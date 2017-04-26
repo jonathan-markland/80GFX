@@ -1,5 +1,5 @@
 g++ \
- Example1_Main.cpp \
+ Example2_Main.cpp \
  Library/Abstractions.cpp \
  Library/libGraphics_Fonts.cpp \
  Library/libGraphics_Main.cpp \
