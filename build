@@ -1,0 +1,1 @@
+g++ Example1_Main.cpp Library/SineTable.cpp -I Library
