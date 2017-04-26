@@ -636,7 +636,7 @@ namespace libGraphics
 		void BitmapDevice::DirectTriangle( int32_t x0, int32_t y0, int32_t x1, int32_t y1, int32_t x2, int32_t y2 )
 		{
 			// "Direct" API:  Special case for bitmaps only.
-			if( BrushAvailable() )
+			if( BrushAvailable()  &&  _pLRArray != nullptr )
 			{
 				// ** FIX: optimise the range done.  Reminder: params may not be rectified.
 				InitArray( _pLRArray, _bitmap.HeightPixels, _bitmap.WidthPixels );
