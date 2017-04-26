@@ -34,9 +34,15 @@ bool SaveMemoryToFile(const std::string &filename, const void *data, size_t cons
 
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-//    FONT SERVER  -- TODO:  I have not made a font server provision in the library itself, it is separate!
+//    FONT SERVER
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
+	// TODO:  I have not made a font server provision in the library itself yet!
+	
+	// This font server is very simple.  It doesn't even reference count the font usages,
+	// because the font definitions that it supports are statically-allocated, and remain
+	// present for the duration of the program run.
+	
 
 class TestFontServer: public libGraphics::Fonts::AbstractFontServer
 {
@@ -48,7 +54,7 @@ public:
 
 
 
-// The font server will only serve these fonts:
+// This simple font server will only serve these fonts:
 std::shared_ptr<libGraphics::Fonts::Fixed8byNFont>  g_pSystemFont;
 std::shared_ptr<libGraphics::Fonts::Fixed8byNFont>  g_pCamLynxFont;
 
