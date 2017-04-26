@@ -7,7 +7,9 @@
 #include <string>
 #include <iostream>
 #include "libGraphics_Main.h"
+#include "libGraphics_Fonts.h"
 #include "ColoursEnum.h"
+#include "Resources_FixedFont.h"
 
 
 
@@ -54,30 +56,43 @@ public:
 
 
 
-// This simple font server will only serve these fonts:
+// This simple font server will only serve these font objects:
+
 std::shared_ptr<libGraphics::Fonts::Fixed8byNFont>  g_pSystemFont;
 std::shared_ptr<libGraphics::Fonts::Fixed8byNFont>  g_pCamLynxFont;
 
+	// Note: The Font object must provide 1-bpp bitmaps for each character,
+	//       upon request, but all that's hidden in the library!  You could
+	//       make your own kind of font *class* to support a new font format,
+	//       as well as providing new font definitions in any supported format.
 
 
 
 void TestFontServer::Init()
 {
 	// SYSTEM 80
-	g_pSystemFont = std::make_shared<libGraphics::Fonts::Fixed8byNFont>( 80, g_GEMSystem8x14Font,  14,  0,255,  10 );
+	g_pSystemFont = std::make_shared<libGraphics::Fonts::Fixed8byNFont>( 
+		80,     // Font size (for SelectFont() call)
+		g_PcBios8x16Font,   // Font definition.  (As you would expect, just array of bytes in character order).
+		16,     // Height of cell (pixels)
+		0,255,  // Character code low/high range supported (ie: defines array indexing).
+		10 );   // Offset of the base-line (from top) in pixels.
 
 	// LYNX font
-	g_pCamLynxFont = std::make_shared<libGraphics::Fonts::Fixed8byNFont>( 80, g_CamputersLynxIIFont,  10,  32,126,  8 );
+	g_pCamLynxFont = std::make_shared<libGraphics::Fonts::Fixed8byNFont>( 
+		80, g_CamputersLynxIIFont,  10,  32,126,  7 );
 }
 
 
 
 std::shared_ptr<libGraphics::Fonts::AbstractFont>  TestFontServer::AddRefFont( const char *fontName, uint32_t pointSizeTenths )
 {
-	// - FontName is the name of the font the caller desires.
+	// - FontName is the name of the font the caller desires.  Hint:  The SelectFont() function passes in this string.
 	// - PointSizeTenths gives the font size desired.
 	
 	// In this simple font server, we don't even look at the 'PointSizeTenths' parameter!
+
+	// Look up the name string, and return the font object:
 	
 	if( CaseInsensitiveCompare(fontName,"System") == 0 )
 	{
@@ -96,7 +111,7 @@ std::shared_ptr<libGraphics::Fonts::AbstractFont>  TestFontServer::AddRefFont( c
 
 bool TestFontServer::ReleaseFont( std::shared_ptr<libGraphics::Fonts::AbstractFont> fontToRelease )
 {
-	if( fontToRelease == g_pSystemFont || fontToRelease == g_pCamLynxFont ) // <-- TODO: not proper "addref/release" faking but is close enough
+	if( fontToRelease == g_pSystemFont || fontToRelease == g_pCamLynxFont ) // <-- TODO: not proper "addref/release" usage-count faking but is close enough
 	{
 		return true;
 	}
@@ -193,7 +208,7 @@ int main()
 	
 	// Create a "font server":  TODO: Should really be a high-level library responsibility to provide this.
 	TestFontServer::Init();
-	TestFontServer  testFontServer; // <-- This is the font server instance.
+	auto testFontServer = std::make_shared<TestFontServer>(); // <-- This is the font server instance.
 
 	// Plug the "Font server" into the device object, so that it request font definitions:
 	theBitmapDevice.SetFontServer( testFontServer );
@@ -205,18 +220,27 @@ int main()
 	DrawPalette( g_ColourStripData, 16, theBitmapDevice, DemoBitmapWidth, DemoBitmapHeight );
 
 	// Set the colour for the text:
-	dc.SetForegroundColour( libBasic::Colours::Cyan );
+	theBitmapDevice.SetForegroundColour( libBasic::Colours::White );
 	
 	// Select a font, and write a string.
 	// The nullptr means no scaling is provided, so font will render 1:1 definition-to-pixels.
-	dc.SelectFont( "System",80 );
-	dc.Text( 20,20, nullptr, "This is a test of System font.", 34 );
+	theBitmapDevice.SelectFont( "System",80 );
+	theBitmapDevice.Text( 320,100, nullptr, "This is a test of System font.", 30 );
 	
 	// Select another colour and show how to write text scaled by a ratio:
-	dc.SetForegroundColour( libBasic::Colours::Red );
 
+	theBitmapDevice.SetForegroundColour( libBasic::Colours::Red );
 	auto scaleRatio = libGraphics::Scaling( 4, 2 );
-	dc.Text( 20,240, &scaleRatio, "This is a test of System font.", 34 );
+	theBitmapDevice.Text( 100,250, &scaleRatio, "Larger text!", 12 );
+
+	theBitmapDevice.SetForegroundColour( libBasic::Colours::Yellow );
+	auto scaleRatio2 = libGraphics::Scaling( 2, 4 );
+	theBitmapDevice.Text( 300,350, &scaleRatio2, "Larger text!", 12 );
+	
+	// Select a different font:
+	theBitmapDevice.SetForegroundColour( libBasic::Colours::Black );
+	theBitmapDevice.SelectFont( "Lynx",80 );
+	theBitmapDevice.Text( 300,200, nullptr, "This is the Camputers Lynx's font.", 34 );
 	
 	// Save the file as ".data" so you can import it into GIMP and use the RAW import
 	// format.  You would enter 640*480 as the dimensions, and set the format to RGBA:
