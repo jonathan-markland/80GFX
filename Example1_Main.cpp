@@ -31,8 +31,6 @@ bool SaveMemoryToFile(const std::string &filename, const void *data, size_t cons
  
 int main()
 {
-	//std::cout << "Hello World!" << g_FixedPointSineTable[45] << std::endl;
-
 	//
 	// In this version of the library, the 32-bpp bitmap class "libGraphics::Bitmaps::Colour"
 	// doesn't allocate bitmap memory.  So we do it separately:
@@ -54,9 +52,6 @@ int main()
 	// Create a "device" object that will allow drawing routines to operate
 	// without knowing what they're drawing on:
 	libGraphics::Devices::BitmapDevice  theBitmapDevice( theColourBitmap );
-
-	// Plug in the "Font server":
-	// theBitmapDevice.SetFontServer( testFontServer );
 
 	//
 	// Graphics start here...
