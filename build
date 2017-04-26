@@ -1,1 +1,13 @@
-g++ Example1_Main.cpp Library/SineTable.cpp -I Library
+g++ \
+ Example1_Main.cpp \
+ Library/Abstractions.cpp \
+ Library/libGraphics_Fonts.cpp \
+ Library/libGraphics_Main.cpp \
+ Library/Maths.cpp \
+ Library/MetaFile.cpp \
+ Library/NumStr.cpp \
+ Library/Resources_FixedFont_PcBios8x16.cpp \
+ Library/Resources_Pattern1616.cpp \
+ Library/SineTable.cpp \
+ Library/SmallStringBuilder.cpp \
+ -I Library -std=c++11
