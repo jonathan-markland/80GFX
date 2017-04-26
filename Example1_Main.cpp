@@ -84,9 +84,31 @@ int main()
 	
 	theBitmapDevice.SelectBrush( patternedBrush );
 	theBitmapDevice.DirectRectangle( 50,50, 100,100 );
-	theBitmapDevice.DirectEllipse( 200,50, 250,100 );
+
+	// In order to see "direct" ellipse and triangle, we must do a once-only creation
+	// of a temporary array to store the edges of each raster line of these shapes.
+	// This array is attached to the bitmap device.
+	// It must have one entry per row in the target bitmap:
+	// TODO: It's a bit annoying to have to do this!
 	
-//	theBitmapDevice.DirectTriangle( 400,50, 450,100, 350,100 );
+	auto lrArray = new libGraphics::System::Raster::RasterLR<int32_t>[ DemoBitmapHeight ]; // TODO: avoid bare new really!
+	theBitmapDevice.SetLRArray(lrArray, DemoBitmapHeight);
+
+	// Now we can demonstrate ellipse and triangle:
+	
+	theBitmapDevice.SelectBrush( patternedBrush );
+	theBitmapDevice.DirectEllipse( 200,50, 250,100 );
+	theBitmapDevice.DirectTriangle( 400,50, 450,100, 350,125 );
+
+	theBitmapDevice.SelectBrush( solidBrush );
+	theBitmapDevice.DirectEllipse( 500,50, 600,125 );
+	theBitmapDevice.DirectTriangle( 500,250, 550,275, 525,400 );
+	
+	// Do clean up:
+	// TODO: It's a bit annoying to have to do this!
+	
+	theBitmapDevice.SetLRArray(nullptr, 0);
+	delete [] lrArray;
 
 	// Save the file as ".data" so you can import it into GIMP and use the RAW import
 	// format.  You would enter 640*480 as the dimensions, and set the format to RGBA:

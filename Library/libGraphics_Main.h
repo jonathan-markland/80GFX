@@ -2290,24 +2290,25 @@ namespace libGraphics
 
 			explicit BitmapDevice( Bitmaps::Colour &Target ); /// WARNING: A copy is taken of the bitmap specifics!
 
-			/// Priming:
+			// Priming:
 			void SetLRArray( System::Raster::RasterLR<int32_t> *pArray, size_t capacity );
 			void SetPointsArray( Point<int32_t> *pArray, size_t capacity );
 
-			/// Query functions
+			// Query functions
 			inline Rect<int32_t> GetExtentsRect() const     { return Rect<int32_t>( 0, 0, _bitmap.WidthPixels, _bitmap.HeightPixels ); }
 
-			/// Implementing the standard device API:
+			// Implementing the standard device API:
 			ABSTRACT_DEVICE_VIRTUALS;
 
-			/// We also override these from BaseDevice:
+			// We also override these from BaseDevice:
 			virtual void StartPoly() override;
 			virtual void EndPoly() override;
 			virtual void SetViewport( Rect<int32_t> r ) override;
 			virtual void SelectPen( std::shared_ptr<Pens::AbstractPen> ) override;
 
-			/// The "Direct" API, for direct-to-bitmap performance (note: non-virtual).
-			/// These are BRUSH-ONLY functions (no outlines with pen).
+			// The "Direct" API, for direct-to-bitmap performance (note: non-virtual).
+			// These are BRUSH-ONLY functions (no outlines with pen).
+			// The Ellipse and Triangle require SetLRArray(), or else nothing shows.
 			void DirectRectangle( int32_t x0,int32_t y0,int32_t x1,int32_t y1 );
 			void DirectEllipse( int32_t x0,int32_t y0,int32_t x1,int32_t y1 );
 			void DirectTriangle( int32_t x0,int32_t y0,int32_t x1,int32_t y1,int32_t x2,int32_t y2 );
