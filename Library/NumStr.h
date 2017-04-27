@@ -125,24 +125,6 @@ NumberAsStringStore<INTTYPE>::NumberAsStringStore( INTTYPE number, uint32_t base
 
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-//    DATE TIME STORAGE
-// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-class DateTimeStringStore
-{
-public:
-	DateTimeStringStore( uint64_t dateAndTime, uint32_t flags ); // packed in OS BCD format.
-	inline operator const char *()   { return _buffer; }
-private:
-	char _buffer[40];
-};
-
-
-
-
-
-
-// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 //
 // Integer Number-to-string conversion classes.
 //
@@ -162,25 +144,3 @@ inline NumberAsStringStore<int32_t>     ToString( int32_t  signedNumber )       
 inline NumberAsStringStore<uint32_t>    ToString( uint32_t unsignedNumber )          { return ToString( unsignedNumber, 10 ); }
 inline NumberAsStringStore<int64_t>     ToString( int64_t  signedNumber )            { return ToString( signedNumber,   10 ); }
 inline NumberAsStringStore<uint64_t>    ToString( uint64_t unsignedNumber )          { return ToString( unsignedNumber, 10 ); }
-
-// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-//    Date and time conversion to string.
-//    Packed in BCD format:  0x00YYYYMMDDHHMMSS
-// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-inline DateTimeStringStore  ToTimeString( uint64_t dateAndTime )
-{
-    return DateTimeStringStore( dateAndTime, 1 );
-}
-
-inline DateTimeStringStore  ToDateString( uint64_t dateAndTime )
-{
-    return DateTimeStringStore( dateAndTime, 2 );
-}
-
-inline DateTimeStringStore  ToDateTimeString( uint64_t dateAndTime )
-{
-    return DateTimeStringStore( dateAndTime, 3 );
-}
-
-
