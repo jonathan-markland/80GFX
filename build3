@@ -11,4 +11,5 @@ g++ \
  Library/Resources_Pattern1616.cpp \
  Library/SineTable.cpp \
  Library/SmallStringBuilder.cpp \
+ AssistanceForExamples.cpp \
  -I Library -std=c++11
