@@ -53,12 +53,6 @@ SCALAR  Max( const std::vector<SCALAR> &vec )
 
 uint32_t  g_ChartDrawingPalette[16]=
 {
-  0xFF000000,   // black
-  0xFF333333,   // grey 33
-  0xFF575757,   // grey 57
-  0xFF888888,   // grey 88
-  0xFFCCCCCC,   // grey
-  0xFFFFFFFF,   // white
   0xFF33EEFF,   // yellow
   0xFF3392FF,   // orange
   0xFF2323AD,   // red
@@ -69,6 +63,12 @@ uint32_t  g_ChartDrawingPalette[16]=
   0xFF14691D,   // green
   0xFF194A81,   // brown
   0xFFF3CDFF,   // pink
+  0xFF000000,   // black
+  0xFF333333,   // grey 33
+  0xFF575757,   // grey 57
+  0xFF888888,   // grey 88
+  0xFFCCCCCC,   // grey
+  0xFFFFFFFF,   // white
 };
 
 
@@ -88,7 +88,7 @@ void DrawBarChart(
 
 	// Create brush:
 	auto patternedBrush = std::make_shared<libGraphics::Brushes::Patterned>( 
-		g_Pattern1616_Balls, libBasic::Colours::Black, libBasic::Colours::Black );
+		g_Pattern1616_RoughWeave, libBasic::Colours::Black, libBasic::Colours::Black );
 
 	// Draw AXES
 	theDevice.SelectPen( axisPen );
@@ -120,9 +120,9 @@ void DrawBarChart(
 					patternedBrush->Settings.ForeColour = g_ChartDrawingPalette[i & 15];
 					theDevice.SelectBrush( patternedBrush );
 					theDevice.StartPoly();
-					theDevice.Rectangle( Rect<int32_t>( barLeft, barTop, barLeft + barWidth, barBottom ) );
-					theDevice.EndPoly();
-					theDevice.Rectangle( Rect<int32_t>( barLeft, barTop, barLeft + barWidth, barBottom ) );
+					theDevice.Rectangle( Rect<int32_t>( barLeft, barTop, barLeft + barWidth, barBottom ) );  // The fill (in brush)
+					theDevice.EndPoly();                                                                     
+					theDevice.Rectangle( Rect<int32_t>( barLeft, barTop, barLeft + barWidth, barBottom ) );  // The outline (in pen)
 				}
 			}
 		}
@@ -140,7 +140,7 @@ void DrawPieChart(
 	auto ly = projectionHeight / 10;
 
 	// Create pens:
-	auto outlinePen = std::make_shared<libGraphics::Pens::Solid>( libBasic::Colours::Yellow );
+	auto outlinePen = std::make_shared<libGraphics::Pens::Solid>( libBasic::Colours::White );
 
 	// Create brush:
 	auto patternedBrush = std::make_shared<libGraphics::Brushes::Patterned>(
@@ -169,9 +169,9 @@ void DrawPieChart(
 				patternedBrush->Settings.ForeColour = g_ChartDrawingPalette[ i & 15 ];
 				theDevice.SelectBrush( patternedBrush );
 				theDevice.StartPoly();
-				theDevice.Pie( pieExtentsRect, startAngle, endAngle );
+				theDevice.Pie( pieExtentsRect, startAngle, endAngle );  // The fill (in brush)
 				theDevice.EndPoly();
-				theDevice.Pie( pieExtentsRect, startAngle, endAngle );
+				theDevice.Pie( pieExtentsRect, startAngle, endAngle );  // The outline (in pen)
 			}
 		}
 	}

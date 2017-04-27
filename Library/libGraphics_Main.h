@@ -2315,9 +2315,9 @@ namespace libGraphics
 
 		private:
 			Bitmaps::Colour     _bitmap;                     /// The target bitmap.
-			System::Raster::RasterLR<int32_t>  *_pLRArray;   /// If allocated, it always has m_Bitmap.Height elements.
-			Point<int32_t>     *_pPointsArray;               /// The caller can allocate a static array for poly scan conversion (we still use heap if too small)
-			size_t              _pointsArrayCapacity;        /// Capacity of m_pPointsArray
+			System::Raster::RasterLR<int32_t>  *_pLRArray;   /// If allocated, it always has _bitmap.Height elements.
+			Point<int32_t>     *_pPointsArray;               /// The caller allocates an array for poly scan conversion.
+			size_t              _pointsArrayCapacity;        /// Capacity of _pPointsArray
 			System::LineReceivers::ForBitmapOutlines                 _outlinerLineRecv;
 			System::LineReceivers::ForBitmapScanConvPointCollecting  _scanCvtLineRecv;
 			int32_t             _cursorX;

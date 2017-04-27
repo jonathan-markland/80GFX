@@ -9,6 +9,12 @@
 #include "libGraphics_Fonts.h"
 
 
+
+const uint32_t PolyScanArrayElementCount = 1000;
+
+
+
+
 bool SaveMemoryToFile( const std::string &filename, const void *data, size_t sizeBytes );
 
 
@@ -53,6 +59,12 @@ bool WithNewBitmapDo(
 	
 	memset( demoBitmapMemory, 0, sizeBytes );
 
+	//
+	// Allocate polygon scan conversion array   TODO: This is a bit horrible!
+	//
+
+	auto polygonScanConversionArray = new Point<int32_t>[ PolyScanArrayElementCount ];
+	
 	{	
 		//
 		// Now set up a bitmap object to reference this memory:
@@ -80,6 +92,12 @@ bool WithNewBitmapDo(
 		theBitmapDevice.SetFontServer( testFontServer );
 
 		//
+		// Connect device to the array for polygon scan conversion:
+		//
+
+		theBitmapDevice.SetPointsArray( polygonScanConversionArray, PolyScanArrayElementCount );
+		
+		//
 		// Graphics start here...
 		//
 
@@ -91,6 +109,7 @@ bool WithNewBitmapDo(
 		functionResult = SaveMemoryToFile( outputFileName, demoBitmapMemory, sizeBytes );
 	}
 	
+	delete [] polygonScanConversionArray;
 	free(demoBitmapMemory);
 	
 	return functionResult;
