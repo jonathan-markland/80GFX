@@ -55,7 +55,7 @@ uint32_t g_ColourStripData[16] =
 // Here's an example of drawing a 32-bpp bitmap onto a target device.
 //
 
-void DrawPalette( uint32_t *colourStrip, uint32_t numColours, libGraphics::Devices::AbstractDevice &dc, int32_t widthOfDisplay, int32_t heightOfDisplay )
+void DrawPalette( uint32_t *colourStrip, uint32_t numColours, libGraphics::Devices::AbstractDevice &theDevice, int32_t widthOfDisplay, int32_t heightOfDisplay )
 {
 	int32_t  lx = widthOfDisplay / 10;
 	int32_t  ly = heightOfDisplay / 10;
@@ -67,9 +67,9 @@ void DrawPalette( uint32_t *colourStrip, uint32_t numColours, libGraphics::Devic
 	// Select the bitmap and draw it:
 	auto targetRect = Rect<int32_t>( lx, ly, lx*9, ly*9 );
 	auto sourceRect = Rect<int32_t>( 0, 0, theBitmap->WidthPixels, theBitmap->HeightPixels );
-	dc.SelectBitmap( theBitmap );
-	dc.DrawBitmap( targetRect, sourceRect, 0 );
-	dc.SelectBitmap( nullptr );
+	theDevice.SelectBitmap( theBitmap );
+	theDevice.DrawBitmap( targetRect, sourceRect, 0 );
+	theDevice.SelectBitmap( nullptr );
 }
 
 
