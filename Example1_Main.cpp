@@ -21,12 +21,13 @@ void DrawWithTheDirectGraphicsFunctions( libGraphics::Devices::BitmapDevice &the
 	// which will let you see the output in GIMP.  Obviously the "A" component is
 	// not processed by this library, only stored.  Alpha just isn't retro enough.
 	
+	auto lx = DemoBitmapWidth / 10;
+	auto ly = DemoBitmapHeight / 10;
+	
 	// Create pens:
 	
 	auto whitePen = std::make_shared<libGraphics::Pens::Solid>( libBasic::Colours::White );
 	auto bluePen  = std::make_shared<libGraphics::Pens::Solid>( libBasic::Colours::Blue );
-
-	
 	
 	// Create brushes:
 	
@@ -35,43 +36,18 @@ void DrawWithTheDirectGraphicsFunctions( libGraphics::Devices::BitmapDevice &the
 
 	auto solidBrush = std::make_shared<libGraphics::Brushes::Solid>( 
 		libBasic::Colours::Blue );
-
-		
 		
 	// Demo the "direct" functions, although these are for BitmapDevice only:
 
 	theBitmapDevice.SelectBrush( solidBrush );
-	theBitmapDevice.DirectRectangle( 0,0, 400,400 );
+	theBitmapDevice.DirectRectangle( lx,ly, lx*9,ly*9 );
 	
 	theBitmapDevice.SelectBrush( patternedBrush );
-	theBitmapDevice.DirectRectangle( 50,50, 100,100 );
+	theBitmapDevice.DirectRectangle( lx*2,ly*2, lx*3,ly*3 );
 
-	
-
-	// In order to see "direct" ellipse and triangle, we must do a once-only creation
-	// of a temporary array to store the edges of each raster line of these shapes.
-	// This array is attached to the bitmap device.
-	// It must have one entry per row in the target bitmap:
-	// TODO: It's a bit annoying to have to do this!
-	
-	auto lrArray = new libGraphics::System::Raster::RasterLR<int32_t>[ DemoBitmapHeight ]; // TODO: avoid bare new really!
-	theBitmapDevice.SetLRArray(lrArray, DemoBitmapHeight);
-
-	// Now we can demonstrate ellipse and triangle:
-	
 	theBitmapDevice.SelectBrush( patternedBrush );
-	theBitmapDevice.DirectEllipse( 200,50, 250,100 );
-	theBitmapDevice.DirectTriangle( 400,50, 450,100, 350,125 );
-
-	theBitmapDevice.SelectBrush( solidBrush );
-	theBitmapDevice.DirectEllipse( 500,50, 600,125 );
-	theBitmapDevice.DirectTriangle( 500,250, 550,275, 525,400 );
-	
-	// Do clean up:
-	// TODO: It's a bit annoying to have to do this!
-	
-	theBitmapDevice.SetLRArray(nullptr, 0);
-	delete [] lrArray;
+	theBitmapDevice.DirectEllipse( lx*5,ly*2, lx*8,ly*4 );
+	theBitmapDevice.DirectTriangle( lx*2,ly*4, lx*2,ly*8, lx*4, ly*5 );
 }
 
 

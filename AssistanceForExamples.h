@@ -60,10 +60,19 @@ bool WithNewBitmapDo(
 	memset( demoBitmapMemory, 0, sizeBytes );
 
 	//
-	// Allocate polygon scan conversion array   TODO: This is a bit horrible!
+	// Allocate polygon scan conversion array.
+	// TODO: Upgrade library:  It's a bit annoying to have to do this!
 	//
 
-	auto polygonScanConversionArray = new Point<int32_t>[ PolyScanArrayElementCount ];
+	auto polygonScanConversionArray = new Point<int32_t>[ PolyScanArrayElementCount ]; // TODO: avoid bare new really!
+
+	// In order to see "direct" ellipse and triangle, we must do a once-only creation
+	// of a temporary array to store the edges of each raster line of these shapes.
+	// This array is attached to the bitmap device.
+	// It must have one entry per row in the target bitmap:
+	// TODO: Upgrade library:  It's a bit annoying to have to do this!
+	
+	auto lrArray = new libGraphics::System::Raster::RasterLR<int32_t>[ demoBitmapHeight ]; // TODO: avoid bare new really!
 	
 	{	
 		//
@@ -98,6 +107,14 @@ bool WithNewBitmapDo(
 		theBitmapDevice.SetPointsArray( polygonScanConversionArray, PolyScanArrayElementCount );
 		
 		//
+		// Connect device to "left / right edges" array, for scan converting
+		// "direct" triangles and ellipses.  (This is faster rendering than
+		// polygon scan conversion, because it does not require sorting points):
+		//
+		
+		theBitmapDevice.SetLRArray( lrArray, demoBitmapHeight );
+		
+		//
 		// Graphics start here...
 		//
 
@@ -107,8 +124,14 @@ bool WithNewBitmapDo(
 		// format.  You would enter the dimensions, and set the format to RGBA:
 
 		functionResult = SaveMemoryToFile( outputFileName, demoBitmapMemory, sizeBytes );
+
+		// This is how to disconnect the temporary arrays from the bitmap device:
+		
+		theBitmapDevice.SetLRArray( nullptr, 0 );
+		theBitmapDevice.SetPointsArray( nullptr, 0 );
 	}
-	
+
+	delete [] lrArray;
 	delete [] polygonScanConversionArray;
 	free(demoBitmapMemory);
 	
