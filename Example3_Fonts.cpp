@@ -161,7 +161,7 @@ uint32_t g_ColourStripData[16] =
 // Here's an example of drawing a 32-bpp bitmap onto a target device.
 //
 
-void DrawPalette( uint32_t *colourStrip, uint32_t numColours, libGraphics::Devices::AbstractDevice &dc, int32_t widthOfDisplay, int32_t heightOfDisplay )
+void DrawPalette( uint32_t *colourStrip, uint32_t numColours, libGraphics::Devices::AbstractDevice &theDevice, int32_t widthOfDisplay, int32_t heightOfDisplay )
 {
 	int32_t  lx = widthOfDisplay / 10;
 	int32_t  ly = heightOfDisplay / 10;
@@ -173,10 +173,47 @@ void DrawPalette( uint32_t *colourStrip, uint32_t numColours, libGraphics::Devic
 	// Select the bitmap and draw it:
 	auto targetRect = Rect<int32_t>( lx, ly, lx*9, ly*9 );
 	auto sourceRect = Rect<int32_t>( 0, 0, theBitmap->WidthPixels, theBitmap->HeightPixels );
-	dc.SelectBitmap( theBitmap );
-	dc.DrawBitmap( targetRect, sourceRect, 0 );
-	dc.SelectBitmap( nullptr );
+	theDevice.SelectBitmap( theBitmap );
+	theDevice.DrawBitmap( targetRect, sourceRect, 0 );
+	theDevice.SelectBitmap( nullptr );
 }
+
+
+
+
+
+//
+// DrawFontDemo
+//
+
+void DrawFontDemo( libGraphics::Devices::AbstractDevice &theDevice )
+{
+	// Set the colour for the text:
+	theDevice.SetForegroundColour( libBasic::Colours::White );
+	
+	// Select a font, and write a string.
+	// The nullptr means no scaling is provided, so font will render 1:1 definition-to-pixels.
+	theDevice.SelectFont( "System",80 );
+	theDevice.Text( 320,100, nullptr, "This is a test of System font.", 30 );
+	
+	// Select another colour and show how to write text scaled by a ratio:
+
+	theDevice.SetForegroundColour( libBasic::Colours::Red );
+	auto scaleRatio = libGraphics::Scaling( 4, 2 );
+	theDevice.Text( 100,250, &scaleRatio, "Wide text!", 10 );
+
+	auto scaleRatio2 = libGraphics::Scaling( 2, 4 );
+	theDevice.SetForegroundColour( libBasic::Colours::Black );   // Shadow
+	theDevice.Text( 301,351, &scaleRatio2, "Tall text!", 10 );
+	theDevice.SetForegroundColour( libBasic::Colours::Yellow );  // Text
+	theDevice.Text( 300,350, &scaleRatio2, "Tall text!", 10 );
+	
+	// Select a different font:
+	theDevice.SetForegroundColour( libBasic::Colours::Black );
+	theDevice.SelectFont( "Lynx",80 );
+	theDevice.Text( 300,200, nullptr, "This is the Camputers Lynx's font.", 34 );
+}
+
 
 
 
@@ -218,29 +255,7 @@ int main()
 	//
 	
 	DrawPalette( g_ColourStripData, 16, theBitmapDevice, DemoBitmapWidth, DemoBitmapHeight );
-
-	// Set the colour for the text:
-	theBitmapDevice.SetForegroundColour( libBasic::Colours::White );
-	
-	// Select a font, and write a string.
-	// The nullptr means no scaling is provided, so font will render 1:1 definition-to-pixels.
-	theBitmapDevice.SelectFont( "System",80 );
-	theBitmapDevice.Text( 320,100, nullptr, "This is a test of System font.", 30 );
-	
-	// Select another colour and show how to write text scaled by a ratio:
-
-	theBitmapDevice.SetForegroundColour( libBasic::Colours::Red );
-	auto scaleRatio = libGraphics::Scaling( 4, 2 );
-	theBitmapDevice.Text( 100,250, &scaleRatio, "Larger text!", 12 );
-
-	theBitmapDevice.SetForegroundColour( libBasic::Colours::Yellow );
-	auto scaleRatio2 = libGraphics::Scaling( 2, 4 );
-	theBitmapDevice.Text( 300,350, &scaleRatio2, "Larger text!", 12 );
-	
-	// Select a different font:
-	theBitmapDevice.SetForegroundColour( libBasic::Colours::Black );
-	theBitmapDevice.SelectFont( "Lynx",80 );
-	theBitmapDevice.Text( 300,200, nullptr, "This is the Camputers Lynx's font.", 34 );
+	DrawFontDemo( theBitmapDevice );
 	
 	// Save the file as ".data" so you can import it into GIMP and use the RAW import
 	// format.  You would enter 640*480 as the dimensions, and set the format to RGBA:
