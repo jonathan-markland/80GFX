@@ -8,6 +8,7 @@
 #include <iostream>
 #include "libGraphics_Main.h"
 #include "ColoursEnum.h"
+#include "AssistanceForExamples.h"
 
 
 
@@ -17,18 +18,6 @@ const int DemoBitmapHeight = 480;
 
 
 
-
-
-bool SaveMemoryToFile(const std::string &filename, const void *data, size_t const bytes)
-{
-	std::ofstream b_stream( filename.c_str(), std::fstream::out | std::fstream::binary );
-	if (b_stream)
-	{
-		b_stream.write((const char *) data, bytes);
-		return b_stream.good();
-	}
-	return false;
-}
 
 
 //
@@ -86,39 +75,16 @@ void DrawPalette( uint32_t *colourStrip, uint32_t numColours, libGraphics::Devic
 
 
 
- 
+
 int main()
 {
-	//
-	// In this version of the library, the 32-bpp bitmap class "libGraphics::Bitmaps::Colour"
-	// doesn't allocate bitmap memory.  So we do it separately:
-	//
-	
-	auto sizeBytes = DemoBitmapWidth * DemoBitmapHeight * 4;
-	void *demoBitmapMemory = malloc( sizeBytes );
-	if( demoBitmapMemory == nullptr ) return 1;
-
-	// Just ensure memory is clean.
-	memset( demoBitmapMemory, 0xFF, sizeBytes );
-	
-	// Now set up a bitmap object to reference this memory:
-	libGraphics::Bitmaps::Colour  theColourBitmap(
-		(uint32_t *) demoBitmapMemory,
-		DemoBitmapWidth, DemoBitmapHeight,
-		DemoBitmapWidth * 4 ); // <-- inter-row offset, in bytes
-
-	// Create a "device" object that will allow drawing routines to operate
-	// without knowing what they're drawing on:
-	libGraphics::Devices::BitmapDevice  theBitmapDevice( theColourBitmap );
-
-	//
-	// Graphics start here...
-	//
-	
-	DrawPalette( g_ColourStripData, 16, theBitmapDevice, DemoBitmapWidth, DemoBitmapHeight );
-	
-	// Save the file as ".data" so you can import it into GIMP and use the RAW import
-	// format.  You would enter 640*480 as the dimensions, and set the format to RGBA:
-
-	return SaveMemoryToFile( "output.data", demoBitmapMemory, sizeBytes ) ? 0 : 1;
+	return WithNewBitmapDo( DemoBitmapWidth, DemoBitmapHeight, "output.data", 
+		[]( libGraphics::Devices::AbstractDevice &theDevice )
+		{
+			DrawPalette( g_ColourStripData, 16, theDevice, DemoBitmapWidth, DemoBitmapHeight );
+		}) ? 0 : 1;
 }
+
+
+
+
