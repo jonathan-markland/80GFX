@@ -1,5 +1,5 @@
 //
-// Showcasing a palette using stretched-bitmap painting.
+// Showcasing bitmapped text.
 //
 
 
@@ -46,19 +46,24 @@ uint32_t g_ColourStripData[16] =
 
 
 //
-// DrawPalette
+// DrawHorizontalPalette
 //
 // Here's an example of drawing a 32-bpp bitmap onto a target device.
 //
 
-void DrawPalette( uint32_t *colourStrip, uint32_t numColours, libGraphics::Devices::AbstractDevice &theDevice, int32_t widthOfDisplay, int32_t heightOfDisplay )
+void DrawHorizontalPalette( 
+	libGraphics::Devices::AbstractDevice &theDevice,
+	uint32_t *colourStrip, 
+	uint32_t numColours, 
+	int32_t widthOfDisplay, 
+	int32_t heightOfDisplay )
 {
 	int32_t  lx = widthOfDisplay / 10;
 	int32_t  ly = heightOfDisplay / 10;
 
 	// Create a bitmap object that refers to the colourStrip memory space:
 	auto theBitmap = std::make_shared<libGraphics::Bitmaps::Colour>(
-		colourStrip, numColours, 1, numColours * 4 );
+		colourStrip, 1, numColours, 4 );
 
 	// Select the bitmap and draw it:
 	auto targetRect = Rect<int32_t>( lx, ly, lx*9, ly*9 );
@@ -75,33 +80,43 @@ void DrawPalette( uint32_t *colourStrip, uint32_t numColours, libGraphics::Devic
 //
 // DrawFontDemo
 //
+// This example shows how to select fonts, and render them.
+//
+// This also illustrates the scaling feature.  I can't remember
+// why I put this unusual feature in, but it's there, anyway!
+//
 
 void DrawFontDemo( libGraphics::Devices::AbstractDevice &theDevice )
 {
-	// Set the colour for the text:
+	// Set the colour for the text using SetForegroundColour():
+
 	theDevice.SetForegroundColour( libBasic::Colours::White );
 	
 	// Select a font, and write a string.
-	// The nullptr means no scaling is provided, so font will render 1:1 definition-to-pixels.
+	// The nullptr means no scaling is provided, so font will render 1:1 definition-to-pixels:
+	
 	theDevice.SelectFont( "System",80 );
-	theDevice.Text( 320,100, nullptr, "This is a test of System font.", 30 );
+	theDevice.Text( 100,88, nullptr, "This is a test of System font.", 30 );
 	
 	// Select another colour and show how to write text scaled by a ratio:
 
 	theDevice.SetForegroundColour( libBasic::Colours::Red );
 	auto scaleRatio = libGraphics::Scaling( 4, 2 );
-	theDevice.Text( 100,250, &scaleRatio, "Wide text!", 10 );
+	theDevice.Text( 100,175, &scaleRatio, "Wide text!", 10 );
 
-	auto scaleRatio2 = libGraphics::Scaling( 2, 4 );
+	// Large text with shadow effect:
+	
+	auto scaleRatio2 = libGraphics::Scaling( 6, 7 );
 	theDevice.SetForegroundColour( libBasic::Colours::Black );   // Shadow
-	theDevice.Text( 301,351, &scaleRatio2, "Tall text!", 10 );
+	theDevice.Text( 201,351, &scaleRatio2, "Tall text!", 10 );
 	theDevice.SetForegroundColour( libBasic::Colours::Yellow );  // Text
-	theDevice.Text( 300,350, &scaleRatio2, "Tall text!", 10 );
+	theDevice.Text( 200,350, &scaleRatio2, "Tall text!", 10 );
 	
 	// Select a different font:
+	
 	theDevice.SetForegroundColour( libBasic::Colours::Black );
 	theDevice.SelectFont( "Lynx",80 );
-	theDevice.Text( 300,200, nullptr, "This is the Camputers Lynx's font.", 34 );
+	theDevice.Text( 100,210, nullptr, "This is the Camputers Lynx's font.", 34 );
 }
 
 
@@ -111,7 +126,7 @@ int main()
 	return WithNewBitmapDo( DemoBitmapWidth, DemoBitmapHeight, "output.data", 
 		[]( libGraphics::Devices::AbstractDevice &theDevice )
 		{
-			DrawPalette( g_ColourStripData, 16, theDevice, DemoBitmapWidth, DemoBitmapHeight );
+			DrawHorizontalPalette( theDevice, g_ColourStripData, 16, DemoBitmapWidth, DemoBitmapHeight );
 			DrawFontDemo( theDevice );
 		}) ? 0 : 1;
 }
