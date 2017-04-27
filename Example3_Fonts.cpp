@@ -218,47 +218,81 @@ void DrawFontDemo( libGraphics::Devices::AbstractDevice &theDevice )
 
 
 
- 
-int main()
+template<typename LAMBDA>
+bool WithNewBitmapDo( 
+	int32_t demoBitmapWidth, int32_t demoBitmapHeight, 
+	const char *outputFileName, LAMBDA drawingLambda )
 {
+	bool functionResult = false;
+	
 	//
 	// In this version of the library, the 32-bpp bitmap class "libGraphics::Bitmaps::Colour"
 	// doesn't allocate bitmap memory.  So we do it separately:
 	//
 	
-	auto sizeBytes = DemoBitmapWidth * DemoBitmapHeight * 4;
+	auto sizeBytes = demoBitmapWidth * demoBitmapHeight * 4;
 	void *demoBitmapMemory = malloc( sizeBytes );
-	if( demoBitmapMemory == nullptr ) return 1;
+	if( demoBitmapMemory == nullptr ) return false;
 
-	// Just ensure memory is clean.
+	//
+	// Just ensure memory is clean:
+	//
+	
 	memset( demoBitmapMemory, 0, sizeBytes );
-	
-	// Now set up a bitmap object to reference this memory:
-	libGraphics::Bitmaps::Colour  theColourBitmap(
-		(uint32_t *) demoBitmapMemory,
-		DemoBitmapWidth, DemoBitmapHeight,
-		DemoBitmapWidth * 4 ); // <-- inter-row offset, in bytes
 
-	// Create a "device" object that will allow drawing routines to operate
-	// without knowing what they're drawing on:
-	libGraphics::Devices::BitmapDevice  theBitmapDevice( theColourBitmap );
-	
-	// Create a "font server":  TODO: Should really be a high-level library responsibility to provide this.
-	TestFontServer::Init();
-	auto testFontServer = std::make_shared<TestFontServer>(); // <-- This is the font server instance.
+	{	
+		//
+		// Now set up a bitmap object to reference this memory:
+		//
+		
+		libGraphics::Bitmaps::Colour  theColourBitmap(
+			(uint32_t *) demoBitmapMemory,
+			demoBitmapWidth, demoBitmapHeight,
+			demoBitmapWidth * 4 ); // <-- inter-row offset, in bytes
 
-	// Plug the "Font server" into the device object, so that it request font definitions:
-	theBitmapDevice.SetFontServer( testFontServer );
+		//
+		// Create a "device" object that will allow drawing routines to operate
+		// without knowing what they're drawing on:
+		//
+		
+		libGraphics::Devices::BitmapDevice  theBitmapDevice( theColourBitmap );
+		
+		//
+		// Create a "font server":  TODO: Should really be a high-level library responsibility to provide this.
+		// Plug the "Font server" into the device object, so that it request font definitions:
+		//
+		
+		TestFontServer::Init();
+		auto testFontServer = std::make_shared<TestFontServer>(); // <-- This is the font server instance.
+		theBitmapDevice.SetFontServer( testFontServer );
 
-	//
-	// Graphics start here...
-	//
-	
-	DrawPalette( g_ColourStripData, 16, theBitmapDevice, DemoBitmapWidth, DemoBitmapHeight );
-	DrawFontDemo( theBitmapDevice );
-	
-	// Save the file as ".data" so you can import it into GIMP and use the RAW import
-	// format.  You would enter 640*480 as the dimensions, and set the format to RGBA:
+		//
+		// Graphics start here...
+		//
 
-	return SaveMemoryToFile( "output.data", demoBitmapMemory, sizeBytes ) ? 0 : 1;
+		drawingLambda( theBitmapDevice );
+		
+		// Save the file as ".data" so you can import it into GIMP and use the RAW import
+		// format.  You would enter 640*480 as the dimensions, and set the format to RGBA:
+
+		functionResult = SaveMemoryToFile( outputFileName, demoBitmapMemory, sizeBytes );
+	}
+	
+	free(demoBitmapMemory);
+	
+	return functionResult;
+}
+
+
+
+
+ 
+int main()
+{
+	return WithNewBitmapDo( DemoBitmapWidth, DemoBitmapHeight, "output.data", 
+		[]( libGraphics::Devices::AbstractDevice &theDevice )
+		{
+			DrawPalette( g_ColourStripData, 16, theDevice, DemoBitmapWidth, DemoBitmapHeight );
+			DrawFontDemo( theDevice );
+		}) ? 0 : 1;
 }
