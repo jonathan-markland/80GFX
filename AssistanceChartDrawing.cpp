@@ -5,10 +5,10 @@
 #include <stdint.h>
 #include <memory>
 #include <vector>
-#include "IFileOpener.h"
 #include "libGraphics_Main.h"
 #include "libGraphics_Fonts.h"
 #include "AssistanceChartDrawing.h"
+#include "ColoursEnum.h"
 
 
 
@@ -51,8 +51,33 @@ SCALAR  Max( const std::vector<SCALAR> &vec )
 
 
 
+uint32_t  g_ChartDrawingPalette[16]=
+{
+  0xFF000000,   // black
+  0xFF333333,   // grey 33
+  0xFF575757,   // grey 57
+  0xFF888888,   // grey 88
+  0xFFCCCCCC,   // grey
+  0xFFFFFFFF,   // white
+  0xFF33EEFF,   // yellow
+  0xFF3392FF,   // orange
+  0xFF2323AD,   // red
+  0xFFC02681,   // magenta
+  0xFFD74B2A,   // blue
+  0xFFFFAF9D,   // light blue
+  0xFF7AC581,   // light green
+  0xFF14691D,   // green
+  0xFF194A81,   // brown
+  0xFFF3CDFF,   // pink
+};
 
-void DrawBarChart( libGraphics::Devices::AbstractDevice &theDevice, const VectorOfInt32 *dataSet, int32_t projectionWidth, int32_t projectionHeight )
+
+
+
+
+void DrawBarChart( 
+	libGraphics::Devices::AbstractDevice &theDevice, 
+	const VectorOfInt32 *dataSet, int32_t projectionWidth, int32_t projectionHeight )
 {
 	auto lx = projectionWidth / 10;
 	auto ly = projectionHeight / 10;
@@ -62,7 +87,8 @@ void DrawBarChart( libGraphics::Devices::AbstractDevice &theDevice, const Vector
 	auto outlinePen = std::make_shared<libGraphics::Pens::Solid>( libBasic::Colours::Blue );
 
 	// Create brush:
-	auto patternedBrush = std::make_shared<libGraphics::Brushes::Patterned>( g_Pattern1616_Balls, libBasic::Colours::Black, libBasic::Colours::Black );
+	auto patternedBrush = std::make_shared<libGraphics::Brushes::Patterned>( 
+		g_Pattern1616_Balls, libBasic::Colours::Black, libBasic::Colours::Black );
 
 	// Draw AXES
 	theDevice.SelectPen( axisPen );
@@ -91,7 +117,7 @@ void DrawBarChart( libGraphics::Devices::AbstractDevice &theDevice, const Vector
 					auto barLeft   = lx + (i * barSpacing) + barIndent;
 					auto barHeight = ((ly * 8) * v) / tallestBar;
 					auto barTop    = barBottom - barHeight;
-					patternedBrush->Settings.ForeColour = libBasic::Console::g_RGBs[i & 15];
+					patternedBrush->Settings.ForeColour = g_ChartDrawingPalette[i & 15];
 					theDevice.SelectBrush( patternedBrush );
 					theDevice.StartPoly();
 					theDevice.Rectangle( Rect<int32_t>( barLeft, barTop, barLeft + barWidth, barBottom ) );
@@ -106,7 +132,9 @@ void DrawBarChart( libGraphics::Devices::AbstractDevice &theDevice, const Vector
 
 
 
-void DrawPieChart( libGraphics::Devices::AbstractDevice &theDevice, const VectorOfInt32 *dataSet, int32_t projectionWidth, int32_t projectionHeight )
+void DrawPieChart( 
+	libGraphics::Devices::AbstractDevice &theDevice, 
+	const VectorOfInt32 *dataSet, int32_t projectionWidth, int32_t projectionHeight )
 {
 	auto lx = projectionWidth / 10;
 	auto ly = projectionHeight / 10;
@@ -115,7 +143,8 @@ void DrawPieChart( libGraphics::Devices::AbstractDevice &theDevice, const Vector
 	auto outlinePen = std::make_shared<libGraphics::Pens::Solid>( libBasic::Colours::Yellow );
 
 	// Create brush:
-	auto patternedBrush = std::make_shared<libGraphics::Brushes::Patterned>( g_Pattern1616_Balls, libBasic::Colours::Black, libBasic::Colours::Black );
+	auto patternedBrush = std::make_shared<libGraphics::Brushes::Patterned>(
+		g_Pattern1616_Balls, libBasic::Colours::Black, libBasic::Colours::Black );
 
 	// Draw series
 	theDevice.SelectPen( outlinePen );
@@ -137,7 +166,7 @@ void DrawPieChart( libGraphics::Devices::AbstractDevice &theDevice, const Vector
 				auto startAngle = prevAngle;
 				auto endAngle   = (360 * sumSoFar) / dataTotal;
 				prevAngle = endAngle;
-				patternedBrush->Settings.ForeColour = libBasic::Console::g_RGBs[ i & 15 ];
+				patternedBrush->Settings.ForeColour = g_ChartDrawingPalette[ i & 15 ];
 				theDevice.SelectBrush( patternedBrush );
 				theDevice.StartPoly();
 				theDevice.Pie( pieExtentsRect, startAngle, endAngle );
