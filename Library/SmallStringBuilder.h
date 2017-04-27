@@ -68,11 +68,4 @@ bool StringToInteger( const char *&Str, intptr_t Base, intptr_t *out_pValue );
 	// Returns true if success and updates Str.
 	// Returns false if parse or base error, and leaves Str unchanged.
 
-const char *KStr( SmallStringBuilder &tempstr, const char *Pattern, const char *s1, const char *s2=0, const char *s3=0, const char *s4=0 );
-	// Perform libBasic's template_Sprintf() into the given SmallStringBuilder 'tempstr' and
-	// returns tempstr as a (const char *).  This is intended to allow use
-	// of template_Sprintf() in an expression, but this requires a user-defined temporary
-	// to ensure saving of stack space overall.  The user would have to ensure
-	// the temporary exists for the lifetime of the expression.
-
 

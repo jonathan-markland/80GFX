@@ -18,10 +18,6 @@
 //		jynx_emulator {at} yahoo {dot} com
 //
 
-//
-// Kernel's string and int-to-string support.  ** Don't experiment here! **
-//
-
 #include "SmallStringBuilder.h"
 #include "TemplateMemoryFunctions.h"
 
@@ -59,10 +55,6 @@ void Append( SmallStringBuilder &Dest, const char *s )
 		}
 	}
 }
-
-//
-// CaseInsensitiveCompare
-//
 
 //
 // CaseInsensitiveCompare
@@ -234,12 +226,4 @@ inline  void template_Sprintf_Append( SmallStringBuilder &str, const char *s )
 	{
 		Append(str,s);
 	}
-}
-
-
-const char *KStr( SmallStringBuilder &tempstr, const char *Pattern, const char *s1, const char *s2, const char *s3, const char *s4 )
-{
-	tempstr.Clear();
-	template_Sprintf( tempstr, Pattern, s1,s2,s3,s4 );
-	return tempstr.c_str();
 }
