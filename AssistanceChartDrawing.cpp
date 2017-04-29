@@ -206,6 +206,14 @@ void DrawFilledPolygonWithHoles(
 	libGraphics::Devices::AbstractDevice &theDevice, 
 	int32_t projectionWidth, int32_t projectionHeight )
 {
+	//
+	// Composing a filled polygon with holes from basic shapes:
+	//
+	//     - Rectangle
+	//     - Circle (ellipse)
+	//     - Pie slice
+	//
+
 	auto lx = projectionWidth / 10;
 	auto ly = projectionHeight / 10;
 
@@ -215,9 +223,10 @@ void DrawFilledPolygonWithHoles(
 	// Draw series
 	auto  cx = lx * 5;
 	auto  cy = ly * 5;
-	auto  r2 = std::min(lx,ly) * 2;
-	auto  r3 = std::min(lx,ly) * 3;
-	auto  r4 = std::min(lx,ly) * 4;
+	auto  r  = std::min(lx, ly);
+	auto  r2 = r * 2;
+	auto  r3 = r * 3;
+	auto  r4 = r * 4;
 
 	// Calculate shape positioning:
 	auto ellipseExtentsRect  = Rect<int32_t>( cx-r2, cy-r2, cx+r2, cy+r2 );
@@ -234,13 +243,66 @@ void DrawFilledPolygonWithHoles(
 		theDevice.Pie( pieExtentsRect, 25, 85 );
 
 		// Note:  A ellipse is naturally a *closed* outline:
-		theDevice.Ellipse( ellipseExtentsRect );
+		theDevice.Ellipse( ellipseExtentsRect );   // Really a circle
 
 		// Note:  A ellipse is naturally a *closed* outline:
-		theDevice.Ellipse( ellipse2ExtentsRect );
+		theDevice.Ellipse( ellipse2ExtentsRect );  // Really a circle
 
 		// Note:  A rectangle is naturally a *closed* outline:
 		theDevice.Rectangle( halfRectExtentsRect );
+
+	theDevice.EndPoly(); // <-- This line executes the final drawing.
+
+	// NB: If nothing appears when you draw the polygon, the points buffer ran out of space.
+	//     In the demo program, the lambda that calls this (WithNewBitmapDo) reserves this
+	//     using the constant PolyScanArrayElementCount.
+		// TODO: This problem needs sorting out by design!
+}
+
+
+
+
+
+
+void DrawFilledPolygonWithHoles2( 
+	libGraphics::Devices::AbstractDevice &theDevice, 
+	int32_t projectionWidth, int32_t projectionHeight )
+{
+	auto lx = projectionWidth / 10;
+	auto ly = projectionHeight / 10;
+
+	// Create brush:
+	auto theBrush = std::make_shared<libGraphics::Brushes::Solid>( 0xFFF3CDFF );
+
+	// Draw series
+	auto  cx = lx * 5;
+	auto  cy = ly * 5;
+	auto  r  = std::min(lx, ly);
+	auto  r2 = r * 2;
+	auto  r3 = r * 3;
+	auto  r4 = r * 4;
+
+	// Calculate shape positioning:
+	auto ellipseExtentsRect  = Rect<int32_t>( cx-r3, cy-r2, cx+r3, cy+r2 );
+	auto pieExtentsRect      = Rect<int32_t>( cx-r3, cy-r3, cx+r3, cy+r3 );
+	auto outerExtentsRect    = Rect<int32_t>( cx-r4-10, cy-r4-10,  cx+r4+10, cy+r4+10 );
+
+	theDevice.SelectBrush( theBrush );
+
+	// Construct the polygon:
+	theDevice.StartPoly();
+	
+		// Note:  A secant is naturally a *closed* outline:
+		theDevice.Secant( pieExtentsRect, 345, 175 );  // NB:Defined in clockwise direction.
+
+		// Note:  A ellipse is naturally a *closed* outline:
+		theDevice.Ellipse( ellipseExtentsRect );   // Really an ellipse!
+
+		// Note:  A triangle is naturally a *closed* outline:
+		theDevice.Triangle( cx-r4,cy-r4, cx-r3,cy+r3, cx+r4,cy+r4 );
+
+		// Note:  A rectangle is naturally a *closed* outline:
+		theDevice.Rectangle( outerExtentsRect );
 
 	theDevice.EndPoly(); // <-- This line executes the final drawing.
 

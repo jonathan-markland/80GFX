@@ -56,10 +56,16 @@ int main()
 //            DrawBarChart( theDevice, &testData, DemoBitmapWidth, DemoBitmapHeight );
 //		})) return 1;
 
-	if( ! WithNewBitmapDo( DemoBitmapWidth, DemoBitmapHeight, "PolyWithHoles.data", 
+//	if( ! WithNewBitmapDo( DemoBitmapWidth, DemoBitmapHeight, "PolyWithHoles.data", 
+//		[]( libGraphics::Devices::AbstractDevice &theDevice )
+//		{
+//            DrawFilledPolygonWithHoles( theDevice, DemoBitmapWidth, DemoBitmapHeight );
+//		})) return 1;
+
+	if( ! WithNewBitmapDo( DemoBitmapWidth, DemoBitmapHeight, "PolyWithHoles2.data", 
 		[]( libGraphics::Devices::AbstractDevice &theDevice )
 		{
-            DrawFilledPolygonWithHoles( theDevice, DemoBitmapWidth, DemoBitmapHeight );
+            DrawFilledPolygonWithHoles2( theDevice, DemoBitmapWidth, DemoBitmapHeight );
 		})) return 1;
 
 	return 0;
