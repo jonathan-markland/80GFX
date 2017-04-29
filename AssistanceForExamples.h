@@ -30,7 +30,7 @@
 
 
 
-const uint32_t PolyScanArrayElementCount = 1000;
+const uint32_t PolyScanArrayElementCount = 10000; // TODO: Need to eliminate the need to do this by re-design in the library.
 
 
 
