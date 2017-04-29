@@ -1,5 +1,5 @@
 g++ \
- Example4_BarChart.cpp \
+ Example4_MultipleExamples.cpp \
  Library/Abstractions.cpp \
  Library/libGraphics_Fonts.cpp \
  Library/libGraphics_Main.cpp \

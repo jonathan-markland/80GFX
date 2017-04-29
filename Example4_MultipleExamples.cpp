@@ -19,7 +19,7 @@
 //
 
 //
-// The PIE chart example
+// This is the core program for multiple examples.
 //
 
 
@@ -43,12 +43,20 @@ const int DemoBitmapHeight = 480;
 int main()
 {
 	VectorOfInt32  testData = { 100,200,300,400,500 };
-	
-	return WithNewBitmapDo( DemoBitmapWidth, DemoBitmapHeight, "output.data", 
+
+	if( ! WithNewBitmapDo( DemoBitmapWidth, DemoBitmapHeight, "piechart.data", 
 		[&testData]( libGraphics::Devices::AbstractDevice &theDevice )
 		{
             DrawPieChart( theDevice, &testData, DemoBitmapWidth, DemoBitmapHeight );
-		}) ? 0 : 1;
+		})) return 1;
+
+	if( ! WithNewBitmapDo( DemoBitmapWidth, DemoBitmapHeight, "barchart.data", 
+		[&testData]( libGraphics::Devices::AbstractDevice &theDevice )
+		{
+            DrawBarChart( theDevice, &testData, DemoBitmapWidth, DemoBitmapHeight );
+		})) return 1;
+
+	return 0;
 }
 
 
