@@ -132,6 +132,11 @@ namespace libGraphics
 		{
 			// - - - BRUSHES - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
+			// TODO: Consider: A brush's fields are directly adjustable, which can improve
+			//                 raw performance.  However, some Device types (eg: metafile)
+			//                 do not notice the field-fiddling, and will not register the
+			//                 adjusted brush unless the brush is re-selected (SelectBrush).
+			
 			template<typename PIXEL>
 			class SolidBrush
 			{
@@ -145,7 +150,24 @@ namespace libGraphics
 				PIXEL  Colour;
 			};
 
-			template<typename PIXEL, uint32_t MASK, uint32_t SHIFT>
+			template<typename PIXEL>
+			class AndXorBrush
+			{
+			public:
+
+				// A brush that represents and AND-XOR operation with the background 
+				// pixel's colour value.
+				//
+				// RESULT = (old-pixel AND AndMask) XOR XorMask.
+			
+				AndXorBrush() : And(0), Xor(0) {}  // TODO: Are default constructors needed?
+				AndXorBrush( PIXEL andMask, PIXEL xorMask ) : AndMask(andMask), XorMask(xorMask) {}
+
+				PIXEL  AndMask;
+				PIXEL  XorMask;
+			};
+			
+			template<typename PIXEL, uint32_t MASK, uint32_t SHIFT>  // TODO: Why MASK and SHIFT?
 			class AverageMixBrush
 			{
 			public:
@@ -1995,6 +2017,15 @@ namespace libGraphics
 			System::Raster::AverageMixBrush<uint32_t,AMIX_TYPES_TUPLE> Settings;
 		};
 		#undef AMIX_TYPES_TUPLE
+
+		class AndXor: public AbstractBrush
+		{
+		public:
+			AndXor() {}
+			explicit AndXor( uint32_t andMask, uint32_t xorMask ) : Settings(andMask, xorMask) {}
+			ABSTRACT_BRUSH_VIRTUALS;
+			System::Raster::AndXorBrush<uint32_t, uint32_t> Settings;
+		};
 
 		#undef ABSTRACT_BRUSH_VIRTUALS
 	}
