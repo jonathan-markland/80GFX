@@ -327,10 +327,13 @@ void DrawBrushesDemo(
 
 	auto lx = projectionWidth / 10;
 	auto ly = projectionHeight / 10;
+	auto  r  = std::min(lx, ly);
 
 	auto DrawCircle = [&](int32_t cx, int32_t cy)
 	{
-		auto ellipseExtentsRect = Rect<int32_t>( (cx-1)*lx, (cy-1)*ly, (cx+1)*lx, (cy+1)*ly );
+		auto x = cx * lx;
+		auto y = cy * ly;
+		auto ellipseExtentsRect = Rect<int32_t>( x-r, y-r, x+r, y+r );
 		theDevice.StartPoly();
 		theDevice.Ellipse( ellipseExtentsRect );
 		theDevice.EndPoly();
@@ -341,6 +344,7 @@ void DrawBrushesDemo(
 	auto blackBrush   = std::make_shared<libGraphics::Brushes::Solid>( 0xFF000000 );
 	auto yellowBrush  = std::make_shared<libGraphics::Brushes::Solid>( 0xFF00FFFF );
 	auto redBrush     = std::make_shared<libGraphics::Brushes::Solid>( 0xFF0000FF );
+	
 	auto cyanMixBrush = std::make_shared<libGraphics::Brushes::AverageMixed>( 0xFFFFFF00 );
 	auto blueMixBrush = std::make_shared<libGraphics::Brushes::AverageMixed>( 0xFFFF0000 );
 	
