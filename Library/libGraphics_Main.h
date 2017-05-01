@@ -264,13 +264,25 @@ namespace libGraphics
 				const AverageMixBrush<PIXEL,MASK,SHIFT> &averageMixBrush,
 				SCALAR x,
 				SCALAR y,
-				PIXEL *destination,
+				PIXEL *destinationAddress,
 				SCALAR widthPixels )
 			{
 				// Paint a raster with averaging brush.
 				// x; // not used
 				// y; // not used
-				ArrayAverageFill( destination, averageMixBrush.Colour, PIXEL(MASK), PIXEL(SHIFT), widthPixels );
+
+				auto valueMask  = PIXEL(MASK);    // eg: 0xFEFEFE
+				auto valueShift = PIXEL(SHIFT);   // eg: 1
+
+				fillerValue = (averageMixBrush.Colour & valueMask) >> valueShift;
+
+				auto d = destinationAddress;
+				auto e = destinationAddress + widthPixels;
+				while(d != e)
+				{
+					*d = (((*d) & valueMask) >> valueShift) + fillerValue;
+					++d;
+				}
 			}
 
 
