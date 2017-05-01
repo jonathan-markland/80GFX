@@ -316,3 +316,57 @@ void DrawFilledPolygonWithHoles2(
 
 
 
+
+
+
+void DrawBrushesDemo( 
+	libGraphics::Devices::AbstractDevice &theDevice, 
+	int32_t projectionWidth, int32_t projectionHeight )
+{
+	// Demonstrate the brushes
+
+	auto lx = projectionWidth / 10;
+	auto ly = projectionHeight / 10;
+
+	auto DrawCircle = [&](int32_t cx, int32_t cy)
+	{
+		auto ellipseExtentsRect = Rect<int32_t>( (cx-1)*lx, (cy-1)*ly, (cx+1)*lx, (cy+1)*ly );
+		theDevice.StartPoly();
+		theDevice.Ellipse( ellipseExtentsRect );
+		theDevice.EndPoly();
+	};
+
+	// Create brushes:
+
+	auto yellowBrush  = std::make_shared<libGraphics::Brushes::Solid>( 0xFF00FFFF );
+	auto redBrush     = std::make_shared<libGraphics::Brushes::Solid>( 0xFF0000FF );
+	auto cyanMixBrush = std::make_shared<libGraphics::Brushes::AverageMixed>( 0xFFFEFE00 );
+
+	auto cobbleBrush = std::make_shared<libGraphics::Brushes::Patterned>(
+		g_Pattern1616_CobbleStone, 0xFFC0FFFF, 0x90AAAA );
+
+	// Draw circles:
+
+	theDevice.SelectBrush( yellowBrush );
+	DrawCircle( 2,2 );
+
+	theDevice.SelectBrush( redBrush );
+	DrawCircle( 5,2 );
+
+	theDevice.SelectBrush( cobbleBrush );
+	DrawCircle( 8,2 );
+
+	theDevice.SelectBrush( cyanMixBrush );
+	DrawCircle( 2,5 );
+
+	theDevice.SelectBrush( yellowBrush );
+	DrawCircle( 5,5 );
+
+	theDevice.SelectBrush( cyanMixBrush ); // overlaps
+	DrawCircle( 6,5 );
+
+}
+
+
+
+

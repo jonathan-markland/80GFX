@@ -62,10 +62,16 @@ int main()
 //            DrawFilledPolygonWithHoles( theDevice, DemoBitmapWidth, DemoBitmapHeight );
 //		})) return 1;
 
-	if( ! WithNewBitmapDo( DemoBitmapWidth, DemoBitmapHeight, "PolyWithHoles2.data", 
+//	if( ! WithNewBitmapDo( DemoBitmapWidth, DemoBitmapHeight, "PolyWithHoles2.data", 
+//		[]( libGraphics::Devices::AbstractDevice &theDevice )
+//		{
+//            DrawFilledPolygonWithHoles2( theDevice, DemoBitmapWidth, DemoBitmapHeight );
+//		})) return 1;
+
+	if( ! WithNewBitmapDo( DemoBitmapWidth, DemoBitmapHeight, "Brushes.data", 
 		[]( libGraphics::Devices::AbstractDevice &theDevice )
 		{
-            DrawFilledPolygonWithHoles2( theDevice, DemoBitmapWidth, DemoBitmapHeight );
+            DrawBrushesDemo( theDevice, DemoBitmapWidth, DemoBitmapHeight );
 		})) return 1;
 
 	return 0;
