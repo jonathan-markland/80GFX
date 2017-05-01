@@ -160,7 +160,7 @@ namespace libGraphics
 				//
 				// RESULT = (old-pixel AND AndMask) XOR XorMask.
 			
-				AndXorBrush() : And(0), Xor(0) {}  // TODO: Are default constructors needed?
+				AndXorBrush() : AndMask(0), XorMask(0) {}  // TODO: Are default constructors needed?
 				AndXorBrush( PIXEL andMask, PIXEL xorMask ) : AndMask(andMask), XorMask(xorMask) {}
 
 				PIXEL  AndMask;
@@ -401,6 +401,33 @@ namespace libGraphics
 					PaintRasterInPatternBrush_Core(
 						destination, widthPixels, thisRowPattern, mask,
 						patternBrush.ForeColour, patternBrush.BackColour, patternBrush.ForeTransparent, patternBrush.BackTransparent );
+				}
+			}
+
+
+			template<typename PIXEL, typename SCALAR>
+			inline void PaintRasterInAndXorBrush(
+				const AndXorBrush<PIXEL> &andXorBrush,
+				SCALAR x,
+				SCALAR y,
+				PIXEL *destination,
+				SCALAR widthPixels )
+			{
+				// Paint a raster with AND-XOR operation.
+				
+				// TODO: We could usefully do some loop unrolling here.
+
+				// x; // not used
+				// y; // not used
+				
+				auto andMask = andXorBrush.AndMask;
+				auto xorMask = andXorBrush.XorMask;
+				
+				auto endAddress = destination + widthPixels;
+				while( destination < endAddress )
+				{
+					*destination = ((*destination) & andMask) ^ xorMask;
+					++destination;
 				}
 			}
 
@@ -2024,7 +2051,7 @@ namespace libGraphics
 			AndXor() {}
 			explicit AndXor( uint32_t andMask, uint32_t xorMask ) : Settings(andMask, xorMask) {}
 			ABSTRACT_BRUSH_VIRTUALS;
-			System::Raster::AndXorBrush<uint32_t, uint32_t> Settings;
+			System::Raster::AndXorBrush<uint32_t> Settings;
 		};
 
 		#undef ABSTRACT_BRUSH_VIRTUALS

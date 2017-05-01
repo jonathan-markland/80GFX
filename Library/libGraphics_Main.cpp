@@ -34,6 +34,7 @@
 #define META_BRUSH_SOLID        "brush"
 #define META_BRUSH_PATTERNED    "pattern"
 #define META_BRUSH_AVERAGE_MIX  "average"
+#define META_BRUSH_ANDXOR       "andxor"
 #define META_COLOUR_FOREGROUND  "fg"
 #define META_COLOUR_BACKGROUND  "bg"
 #define META_VIEWPORT           "viewport"
@@ -272,6 +273,41 @@ namespace libGraphics
 		}
 
 		#undef AMIX_TYPES_TUPLE
+
+		// AndXor brush:
+
+		void AndXor::PaintRasterRectangle( uint32_t *destinationImage, intptr_t rowStrafeInBytes, int32_t left, int32_t top, int32_t widthPixels, int32_t heightPixels )
+		{
+			System::Raster::PaintFilledRectangle(
+				destinationImage, rowStrafeInBytes, left, top, widthPixels, heightPixels,
+				System::Raster::PaintRasterInAndXorBrush<uint32_t,int32_t>,
+				Settings );
+		}
+
+		void AndXor::PaintRasterLR( uint32_t *destinationImage, intptr_t rowStrafeInBytes, int32_t viewportTop, System::Raster::RasterLR<int32_t> *lrArray, int32_t heightPixels )
+		{
+			System::Raster::PaintLRArray(
+				destinationImage, rowStrafeInBytes, viewportTop, lrArray, heightPixels,
+				System::Raster::PaintRasterInAndXorBrush<uint32_t,int32_t>,
+				Settings );
+		}
+
+		void AndXor::PaintPolygonRasters( uint32_t *destinationImage, intptr_t rowStrafeInBytes, Point<int32_t> *pointsArray, size_t numPoints )
+		{
+			System::Raster::PaintPolygonPointsArray(
+				destinationImage, rowStrafeInBytes, pointsArray, numPoints,
+				System::Raster::PaintRasterInAndXorBrush<uint32_t,int32_t>,
+				Settings );
+		}
+
+		void AndXor::ToMetafileText( libBasic::AbstractTextOutputStream *logStream )
+		{
+			SmallStringBuilder tmpstr;
+			libBasic::MetaOut::Start( tmpstr, META_BRUSH_ANDXOR );
+			libBasic::MetaOut::Add( tmpstr, this->Settings.AndMask );
+			libBasic::MetaOut::Add( tmpstr, this->Settings.XorMask );
+			libBasic::MetaOut::Done( tmpstr, logStream );
+		}
 
 	} /// end namespace
 

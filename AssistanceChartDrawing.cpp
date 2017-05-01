@@ -338,15 +338,22 @@ void DrawBrushesDemo(
 
 	// Create brushes:
 
+	auto blackBrush   = std::make_shared<libGraphics::Brushes::Solid>( 0xFF000000 );
 	auto yellowBrush  = std::make_shared<libGraphics::Brushes::Solid>( 0xFF00FFFF );
 	auto redBrush     = std::make_shared<libGraphics::Brushes::Solid>( 0xFF0000FF );
 	auto cyanMixBrush = std::make_shared<libGraphics::Brushes::AverageMixed>( 0xFFFFFF00 );
 	auto blueMixBrush = std::make_shared<libGraphics::Brushes::AverageMixed>( 0xFFFF0000 );
-
-	auto cobbleBrush = std::make_shared<libGraphics::Brushes::Patterned>(
-		g_Pattern1616_CobbleStone, 0xFFC0FFFF, 0xFF90AAAA );
+	
+	auto redChannelBrush   = std::make_shared<libGraphics::Brushes::AndXor>( 0xFFFFFF00, 0x000000FF );
+	auto blueChannelBrush  = std::make_shared<libGraphics::Brushes::AndXor>( 0xFF00FFFF, 0x00FF0000 );
+	auto greenChannelBrush = std::make_shared<libGraphics::Brushes::AndXor>( 0xFFFF00FF, 0x0000FF00 );
+	
+	auto diamondBrush = std::make_shared<libGraphics::Brushes::Patterned>(
+		g_Pattern1616_FilledDiamond, 0xFFFFFFFF, 0xFF000000 );
 
 	// Draw circles:
+	
+	// Solid brush:
 
 	theDevice.SelectBrush( yellowBrush );
 	DrawCircle( 2,2 );
@@ -354,9 +361,13 @@ void DrawBrushesDemo(
 	theDevice.SelectBrush( redBrush );
 	DrawCircle( 5,2 );
 
-	theDevice.SelectBrush( cobbleBrush );
+	// Patterned brush:
+	
+	theDevice.SelectBrush( diamondBrush );
 	DrawCircle( 8,2 );
 
+	// AverageMixed brush demo: 
+	
 	theDevice.SelectBrush( cyanMixBrush );
 	DrawCircle( 2,5 );
 
@@ -369,6 +380,22 @@ void DrawBrushesDemo(
 	theDevice.SelectBrush( blueMixBrush ); // overlaps
 	DrawCircle( 5,6 );
 
+	// Draw a white background rectangle for the following demos:
+	
+	theDevice.SelectBrush( blackBrush );
+	theDevice.StartPoly();
+	theDevice.Rectangle( Rect<int32_t>( 0*lx, 7*ly, 10*lx, 10*ly ) );
+	theDevice.EndPoly();
+
+	// AndXor brush demo (This writes the R,G,B channels separately)
+	
+	theDevice.SelectBrush( redChannelBrush );
+	DrawCircle( 2,8 );
+	theDevice.SelectBrush( greenChannelBrush );
+	DrawCircle( 3,8 );
+	theDevice.SelectBrush( blueChannelBrush );
+	DrawCircle( 4,8 );
+	
 }
 
 
