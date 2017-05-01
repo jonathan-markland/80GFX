@@ -246,6 +246,7 @@ namespace libGraphics
 				SCALAR widthPixels )
 			{
 				// Paint a raster with a solid brush.
+				// TODO: We could usefully do some loop unrolling here.
 
 				// x; // not used
 				// y; // not used
