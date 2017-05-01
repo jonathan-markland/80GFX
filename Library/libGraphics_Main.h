@@ -29,7 +29,6 @@
 #include "Maths.h"
 #include "Geometric.h"
 #include "SineTable.h"
-#include "Array1D2D.h"
 #include "Abstractions.h"   // for libBasic::AbstractTextOutputStream (for metafiles)
 #include "SmallStringBuilder.h"
 #include "Resources_Pattern1616.h"
@@ -146,7 +145,7 @@ namespace libGraphics
 				PIXEL  Colour;
 			};
 
-			template<typename PIXEL, size_t MASK, size_t SHIFT>
+			template<typename PIXEL, uint32_t MASK, uint32_t SHIFT>
 			class AverageMixBrush
 			{
 			public:
@@ -260,7 +259,7 @@ namespace libGraphics
 			}
 
 
-			template<typename PIXEL, typename SCALAR, size_t MASK, size_t SHIFT>
+			template<typename PIXEL, typename SCALAR, PIXEL MASK, PIXEL SHIFT>
 			inline void PaintRasterInAverageMixBrush(
 				const AverageMixBrush<PIXEL,MASK,SHIFT> &averageMixBrush,
 				SCALAR x,
@@ -269,19 +268,43 @@ namespace libGraphics
 				SCALAR widthPixels )
 			{
 				// Paint a raster with averaging brush.
+				//
+				// Using a kind of "poor man's" saturation arithmetic, for performance
+				// while keeping within traditional C operators.
+				//
+				// The brush is in a solid colour (ARGB).
+				// The screen has a pixel we are blending (averaging) with (ARGB).
+				// 
+				// Assuming standard parameters for PIXEL=uint32_t, MASK=0xFEFEFEFE and SHIFT=1:
+				// - We AND-mask both pixels and shift by 1 place.
+				// - The AND-mask stops a 1 in the LSB of one byte going into the 
+				//   MSB of the adjacent byte, which numerically is non-sensical.
+				// - We shift both bytes to do the averaging division first.
+				// - We add the two 32-bit quantities together, which will now never
+				//   carry between the bytes.
+				// - This could be our final colour value to write.  But - If the
+				//   source bytes were both 255 (0xFF), then the result will be:
+				//      (0xFF and 0xFE = 0xFE) >> 1 = 0x7F  (for each resp).
+				//      Adding both:  0x7F + 0x7F = 0xFE (result).
+				//   It would be desireable for the result to actually be 0xFF
+				//   once again, particularly for the 'A' field.  I have decided
+				//   to just take the LS-Bit of the brush colour and OR it into the
+				//   result to re-supply a value for this without costing too much time.
+				//   I think this will do for now!
+
 				// x; // not used
 				// y; // not used
 
-				auto valueMask  = PIXEL(MASK);    // eg: 0xFEFEFE
-				auto valueShift = PIXEL(SHIFT);   // eg: 1
+				// We can calculate the following outside the loop:
+				auto fillerValue = (averageMixBrush.Colour & MASK) >> SHIFT;
 
-				fillerValue = (averageMixBrush.Colour & valueMask) >> valueShift;
+				auto lsbOrMask   = PIXEL(~MASK) & fillerValue;   // eg: 0x01010101 & fillerValue
 
 				auto d = destinationAddress;
 				auto e = destinationAddress + widthPixels;
 				while(d != e)
 				{
-					*d = (((*d) & valueMask) >> valueShift) + fillerValue;
+					*d = ((((*d) & MASK) >> SHIFT) + fillerValue) | lsbOrMask;
 					++d;
 				}
 			}
@@ -1962,7 +1985,7 @@ namespace libGraphics
 			System::Raster::PatternBrush<uint32_t> Settings;
 		};
 
-		#define AMIX_TYPES_TUPLE     uint32_t(0xFEFEFE),uint32_t(1)
+		#define AMIX_TYPES_TUPLE     uint32_t(0xFEFEFEFE),uint32_t(1)   // TODO: Defined in more than once place!
 		class AverageMixed: public AbstractBrush
 		{
 		public:

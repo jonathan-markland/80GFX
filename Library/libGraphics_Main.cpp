@@ -237,7 +237,7 @@ namespace libGraphics
 
 		// AverageMixed brush:
 
-		#define AMIX_TYPES_TUPLE     uint32_t(0xFEFEFE),uint32_t(1)
+		#define AMIX_TYPES_TUPLE     uint32_t(0xFEFEFEFE),uint32_t(1)   // TODO: Defined in more than once place!
 
 		void AverageMixed::PaintRasterRectangle( uint32_t *destinationImage, intptr_t rowStrafeInBytes, int32_t left, int32_t top, int32_t widthPixels, int32_t heightPixels )
 		{

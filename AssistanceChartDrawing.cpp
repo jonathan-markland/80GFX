@@ -340,10 +340,11 @@ void DrawBrushesDemo(
 
 	auto yellowBrush  = std::make_shared<libGraphics::Brushes::Solid>( 0xFF00FFFF );
 	auto redBrush     = std::make_shared<libGraphics::Brushes::Solid>( 0xFF0000FF );
-	auto cyanMixBrush = std::make_shared<libGraphics::Brushes::AverageMixed>( 0xFFFEFE00 );
+	auto cyanMixBrush = std::make_shared<libGraphics::Brushes::AverageMixed>( 0xFFFFFF00 );
+	auto blueMixBrush = std::make_shared<libGraphics::Brushes::AverageMixed>( 0xFFFF0000 );
 
 	auto cobbleBrush = std::make_shared<libGraphics::Brushes::Patterned>(
-		g_Pattern1616_CobbleStone, 0xFFC0FFFF, 0x90AAAA );
+		g_Pattern1616_CobbleStone, 0xFFC0FFFF, 0xFF90AAAA );
 
 	// Draw circles:
 
@@ -364,6 +365,9 @@ void DrawBrushesDemo(
 
 	theDevice.SelectBrush( cyanMixBrush ); // overlaps
 	DrawCircle( 6,5 );
+
+	theDevice.SelectBrush( blueMixBrush ); // overlaps
+	DrawCircle( 5,6 );
 
 }
 
