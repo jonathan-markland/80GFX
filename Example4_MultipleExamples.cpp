@@ -44,29 +44,29 @@ int main()
 {
 	VectorOfInt32  testData = { 100,200,300,400,500 };
 
-//	if( ! WithNewBitmapDo( DemoBitmapWidth, DemoBitmapHeight, "PieChart.data", 
-//		[&testData]( libGraphics::Devices::AbstractDevice &theDevice )
-//		{
-//            DrawPieChart( theDevice, &testData, DemoBitmapWidth, DemoBitmapHeight );
-//		})) return 1;
-//
-//	if( ! WithNewBitmapDo( DemoBitmapWidth, DemoBitmapHeight, "BarChart.data", 
-//		[&testData]( libGraphics::Devices::AbstractDevice &theDevice )
-//		{
-//            DrawBarChart( theDevice, &testData, DemoBitmapWidth, DemoBitmapHeight );
-//		})) return 1;
+	if( ! WithNewBitmapDo( DemoBitmapWidth, DemoBitmapHeight, "PieChart.data", 
+		[&testData]( libGraphics::Devices::AbstractDevice &theDevice )
+		{
+            DrawPieChart( theDevice, &testData, DemoBitmapWidth, DemoBitmapHeight );
+		})) return 1;
 
-//	if( ! WithNewBitmapDo( DemoBitmapWidth, DemoBitmapHeight, "PolyWithHoles.data", 
-//		[]( libGraphics::Devices::AbstractDevice &theDevice )
-//		{
-//            DrawFilledPolygonWithHoles( theDevice, DemoBitmapWidth, DemoBitmapHeight );
-//		})) return 1;
+	if( ! WithNewBitmapDo( DemoBitmapWidth, DemoBitmapHeight, "BarChart.data", 
+		[&testData]( libGraphics::Devices::AbstractDevice &theDevice )
+		{
+            DrawBarChart( theDevice, &testData, DemoBitmapWidth, DemoBitmapHeight );
+		})) return 1;
 
-//	if( ! WithNewBitmapDo( DemoBitmapWidth, DemoBitmapHeight, "PolyWithHoles2.data", 
-//		[]( libGraphics::Devices::AbstractDevice &theDevice )
-//		{
-//            DrawFilledPolygonWithHoles2( theDevice, DemoBitmapWidth, DemoBitmapHeight );
-//		})) return 1;
+	if( ! WithNewBitmapDo( DemoBitmapWidth, DemoBitmapHeight, "PolyWithHoles.data", 
+		[]( libGraphics::Devices::AbstractDevice &theDevice )
+		{
+            DrawFilledPolygonWithHoles( theDevice, DemoBitmapWidth, DemoBitmapHeight );
+		})) return 1;
+
+	if( ! WithNewBitmapDo( DemoBitmapWidth, DemoBitmapHeight, "PolyWithHoles2.data", 
+		[]( libGraphics::Devices::AbstractDevice &theDevice )
+		{
+            DrawFilledPolygonWithHoles2( theDevice, DemoBitmapWidth, DemoBitmapHeight );
+		})) return 1;
 
 	if( ! WithNewBitmapDo( DemoBitmapWidth, DemoBitmapHeight, "Brushes.data", 
 		[]( libGraphics::Devices::AbstractDevice &theDevice )
