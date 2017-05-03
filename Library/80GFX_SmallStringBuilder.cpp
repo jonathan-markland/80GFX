@@ -18,7 +18,7 @@
 //		jynx_emulator {at} yahoo {dot} com
 //
 
-#include "SmallStringBuilder.h"
+#include "80GFX_SmallStringBuilder.h"
 
 
 

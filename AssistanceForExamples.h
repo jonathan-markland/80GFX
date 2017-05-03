@@ -25,8 +25,8 @@
 #pragma once
 
 #include <string>
-#include "libGraphics_Main.h"
-#include "libGraphics_Fonts.h"
+#include "80GFX_libGraphics_Main.h"
+#include "80GFX_libGraphics_Fonts.h"
 
 
 

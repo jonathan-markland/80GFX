@@ -26,8 +26,8 @@
 #include <fstream>
 #include <string>
 #include <iostream>
-#include "libGraphics_Main.h"
-#include "ColoursEnum.h"
+#include "80GFX_libGraphics_Main.h"
+#include "80GFX_ColoursEnum.h"
 #include "AssistanceForExamples.h"
 
 

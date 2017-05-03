@@ -20,7 +20,7 @@
 
 
 #include <assert.h>
-#include "MetaFile.h"
+#include "80GFX_MetaFile.h"
 
 #define META_BINARY_TERMINATOR  '.'   /// terminator for binary sequences
 

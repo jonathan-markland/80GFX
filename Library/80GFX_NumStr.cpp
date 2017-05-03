@@ -18,7 +18,7 @@
 //		jynx_emulator {at} yahoo {dot} com
 //
 
-#include "NumStr.h"
+#include "80GFX_NumStr.h"
 
 
 char g_HexChars[16] = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F' };

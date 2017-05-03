@@ -19,7 +19,7 @@
 //
 
 
-#include "Maths.h"
+#include "80GFX_Maths.h"
 
 namespace Maths
 {

@@ -25,9 +25,9 @@
 #include "AssistanceForExamples.h"
 #include <fstream>
 #include <iostream>
-#include "libGraphics_Main.h"
-#include "libGraphics_Fonts.h"
-#include "Resources_FixedFont.h"
+#include "80GFX_libGraphics_Main.h"
+#include "80GFX_libGraphics_Fonts.h"
+#include "80GFX_Resources_FixedFont.h"
 
 
 

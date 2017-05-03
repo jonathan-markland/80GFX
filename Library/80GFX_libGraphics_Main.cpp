@@ -21,8 +21,8 @@
 
 // TODO: Use of exception raising - to be considered.
 
-#include "MetaFile.h"
-#include "libGraphics_Main.h"
+#include "80GFX_MetaFile.h"
+#include "80GFX_libGraphics_Main.h"
 
 
 #define METAFILE_PIXELS_MAX     32768

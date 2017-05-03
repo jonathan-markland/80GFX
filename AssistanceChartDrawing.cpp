@@ -25,10 +25,10 @@
 #include <stdint.h>
 #include <memory>
 #include <vector>
-#include "libGraphics_Main.h"
-#include "libGraphics_Fonts.h"
-#include "AssistanceChartDrawing.h"
-#include "ColoursEnum.h"
+#include "80GFX_libGraphics_Main.h"
+#include "80GFX_libGraphics_Fonts.h"
+#include "80GFX_AssistanceChartDrawing.h"
+#include "80GFX_ColoursEnum.h"
 
 
 

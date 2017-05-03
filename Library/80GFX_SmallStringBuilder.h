@@ -25,7 +25,7 @@
 
 #pragma once
 
-#include "NumStr.h"
+#include "80GFX_NumStr.h"
 
 class SmallStringBuilder
 {
