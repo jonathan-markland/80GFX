@@ -1,7 +1,7 @@
 
 #include <stdint.h>
 
-#include "Resources_Pattern1616.h"
+#include "80GFX_Resources_Pattern1616.h"
 
 const uint16_t g_Pattern1616_Brick[16] = {
 	0xffff,
