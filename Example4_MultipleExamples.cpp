@@ -74,6 +74,12 @@ int main()
             DrawBrushesDemo( theDevice, DemoBitmapWidth, DemoBitmapHeight );
 		})) return 1;
 
+	if( ! WithNewBitmapDo( DemoBitmapWidth, DemoBitmapHeight, "DrawOverLines.data", 
+		[]( libGraphics::Devices::AbstractDevice &theDevice )
+		{
+            DrawOverLinesTest( theDevice, DemoBitmapWidth, DemoBitmapHeight );
+		})) return 1;
+
 	return 0;
 }
 

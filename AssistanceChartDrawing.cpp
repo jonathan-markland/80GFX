@@ -405,3 +405,120 @@ void DrawBrushesDemo(
 
 
 
+void private_DrawLineOutAndBack(
+	libGraphics::Devices::AbstractDevice &theDevice, 
+	int32_t x, int32_t y,
+	int32_t dx, int32_t dy, bool drawBack )
+{
+	auto redPen  = std::make_shared<libGraphics::Pens::Solid>( libBasic::Colours::Red );
+	auto bluePen = std::make_shared<libGraphics::Pens::Solid>( libBasic::Colours::Blue );
+
+	auto ox = x + dx;
+	auto oy = y + dy;
+	
+	if( dx > 0 ) --dx; // inclusive required
+	else if( dx < 0 ) ++dx; // inclusive required
+	
+	if( dy > 0 ) --dy; // inclusive required
+	else if( dy < 0 ) ++dy; // inclusive required
+	
+	theDevice.SelectPen( bluePen );
+	theDevice.MoveTo( ox,oy );
+	theDevice.LineTo( ox+dx,oy+dy );
+
+	if( drawBack )
+	{
+		theDevice.SelectPen( redPen );
+		theDevice.MoveTo( ox+dx,oy+dy );
+		theDevice.LineTo( ox,oy );
+	}
+}
+
+
+
+void private_DrawFanOutAndBack(
+	libGraphics::Devices::AbstractDevice &theDevice, 
+	int32_t x, int32_t y,
+	int32_t dx, int32_t dy, bool drawBack )
+{
+	private_DrawLineOutAndBack( theDevice, x,y,  dx, dy, drawBack );
+	private_DrawLineOutAndBack( theDevice, x,y,  dx,-dy, drawBack );
+	private_DrawLineOutAndBack( theDevice, x,y, -dx, dy, drawBack );
+	private_DrawLineOutAndBack( theDevice, x,y, -dx,-dy, drawBack );
+	
+	private_DrawLineOutAndBack( theDevice, x,y,  dy, dx, drawBack );
+	private_DrawLineOutAndBack( theDevice, x,y,  dy,-dx, drawBack );
+	private_DrawLineOutAndBack( theDevice, x,y, -dy, dx, drawBack );
+	private_DrawLineOutAndBack( theDevice, x,y, -dy,-dx, drawBack );
+}
+
+
+
+void DrawOverLinesTest(
+	libGraphics::Devices::AbstractDevice &theDevice, 
+	int32_t projectionWidth, int32_t projectionHeight )
+{
+	private_DrawFanOutAndBack( theDevice, 100,100, 11,6, true );
+	private_DrawFanOutAndBack( theDevice, 200,100, 10,5, true );
+	
+	private_DrawFanOutAndBack( theDevice, 300,100, 8,8,  false );
+	private_DrawFanOutAndBack( theDevice, 350,100, 0,8,  false );
+	private_DrawFanOutAndBack( theDevice, 400,100, 8,0,  false );
+	
+	private_DrawFanOutAndBack( theDevice, 450,100, 3,3,  false );
+	private_DrawFanOutAndBack( theDevice, 500,100, 0,3,  false );
+	private_DrawFanOutAndBack( theDevice, 550,100, 3,0,  false );
+}
+
+
+
+
+
+
+/*
+	// -- TOP ROW --
+	
+	// Draw line in one direction (dx=201, dy=101):
+	theDevice.SelectPen( redPen );
+	theDevice.MoveTo( 100,100 );
+	theDevice.LineTo( 300,200 );
+
+	// Over-draw line in reverse direction:
+	theDevice.SelectPen( bluePen );
+	theDevice.MoveTo( 300,200 );
+	theDevice.LineTo( 100,100 );
+
+	// Draw line in one direction (dx=200, dy=100):
+	theDevice.SelectPen( redPen );
+	theDevice.MoveTo( 200,100 );
+	theDevice.LineTo( 399,199 );
+
+	// Over-draw line in reverse direction:
+	theDevice.SelectPen( bluePen );
+	theDevice.MoveTo( 399,199 );
+	theDevice.LineTo( 200,100 );
+
+	// -- BOTTOM ROW --
+	
+	// Draw line in one direction (dx=301, dy=101):
+	theDevice.SelectPen( redPen );
+	theDevice.MoveTo( 100,300 );
+	theDevice.LineTo( 400,400 );
+
+	// Over-draw line in reverse direction:
+	theDevice.SelectPen( bluePen );
+	theDevice.MoveTo( 400,404 );
+	theDevice.LineTo( 100,304 );
+
+	// Draw line in one direction (dx=300, dy=100):
+	theDevice.SelectPen( redPen );
+	theDevice.MoveTo( 200,300 );
+	theDevice.LineTo( 499,399 );
+
+	// Over-draw line in reverse direction:
+	theDevice.SelectPen( bluePen );
+	theDevice.MoveTo( 499,403 );
+	theDevice.LineTo( 200,304 );
+*/	
+	
+	

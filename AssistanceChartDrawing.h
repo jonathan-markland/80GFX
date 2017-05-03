@@ -46,5 +46,7 @@ void DrawBrushesDemo(
 	libGraphics::Devices::AbstractDevice &theDevice, 
 	int32_t projectionWidth, int32_t projectionHeight );
 
-
+void DrawOverLinesTest(
+	libGraphics::Devices::AbstractDevice &theDevice, 
+	int32_t projectionWidth, int32_t projectionHeight );
 
