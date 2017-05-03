@@ -1110,17 +1110,18 @@ namespace libGraphics
 				{
 					// Line is more horizontal than vertical.
 
-					auto decision = absDeltaX; // necessary to plot 1st point always
+					auto decision = 2*absDeltaY - absDeltaX; // necessary to plot 1st point always
+					absDeltaX *= 2; absDeltaY *= 2; 
 					assert(y != endY);
 					while( y != endY )
 					{
-						decision += absDeltaY;
-						if(decision >= absDeltaX)
+						if(decision > 0)
 						{
 							decision -= absDeltaX;
 							ppf(x,y);
 							y += sgnDeltaY;
 						}
+						decision += absDeltaY;
 						x += sgnDeltaX;
 					}
 				}
@@ -1130,18 +1131,19 @@ namespace libGraphics
 
 					assert( absDeltaX <= absDeltaY );
 
-					auto decision = absDeltaY / 2;
+					auto decision = 2*absDeltaX - absDeltaY;
+					absDeltaX *= 2; absDeltaY *= 2; 
 					assert(y != endY); // means at least 1 point will always be drawn
 					while(y != endY)
 					{
 						ppf(x,y);
 						y += sgnDeltaY;
-						decision += absDeltaX;
-						if(decision >= absDeltaY)
+						if(decision > 0)
 						{
 							x += sgnDeltaX;
 							decision -= absDeltaY;
 						}
+						decision += absDeltaX;
 					}
 				}
 			}
