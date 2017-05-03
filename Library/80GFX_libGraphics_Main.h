@@ -953,22 +953,24 @@ namespace libGraphics
 						{
 							// a
 							auto d = 2*absdy - absdx;
+							absdx *= 2; absdy *= 2;
 							while(x0 >= x1)
 							{
 								plotPoint(x0--, y0);
-								if(d > 0) { --y0; d -= 2*absdx; }
-								d+=2*absdy;
+								if(d > 0) { --y0; d -= absdx; }
+								d+=absdy;
 							}
 						}
 						else
 						{
 							// b
 							auto d = 2*absdx - absdy;
+							absdx *= 2; absdy *= 2;
 							while(y0 >= y1)
 							{
 								plotPoint(x0, y0--);
-								if(d > 0) { --x0; d -= 2*absdy; }
-								d+=2*absdx;
+								if(d > 0) { --x0; d -= absdy; }
+								d+=absdx;
 							}
 						}
 					}
@@ -981,22 +983,24 @@ namespace libGraphics
 						{
 							// d
 							auto d = 2*absdy - absdx;
+							absdx *= 2; absdy *= 2;
 							while(x0 <= x1)
 							{
 								plotPoint(x0++, y0);
-								if(d > 0) { --y0; d -= 2*absdx; }
-								d+=2*absdy;
+								if(d > 0) { --y0; d -= absdx; }
+								d+=absdy;
 							}
 						}
 						else
 						{
 							// c
 							auto d = 2*absdx - absdy;
+							absdx *= 2; absdy *= 2;
 							while(y0 >= y1)
 							{
 								plotPoint(x0, y0--);
-								if(d > 0) { ++x0; d -= 2*absdy; }
-								d+=2*absdx;
+								if(d > 0) { ++x0; d -= absdy; }
+								d+=absdx;
 							}
 						}
 					}
@@ -1020,22 +1024,24 @@ namespace libGraphics
 						{
 							// h
 							auto d = 2*absdy - absdx;
+							absdx *= 2; absdy *= 2;
 							while(x0 >= x1)
 							{
 								plotPoint(x0--, y0);
-								if(d > 0) { ++y0; d -= 2*absdx; }
-								d+=2*absdy;
+								if(d > 0) { ++y0; d -= absdx; }
+								d+=absdy;
 							}
 						}
 						else
 						{
 							// g
 							auto d = 2*absdx - absdy;
+							absdx *= 2; absdy *= 2;
 							while(y0 <= y1)
 							{
 								plotPoint(x0, y0++);
-								if(d > 0) { --x0; d -= 2*absdy; }
-								d+=2*absdx;
+								if(d > 0) { --x0; d -= absdy; }
+								d+=absdx;
 							}
 						}
 					}
@@ -1048,22 +1054,24 @@ namespace libGraphics
 						{
 							// e
 							auto d = 2*absdy - absdx;
+							absdx *= 2; absdy *= 2;
 							while(x0 <= x1)
 							{
 								plotPoint(x0++, y0);
-								if(d > 0) { ++y0; d -= 2*absdx; }
-								d+=2*absdy;
+								if(d > 0) { ++y0; d -= absdx; }
+								d+=absdy;
 							}
 						}
 						else
 						{
 							// f
 							auto d = 2*absdx - absdy;
+							absdx *= 2; absdy *= 2;
 							while(y0 <= y1)
 							{
 								plotPoint(x0, y0++);
-								if(d > 0) { ++x0; d -= 2*absdy; }
-								d+=2*absdx;
+								if(d > 0) { ++x0; d -= absdy; }
+								d+=absdx;
 							}
 						}
 					}
