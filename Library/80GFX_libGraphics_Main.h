@@ -1081,40 +1081,6 @@ namespace libGraphics
 
 
 
-/* TODO: Is this a duplicate?
-			template<typename SCALAR, typename POINT_RECEIVER>
-			bool Line(
-				Rect<SCALAR> Viewport,
-				SCALAR x0, SCALAR y0, SCALAR x1, SCALAR y1,
-				POINT_RECEIVER &PlotPoint)
-			{
-				// Draw a line (fast rejection against viewport)
-
-				// Swap the coordinates so we can perform
-				// fast-rejection against the viewport:
-
-				auto CopyOfX0 = x0;
-				auto CopyOfX1 = x1;
-				auto CopyOfY0 = y0;
-				auto CopyOfY1 = y1;
-
-				// Swap
-				CondSwapEdges(x0, x1);
-				CondSwapEdges(y0, y1);
-
-				// Check
-				if( x0 >= Viewport.right || x1 <= Viewport.left ||
-					y0 >= Viewport.bottom || y1 <= Viewport.top ) return false; // didn't draw anything
-
-				// Draw the line:
-				template_LineToPoints<SCALAR,POINT_RECEIVER>( CopyOfX0, CopyOfY0, CopyOfX1, CopyOfY1, PlotPoint );
-				return true; // drew something
-			}
-			*/
-
-
-
-
 			template<typename SCALAR, typename POINT_RECEIVER>
 			void BresenhamLineForScanConversion(
 				SCALAR x,
