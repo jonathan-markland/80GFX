@@ -31,6 +31,7 @@
 #define META_OUT                "<"   /// un-indent
 
 #define META_PEN_SOLID          "pen"
+#define META_PEN_THICK          "thick"
 #define META_BRUSH_SOLID        "brush"
 #define META_BRUSH_PATTERNED    "pattern"
 #define META_BRUSH_AVERAGE_MIX  "average"
@@ -132,6 +133,16 @@ namespace libGraphics
 			return this->Colour;
 		}
 
+		std::shared_ptr<Brushes::AbstractBrush> Solid::KludgeGetBrush()
+		{
+			return nullptr; // never called
+		}
+		
+		uint32_t Solid::KludgeGetThickness()
+		{
+			return 0;   // never called
+		}
+
 		void Solid::ToMetafileText( libBasic::AbstractTextOutputStream *logStream )
 		{
 			SmallStringBuilder tmpstr;
@@ -141,6 +152,32 @@ namespace libGraphics
 			libBasic::MetaOut::Done( tmpstr, logStream );
 		}
 
+		// -------------------------------------------------------------------------------
+		
+		uint32_t ThickPen::KludgeGetColour()
+		{
+			return 0;  // never called
+		}
+		
+		std::shared_ptr<Brushes::AbstractBrush> ThickPen::KludgeGetBrush()
+		{
+			return this->Brush;
+		}
+		
+		uint32_t ThickPen::KludgeGetThickness()
+		{
+			return this->Thickness;
+		}
+
+		void ThickPen::ToMetafileText( libBasic::AbstractTextOutputStream *logStream )
+		{
+			SmallStringBuilder tmpstr;
+			libBasic::MetaOut::Start( tmpstr, META_PEN_THICK );
+ 			libBasic::MetaOut::Add( tmpstr, this->Brush );  // TODO:  Will this work -- do we have enough space in the string ?
+			libBasic::MetaOut::Add( tmpstr, this->Thickness );
+			libBasic::MetaOut::Done( tmpstr, logStream );
+		}
+		
 	} /// end namespace
 
 } /// end namespace
@@ -470,6 +507,7 @@ namespace libGraphics
 		{
 			SetViewport( GetExtentsRect() );
 			_outlinerLineRecv.SetTargetBitmap( target );
+			_thickOutlinerLineRecv.SetTargetBitmap( target );
 		}
 
 		void BitmapDevice::SetLRArray( System::Raster::RasterLR<int32_t> *pArray, size_t capacity )
@@ -521,6 +559,7 @@ namespace libGraphics
 				_viewport = Rect<int32_t>(0,0,0,0); // Set to "no operation" mode.
 			done:
 				_outlinerLineRecv.SetUncheckedViewport( _viewport );
+				_thickOutlinerLineRecv.SetUncheckedViewport( _viewport );
 				_scanCvtLineRecv.SetViewport(  _viewport );
 			}
 		}
@@ -531,6 +570,7 @@ namespace libGraphics
 			if( pPen != nullptr )
 			{
 				_outlinerLineRecv.SetColour( pPen->KludgeGetColour() );
+				_thickOutlinerLineRecv.SetBrushAndThickness( pPen->KludgeGetBrush(), pPen->KludgeGetThickness() );
 			}
 		}
 

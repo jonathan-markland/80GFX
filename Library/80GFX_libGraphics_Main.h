@@ -128,6 +128,95 @@ namespace libGraphics
 {
 	namespace System
 	{
+		namespace PointReceivers
+		{
+
+			template<typename PIXEL, typename SCALAR>
+			class ThickPlot
+			{
+			public:
+
+				// This is a POINT_RECEIVER
+
+				ThickPlot();
+				~ThickPlot()                                                                           { delete [] _pLRArray; }
+				void SetUncheckedTarget( PIXEL *destination, intptr_t destinationBytesPerLine )        { _destination = destination; _destinationBytesPerLine = destinationBytesPerLine; }
+				void SetUncheckedViewport( Rect<SCALAR> r )                                            { _viewport = r; }
+				void SetBrushAndThickness( std::shared_ptr<Brushes::AbstractBrush> theBrush, int32_t theThickness )   { _theBrush = theBrush; _thickness = theThickness; }
+				Rect<SCALAR>  GetViewport() const                                                      { return _viewport; }
+				void operator()( SCALAR x, SCALAR y ); // NB: This *IS* clipped!
+
+			private:
+
+				PIXEL        *_destination;
+				intptr_t      _destinationBytesPerLine;
+				std::shared_ptr<Brushes::AbstractBrush> _theBrush;
+				int32_t       _thickness;
+				Rect<SCALAR>  _viewport;
+				System::Raster::RasterLR<int32_t>  *_pLRArray;   /// If allocated, it always has _bitmap.Height elements.
+
+			};
+
+			template<typename PIXEL, typename SCALAR>
+			ThickPlot<PIXEL,SCALAR>::ThickPlot()
+					: _destination(nullptr)
+					, _destinationBytesPerLine(0)
+					, _thickness(0)
+					, _viewport(Rect<SCALAR>())
+					, _pLRArray(nullptr)
+			{
+			}
+
+			template<typename PIXEL, typename SCALAR>
+			void ThickPlot<PIXEL,SCALAR>::SetUncheckedViewport( Rect<SCALAR> r )
+			{ 
+				_viewport = r; 
+				delete [] _pLRArray;
+				_pLRArray = new System::Raster::RasterLR<int32_t>[ Height(r) ];
+			}
+			
+			template<typename PIXEL, typename SCALAR>
+			void ThickPlot<PIXEL,SCALAR>::operator()( SCALAR x, SCALAR y )
+			{
+				// if( x >= _viewport.left && x < _viewport.right &&
+				// 	y >= _viewport.top  && y < _viewport.bottom )
+				{
+					assert( _destination != nullptr );
+					assert( _theBrush != nullptr );
+					assert( _destinationBytesPerLine != 0 );
+					
+					// TODO: Optimise range done.
+					
+					InitArray( _pLRArray, Height(_viewport), Width(_viewport) );
+					System::Raster::LRCollector<int32_t>  rasterRecv( _pLRArray, Height(_viewport), _viewport );
+					auto t = _thickness / 2;
+					System::ToRasters::BresenhamFilledEllipse( x-t, y-t, x+t+1, y+t+1, rasterRecv );
+					
+					_theBrush->PaintRasterLR(
+							_bitmap.TopLeft,
+							_bitmap.BytesPerScanLine,
+							_viewport.top,
+							_pLRArray + _viewport.top,
+							Height(_viewport) );
+				}
+			}
+
+		} /// end namespace
+
+	} /// end namespace
+
+} /// end namespace
+
+
+
+
+
+
+
+namespace libGraphics
+{
+	namespace System
+	{
 		namespace Raster
 		{
 			// - - - BRUSHES - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -1960,23 +2049,36 @@ namespace libGraphics
 	{
 		#define ABSTRACT_PEN_VIRTUALS \
 			virtual void ToMetafileText( libBasic::AbstractTextOutputStream * ); \
-			virtual uint32_t KludgeGetColour();
+			virtual uint32_t KludgeGetColour(); \
+			virtual std::shared_ptr<Brushes::AbstractBrush> KludgeGetBrush(); \
+			virtual uint32_t KludgeGetThickness();
 
 		class AbstractPen
 		{
 		public:
 			virtual void ToMetafileText( libBasic::AbstractTextOutputStream * ) = 0;
 			virtual uint32_t KludgeGetColour() = 0;
+			virtual std::shared_ptr<Brushes::AbstractBrush> KludgeGetBrush() = 0;
+			virtual uint32_t KludgeGetThickness() = 0;
 		};
 
 		class Solid: public AbstractPen
 		{
 		public:
-			Solid()                      : Thickness(0), Colour(0) {}
-			Solid( uint32_t colour )     : Thickness(1), Colour(colour) {}
+			Solid()                      : Colour(0) {}
+			Solid( uint32_t colour )     : Colour(colour) {}
 			ABSTRACT_PEN_VIRTUALS;
-			int32_t   Thickness; // not used yet.
 			uint32_t  Colour;
+		};
+
+		class ThickPen: public AbstractPen
+		{
+		public:
+			ThickPen()                      : Thickness(0) {}
+			ThickPen( std::shared_ptr<Brushes::AbstractBrush> theBrush, uint32_t theThickness )     : Brush(theBrush), Thickness(theThickness) {}
+			ABSTRACT_PEN_VIRTUALS;
+			std::shared_ptr<Brushes::AbstractBrush>  Brush;
+			int32_t   Thickness;
 		};
 	}
 
@@ -2347,6 +2449,19 @@ namespace libGraphics
 				PointReceivers::Plot<uint32_t,int32_t> _pointPlotter;
 			};
 
+			class ForBitmapThickenedOutlines: public AbstractLineReceiver
+			{
+			public:
+				// LINE_RECEIVER for drawing shape thickened outlines on a bitmap in given brush
+				void SetTargetBitmap( Bitmaps::Colour &bm )                                             { _pointPlotter.SetUncheckedTarget( bm.TopLeft, bm.BytesPerScanLine ); }
+				void SetUncheckedViewport( Rect<int32_t> r )                                            { _pointPlotter.SetUncheckedViewport(r); }
+				void SetBrushAndThickness( std::shared_ptr<Brushes::AbstractBrush> theBrush, int32_t theThickness )      { _pointPlotter.SetBrushAndThickness(theBrush, theThickness); }
+				virtual void operator()( int32_t x0, int32_t y0, int32_t x1, int32_t y1 )               { System::ToPoints::Line( x0,y0,x1,y1, _pointPlotter ); }
+				virtual Rect<int32_t> GetViewportRect()                                                 { return _pointPlotter.GetViewport(); }
+			private:
+				PointReceivers::ThickPlot<uint32_t,int32_t> _pointPlotter;
+			};
+
 			class ForBitmapScanConvPointCollecting: public AbstractLineReceiver
 			{
 			public:
@@ -2417,6 +2532,7 @@ namespace libGraphics
 			Point<int32_t>     *_pPointsArray;               /// The caller allocates an array for poly scan conversion.
 			size_t              _pointsArrayCapacity;        /// Capacity of _pPointsArray
 			System::LineReceivers::ForBitmapOutlines                 _outlinerLineRecv;
+			System::LineReceivers::ForBitmapThickenedOutlines        _thickOutlinerLineRecv;
 			System::LineReceivers::ForBitmapScanConvPointCollecting  _scanCvtLineRecv;
 			int32_t             _cursorX;
 			int32_t             _cursorY;
