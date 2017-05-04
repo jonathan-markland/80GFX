@@ -148,7 +148,6 @@ namespace libGraphics
 			SmallStringBuilder tmpstr;
 			libBasic::MetaOut::Start( tmpstr, META_PEN_SOLID );
 			libBasic::MetaOut::Add( tmpstr, this->Colour );
-			libBasic::MetaOut::Add( tmpstr, this->Thickness );
 			libBasic::MetaOut::Done( tmpstr, logStream );
 		}
 
@@ -173,7 +172,7 @@ namespace libGraphics
 		{
 			SmallStringBuilder tmpstr;
 			libBasic::MetaOut::Start( tmpstr, META_PEN_THICK );
- 			libBasic::MetaOut::Add( tmpstr, this->Brush );  // TODO:  Will this work -- do we have enough space in the string ?
+			this->Brush->ToMetafileText( logStream );
 			libBasic::MetaOut::Add( tmpstr, this->Thickness );
 			libBasic::MetaOut::Done( tmpstr, logStream );
 		}
@@ -1373,11 +1372,13 @@ namespace libGraphics
 
 			assert( _pTarget != nullptr );
 
+			// TODO: Objects to have a ParseFrom() function.
+			// TODO: META_PEN_THICK
+			
 			if( libBasic::MetaIn::ParseMetaCmd( _pos, META_PEN_SOLID ) )
 			{
 				// Solid pen
 				METAREAD_PARSE_FIELD( _solidPen->Colour );
-				METAREAD_PARSE_FIELD( _solidPen->Thickness );
 				_pTarget->SelectPen( _solidPen );
 			}
 			else if( libBasic::MetaIn::ParseMetaCmd( _pos, META_BRUSH_SOLID ) )
