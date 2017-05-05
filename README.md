@@ -47,8 +47,8 @@ scan-converted using a variety of brushes.
 - Pattern Brush
 - Average Mix Brush
 
-Pen facility is present, but only solid colour single-pixel
-implemented.
+Pen facility is present, including a fast solid colour single-pixel pen,
+and a thickened circular pen of any size, that draws using a brush.
 
 
 
@@ -105,3 +105,7 @@ adaptation to ellipses.
 - Colour and Mono bitmaps supporting transparent sections by keyed colour
 
 
+Redesign notes
+==============
+The code contains some TODOs to smooth internal design.
+There are also some optimisation oppotunities currently missed.
