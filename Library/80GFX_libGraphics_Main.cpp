@@ -128,6 +128,16 @@ namespace libGraphics
 {
 	namespace Pens
 	{
+		bool Solid::IsSolid() const
+		{
+			return true;
+		}
+		
+		bool Solid::IsThick() const
+		{
+			return false;
+		}
+		
 		uint32_t Solid::KludgeGetColour()
 		{
 			return this->Colour;
@@ -152,6 +162,16 @@ namespace libGraphics
 		}
 
 		// -------------------------------------------------------------------------------
+		
+		bool ThickPen::IsSolid() const
+		{
+			return false;
+		}
+		
+		bool ThickPen::IsThick() const
+		{
+			return true;
+		}
 		
 		uint32_t ThickPen::KludgeGetColour()
 		{
@@ -568,6 +588,7 @@ namespace libGraphics
 			BaseDevice::SelectPen( pPen ); /// call the base class
 			if( pPen != nullptr )
 			{
+				// TODO: Sort out these kludges.  Fetches are benign if its the wrong pen type, as it stands.
 				_outlinerLineRecv.SetColour( pPen->KludgeGetColour() );
 				_thickOutlinerLineRecv.SetBrushAndThickness( pPen->KludgeGetBrush(), pPen->KludgeGetThickness() );
 			}
@@ -620,9 +641,16 @@ namespace libGraphics
 
 		System::LineReceivers::AbstractLineReceiver *BitmapDevice::GetLineReceiverForCurrentMode()
 		{
-			return DoingPolygon()
-				? static_cast<System::LineReceivers::AbstractLineReceiver *>( &_scanCvtLineRecv )
-				: static_cast<System::LineReceivers::AbstractLineReceiver *>( &_outlinerLineRecv );
+			if( DoingPolygon() ) 
+				return static_cast<System::LineReceivers::AbstractLineReceiver *>( &_scanCvtLineRecv );
+			
+			if( _pPen->IsSolid() )
+				return static_cast<System::LineReceivers::AbstractLineReceiver *>( &_outlinerLineRecv );
+			
+			if( _pPen->IsThick() )
+				return static_cast<System::LineReceivers::AbstractLineReceiver *>( &_thickOutlinerLineRecv );
+			
+			return nullptr;
 		}
 
 		void BitmapDevice::Arc( Rect<int32_t> r, int32_t startAngle, int32_t endAngle )

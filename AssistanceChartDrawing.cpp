@@ -159,12 +159,18 @@ void DrawPieChart(
 	auto lx = projectionWidth / 10;
 	auto ly = projectionHeight / 10;
 
-	// Create pens:
-	auto outlinePen = std::make_shared<libGraphics::Pens::Solid>( libBasic::Colours::White );
-
 	// Create brush:
 	auto patternedBrush = std::make_shared<libGraphics::Brushes::Patterned>(
 		g_Pattern1616_Balls, libBasic::Colours::Black, libBasic::Colours::Black );
+
+	//auto outlineBrush = std::make_shared<libGraphics::Brushes::Patterned>(
+	//	g_Pattern1616_RoughWeave, libBasic::Colours::White, libBasic::Colours::Blue );
+	
+	auto outlineBrush = std::make_shared<libGraphics::Brushes::Solid>( libBasic::Colours::White );
+		
+	// Create pens:
+	// auto outlinePen = std::make_shared<libGraphics::Pens::Solid>( libBasic::Colours::White );
+	auto outlinePen = std::make_shared<libGraphics::Pens::ThickPen>( outlineBrush, 10 );
 
 	// Draw series
 	theDevice.SelectPen( outlinePen );

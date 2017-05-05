@@ -2031,7 +2031,10 @@ namespace libGraphics
 			virtual void ToMetafileText( libBasic::AbstractTextOutputStream * ); \
 			virtual uint32_t KludgeGetColour(); \
 			virtual std::shared_ptr<Brushes::AbstractBrush> KludgeGetBrush(); \
-			virtual uint32_t KludgeGetThickness();
+			virtual uint32_t KludgeGetThickness(); \
+			virtual bool IsSolid() const; \
+			virtual bool IsThick() const;
+			
 
 		class AbstractPen
 		{
@@ -2040,6 +2043,8 @@ namespace libGraphics
 			virtual uint32_t KludgeGetColour() = 0;
 			virtual std::shared_ptr<Brushes::AbstractBrush> KludgeGetBrush() = 0;
 			virtual uint32_t KludgeGetThickness() = 0;
+			virtual bool IsSolid() const = 0;
+			virtual bool IsThick() const = 0;
 		};
 
 		class Solid: public AbstractPen
