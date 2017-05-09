@@ -108,4 +108,4 @@ adaptation to ellipses.
 Redesign notes
 ==============
 The code contains some TODOs to smooth internal design.
-There are also some optimisation oppotunities currently missed.
+There are also some optimisation opportunities currently missed.
