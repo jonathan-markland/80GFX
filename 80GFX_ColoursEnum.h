@@ -27,6 +27,12 @@ namespace libBasic
 	{
 		enum Enum
 		{
+			// Note:  The your system may place different interpretations
+			//        on the colour values.  Typically I have found that Red and Blue
+			//        can swap over on raw frame buffers vs. Windows DIBSECTIONs etc...
+			//
+			//        Be aware:  I am not trying to solve *that* problem!
+			
 			White   = 0xFFFFFFFF,
 			Black   = 0xFF000000,
 			Blue    = 0xFFFF0000,
