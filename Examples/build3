@@ -1,15 +1,15 @@
 g++ \
  Example3_Fonts.cpp \
- Library/80GFX_Abstractions.cpp \
- Library/80GFX_libGraphics_Fonts.cpp \
- Library/80GFX_libGraphics_Main.cpp \
- Library/80GFX_Maths.cpp \
- Library/80GFX_MetaFile.cpp \
- Library/80GFX_NumStr.cpp \
- Library/80GFX_Resources_FixedFont_CamputersLynxII.cpp \
- Library/80GFX_Resources_FixedFont_PcBios8x16.cpp \
- Library/80GFX_Resources_Pattern1616.cpp \
- Library/80GFX_SineTable.cpp \
- Library/80GFX_SmallStringBuilder.cpp \
+ ../80GFX_Abstractions.cpp \
+ ../80GFX_libGraphics_Fonts.cpp \
+ ../80GFX_libGraphics_Main.cpp \
+ ../80GFX_Maths.cpp \
+ ../80GFX_MetaFile.cpp \
+ ../80GFX_NumStr.cpp \
+ ../80GFX_Resources_FixedFont_CamputersLynxII.cpp \
+ ../80GFX_Resources_FixedFont_PcBios8x16.cpp \
+ ../80GFX_Resources_Pattern1616.cpp \
+ ../80GFX_SineTable.cpp \
+ ../80GFX_SmallStringBuilder.cpp \
  AssistanceForExamples.cpp \
- -I Library -std=c++11
+ -I .. -std=c++11
