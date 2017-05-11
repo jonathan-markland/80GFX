@@ -114,7 +114,7 @@ There are also some optimisation opportunities currently missed.
 Demonstration Images (as jpegs)
 ===============================
 
-Bar chart with patterned brush
+Bar chart with patterned brush.
 ![Bar chart](/Examples/BarChart.jpg)
 
 Pie chart with patterned brush fills, and thick pen outline (circular nib).
