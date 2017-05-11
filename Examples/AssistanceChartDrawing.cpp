@@ -64,6 +64,20 @@ SCALAR  Max( const std::vector<SCALAR> &vec )
 
 
 
+void DrawBackground(
+	libGraphics::Devices::AbstractDevice &theDevice, 
+	int32_t projectionWidth, int32_t projectionHeight )
+{
+	auto blackBrush = std::make_shared<libGraphics::Brushes::Solid>( 0xFF000000 );
+	
+	theDevice.SelectBrush( blackBrush );
+	theDevice.StartPoly();
+		theDevice.Rectangle( Rect<int32_t>(0,0,projectionWidth,projectionHeight) );
+	theDevice.EndPoly();
+}
+
+
+
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 //    CHARTS
@@ -99,6 +113,8 @@ void DrawBarChart(
 	libGraphics::Devices::AbstractDevice &theDevice, 
 	const VectorOfInt32 *dataSet, int32_t projectionWidth, int32_t projectionHeight )
 {
+	DrawBackground( theDevice, projectionWidth, projectionHeight );
+	
 	auto lx = projectionWidth / 10;
 	auto ly = projectionHeight / 10;
 
@@ -156,6 +172,8 @@ void DrawPieChart(
 	libGraphics::Devices::AbstractDevice &theDevice, 
 	const VectorOfInt32 *dataSet, int32_t projectionWidth, int32_t projectionHeight )
 {
+	DrawBackground( theDevice, projectionWidth, projectionHeight );
+	
 	auto lx = projectionWidth / 10;
 	auto ly = projectionHeight / 10;
 
@@ -212,6 +230,8 @@ void DrawFilledPolygonWithHoles(
 	libGraphics::Devices::AbstractDevice &theDevice, 
 	int32_t projectionWidth, int32_t projectionHeight )
 {
+	DrawBackground( theDevice, projectionWidth, projectionHeight );
+	
 	//
 	// Composing a filled polygon with holes from basic shapes:
 	//
@@ -274,6 +294,8 @@ void DrawFilledPolygonWithHoles2(
 	libGraphics::Devices::AbstractDevice &theDevice, 
 	int32_t projectionWidth, int32_t projectionHeight )
 {
+	DrawBackground( theDevice, projectionWidth, projectionHeight );
+	
 	auto lx = projectionWidth / 10;
 	auto ly = projectionHeight / 10;
 
@@ -485,6 +507,8 @@ void DrawWithTheDirectGraphicsFunctions(
 	int32_t demoBitmapWidth,
 	int32_t demoBitmapHeight )
 {
+	DrawBackground( theBitmapDevice, demoBitmapWidth, demoBitmapHeight );
+	
 	// Note the colour values are 32-bpp, so you should specify RGBA where A=255
 	// which will let you see the output in GIMP.  Obviously the "A" component is
 	// not processed by this library, only stored.  Alpha just isn't retro enough.
@@ -598,6 +622,8 @@ void DrawHorizontalPalette(
 
 void DrawFontDemo( libGraphics::Devices::AbstractDevice &theDevice )
 {
+	DrawBackground( theDevice, 640, 480 ); // TODO: Sort out constants
+	
 	// Set the colour for the text using SetForegroundColour():
 
 	theDevice.SetForegroundColour( libBasic::Colours::White );
