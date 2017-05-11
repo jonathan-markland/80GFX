@@ -109,3 +109,20 @@ Redesign notes
 ==============
 The code contains some TODOs to smooth internal design.
 There are also some optimisation opportunities currently missed.
+
+
+Demonstration Images (as jpegs)
+===============================
+
+![Bar chart](/Examples/BarChart.jpg)
+![Pie chart](/Examples/PieChart.jpg)
+![Omega demo - filled and outline shape with beziers](/Examples/Omega.jpg)
+![Capital A](/Examples/CapitalA.jpg)
+![Polygon with holes](/Examples/PolyWithHoles.jpg)
+![Polygon with holes](/Examples/PolyWithHoles2.jpg)
+![Brushes](/Examples/Brushes.jpg)
+![Font demo](/Examples/FontDemo.jpg)
+![Direct drawing functions](/Examples/DirectFunctionsDemo.jpg)
+![Palette bitmap demo](/Examples/PaletteDemo.jpg)
+
+
