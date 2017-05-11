@@ -477,56 +477,6 @@ void DrawOverLinesTest(
 }
 
 
-
-
-
-
-/*
-	// -- TOP ROW --
-	
-	// Draw line in one direction (dx=201, dy=101):
-	theDevice.SelectPen( redPen );
-	theDevice.MoveTo( 100,100 );
-	theDevice.LineTo( 300,200 );
-
-	// Over-draw line in reverse direction:
-	theDevice.SelectPen( bluePen );
-	theDevice.MoveTo( 300,200 );
-	theDevice.LineTo( 100,100 );
-
-	// Draw line in one direction (dx=200, dy=100):
-	theDevice.SelectPen( redPen );
-	theDevice.MoveTo( 200,100 );
-	theDevice.LineTo( 399,199 );
-
-	// Over-draw line in reverse direction:
-	theDevice.SelectPen( bluePen );
-	theDevice.MoveTo( 399,199 );
-	theDevice.LineTo( 200,100 );
-
-	// -- BOTTOM ROW --
-	
-	// Draw line in one direction (dx=301, dy=101):
-	theDevice.SelectPen( redPen );
-	theDevice.MoveTo( 100,300 );
-	theDevice.LineTo( 400,400 );
-
-	// Over-draw line in reverse direction:
-	theDevice.SelectPen( bluePen );
-	theDevice.MoveTo( 400,404 );
-	theDevice.LineTo( 100,304 );
-
-	// Draw line in one direction (dx=300, dy=100):
-	theDevice.SelectPen( redPen );
-	theDevice.MoveTo( 200,300 );
-	theDevice.LineTo( 499,399 );
-
-	// Over-draw line in reverse direction:
-	theDevice.SelectPen( bluePen );
-	theDevice.MoveTo( 499,403 );
-	theDevice.LineTo( 200,304 );
-*/	
-	
 	
 	
 	
