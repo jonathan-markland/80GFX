@@ -114,6 +114,18 @@ int main()
             DrawBarChart( theDevice, &testData, DemoBitmapWidth, DemoBitmapHeight );
 		})) return 1;
 
+	if( ! WithNewBitmapDo( DemoBitmapWidth, DemoBitmapHeight, "CapitalA.data", 
+		[]( libGraphics::Devices::AbstractDevice &theDevice )
+		{
+            DrawCapitalLetterA( theDevice, DemoBitmapWidth, DemoBitmapHeight );
+		})) return 1;
+
+	if( ! WithNewBitmapDo( DemoBitmapWidth, DemoBitmapHeight, "Omega.data", 
+		[]( libGraphics::Devices::AbstractDevice &theDevice )
+		{
+            DrawOmega( theDevice, DemoBitmapWidth, DemoBitmapHeight );
+		})) return 1;
+
 	if( ! WithNewBitmapDo( DemoBitmapWidth, DemoBitmapHeight, "PolyWithHoles.data", 
 		[]( libGraphics::Devices::AbstractDevice &theDevice )
 		{

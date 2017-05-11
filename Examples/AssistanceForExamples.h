@@ -29,7 +29,7 @@
 #include "80GFX_libGraphics_Fonts.h"
 
 
-
+// If any of your polygons are not showing, increase this:
 const uint32_t PolyScanArrayElementCount = 10000; // TODO: Need to eliminate the need to do this by re-design in the library.
 
 

@@ -681,3 +681,122 @@ void DrawFontDemo( libGraphics::Devices::AbstractDevice &theDevice )
 
 
  
+
+
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+//    POLYGON DEMOS - LETTER OUTLINES
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+ 
+
+ 
+void DrawCapitalLetterA(
+	libGraphics::Devices::AbstractDevice &theDevice, 
+	int32_t projectionWidth, int32_t projectionHeight )
+{
+	auto whiteBrush = std::make_shared<libGraphics::Brushes::Solid>( 0xFFFFFFFF );
+	auto blackBrush = std::make_shared<libGraphics::Brushes::Solid>( 0xFF000000 );
+
+	theDevice.SelectBrush( whiteBrush );
+	theDevice.StartPoly(); // TODO: Rename StartFilledPoly() ?
+		theDevice.Rectangle( Rect<int32_t>(0,0,640,480) );
+	theDevice.EndPoly(); // TODO: Rename EndFilledPoly() ?  // <-- This line executes the final drawing.
+	
+	theDevice.SelectBrush( blackBrush );
+	theDevice.StartPoly();
+	
+		// Reminder: Your polygons will not draw if you don't close them.
+		
+		// The following has two figures:
+
+		// Outer outline of the 'A':
+		theDevice.MoveTo(286,52);
+		theDevice.LineTo(348,52);
+		theDevice.LineTo(491,430); 
+		theDevice.LineTo(438,430); 
+		theDevice.LineTo(404,335); 
+		theDevice.LineTo(232,335); 
+		theDevice.LineTo(196,431); 
+		theDevice.LineTo(143,431);
+		theDevice.LineTo(286,52); 
+		
+		// Inner triangle:
+		theDevice.MoveTo(316,102); 
+		theDevice.LineTo(386,291); 
+		theDevice.LineTo(247,291); 
+		theDevice.LineTo(316,102);
+
+	theDevice.EndPoly(); // <-- This line executes the final drawing.
+}
+
+
+
+void DrawOmega(
+	libGraphics::Devices::AbstractDevice &theDevice, 
+	int32_t projectionWidth, int32_t projectionHeight )
+{
+	auto whiteBrush = std::make_shared<libGraphics::Brushes::Solid>( 0xFFFFFFFF );
+	auto blackBrush = std::make_shared<libGraphics::Brushes::Solid>( 0xFF000000 );
+	auto redBrush   = std::make_shared<libGraphics::Brushes::Solid>( libBasic::Colours::Red );
+	
+	theDevice.SelectBrush( whiteBrush );
+	theDevice.StartPoly(); // TODO: Rename StartFilledPoly() ?
+		theDevice.Rectangle( Rect<int32_t>(0,0,640,480) );
+	theDevice.EndPoly(); // TODO: Rename EndFilledPoly() ?  // <-- This line executes the final drawing.
+	
+	auto outlinePen = std::make_shared<libGraphics::Pens::ThickPen>( redBrush, 5 );
+	theDevice.SelectPen( outlinePen );
+
+	auto DrawOmegaOutline = [&]()
+	{
+		// NOTE: Not perfectly symmetrical because I read the coords by hovering
+		// the mouse in GIMP, and making approximate notes rather than doing 
+		// anything clever.
+		
+		// Todo: BezierTo() is required, which MUST set the internal 
+		//       cursor position!  Then get rid of all the duplicate points!
+
+		// Reminder: Your polygons will not draw if you don't close them.
+		
+		theDevice.MoveTo(476,331); // 1
+		theDevice.LineTo(466,370); // 2
+		theDevice.Bezier(466,370   ,464,378, 462,382, 431,382); // 3
+		theDevice.MoveTo(431,382); // TODO: extraneous
+		theDevice.LineTo(388,383); // 4
+		theDevice.Bezier(388,383   ,395,356, 407,336, 431,299); // 5
+		theDevice.Bezier(431,299   ,460,259, 486,223, 486,177); // 6
+		theDevice.Bezier(486,177   ,486,105, 412, 45, 320, 45); // 7
+		theDevice.Bezier(320, 45   ,224, 45, 154,105, 153,176); // 8
+		theDevice.Bezier(153,176   ,153,222, 179,261, 204,298); // 9
+		theDevice.Bezier(204,298   ,233,338, 244,360, 249,381); // 10
+		theDevice.MoveTo(249,381); // TODO: extraneous
+		theDevice.LineTo(207,381); // 11
+		theDevice.Bezier(207,381   ,177,382, 175,378, 171,371); // 12
+		theDevice.Bezier(171,371   ,169,364, 165,345, 162,332); // 13
+		theDevice.MoveTo(162,332); // TODO: extraneous
+		theDevice.LineTo(147,330); 
+		theDevice.LineTo(166,416); 
+		theDevice.LineTo(250,416); 
+		theDevice.Bezier(250,416   ,263,417, 266,417, 267,406); 
+		theDevice.Bezier(267,406   ,266,369, 249,325, 233,284); 
+		theDevice.Bezier(233,284   ,220,250, 208,214, 208,177); 
+		theDevice.Bezier(208,177   ,208, 97, 265, 58, 318, 56); 
+		theDevice.Bezier(318, 56   ,374, 56, 430, 98, 431,176); 
+		theDevice.Bezier(431,176   ,431,216, 416,251, 405,283); 
+		theDevice.Bezier(405,283   ,388,323, 371,368, 371,406); 
+		theDevice.Bezier(371,406   ,371,417, 374,417, 387,416); 
+		theDevice.MoveTo(387,416); // TODO: extraneous
+		theDevice.LineTo(473,418); 
+		theDevice.LineTo(491,333); 
+		theDevice.LineTo(476,331);
+	};
+	
+	theDevice.SelectBrush( blackBrush );
+	theDevice.StartPoly();
+	DrawOmegaOutline();
+	theDevice.EndPoly(); // <-- This line executes the final drawing.  (Fill only!)
+	
+	DrawOmegaOutline();  // <-- This draws the outline in the pen
+}
+
+
+
