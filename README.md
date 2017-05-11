@@ -114,15 +114,34 @@ There are also some optimisation opportunities currently missed.
 Demonstration Images (as jpegs)
 ===============================
 
+Bar chart with patterned brush
 ![Bar chart](/Examples/BarChart.jpg)
+
+Pie chart with patterned brush fills, and thick pen outline (circular nib).
 ![Pie chart](/Examples/PieChart.jpg)
-![Omega demo - filled and outline shape with beziers](/Examples/Omega.jpg)
+
+Polygon scan converted capital letter 'A' (no beziers)
 ![Capital A](/Examples/CapitalA.jpg)
+
+Polygon scan converted Omega symbol with lines and bezier curves, and thickened outline.
+![Omega demo - filled and outline shape with beziers](/Examples/Omega.jpg)
+
+Multiple basic shapes contributing to a polygon that is scan-converted in a single pass.
 ![Polygon with holes](/Examples/PolyWithHoles.jpg)
+
+Multiple basic shapes contributing to a polygon that is scan-converted in a single pass.
 ![Polygon with holes](/Examples/PolyWithHoles2.jpg)
+
+Demonstration of brush types: Solid, Patterned, Average Mix, and painting the R,G,B channels independently.
 ![Brushes](/Examples/Brushes.jpg)
+
+Font demonstration.  Bitmap fonts supported, of user-definable formats.
 ![Font demo](/Examples/FontDemo.jpg)
+
+"Direct" drawing:  Drawing filled shapes without a polygon scan conversion buffer (or it's associated sort() ! ).
 ![Direct drawing functions](/Examples/DirectFunctionsDemo.jpg)
+
+Stretched bitmap drawing used to show a palette.
 ![Palette bitmap demo](/Examples/PaletteDemo.jpg)
 
 
