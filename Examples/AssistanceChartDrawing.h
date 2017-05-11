@@ -26,6 +26,26 @@
 
 typedef std::vector<int32_t> VectorOfInt32;
 
+void DrawFontDemo(
+	libGraphics::Devices::AbstractDevice &theDevice );
+
+void DrawHorizontalPalette( 
+	libGraphics::Devices::AbstractDevice &theDevice,
+	uint32_t *colourStrip, 
+	uint32_t numColours, 
+	int32_t widthOfDisplay, 
+	int32_t heightOfDisplay );
+
+void DrawPalette(
+	uint32_t *colourStrip, uint32_t numColours, 
+	libGraphics::Devices::AbstractDevice &theDevice, 
+	int32_t widthOfDisplay, int32_t heightOfDisplay );
+
+void DrawWithTheDirectGraphicsFunctions(
+	libGraphics::Devices::BitmapDevice &theBitmapDevice,
+	int32_t demoBitmapWidth,
+	int32_t demoBitmapHeight );
+
 void DrawBarChart( 
 	libGraphics::Devices::AbstractDevice &theDevice, 
 	const VectorOfInt32 *pVec, int32_t projectionWidth, int32_t projectionHeight );

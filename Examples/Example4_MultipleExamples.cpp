@@ -39,11 +39,60 @@ const int DemoBitmapWidth = 640;
 const int DemoBitmapHeight = 480;
 
 
+
+//
+// Here is a statically allocated 32-bpp bitmap.
+// It's just a strip of colours:
+//
+
+uint32_t g_ColourStripData[16] = 
+{
+  0xFF000000,   // black
+  0xFF333333,   // grey 33
+  0xFF575757,   // grey 57
+  0xFF888888,   // grey 88
+  0xFFCCCCCC,   // grey
+  0xFFFFFFFF,   // white
+  0xFF33EEFF,   // yellow
+  0xFF3392FF,   // orange
+  0xFF2323AD,   // red
+  0xFFC02681,   // magenta
+  0xFFD74B2A,   // blue
+  0xFFFFAF9D,   // light blue
+  0xFF7AC581,   // light green
+  0xFF14691D,   // green
+  0xFF194A81,   // brown
+  0xFFF3CDFF,   // pink
+};
+
+
+
+
+
  
 int main()
 {
 	VectorOfInt32  testData = { 100,200,300,400,500 };
 
+	if( ! WithNewBitmapDo( DemoBitmapWidth, DemoBitmapHeight, "PaletteDemo.data", 
+		[]( libGraphics::Devices::AbstractDevice &theDevice )
+		{
+			DrawPalette( g_ColourStripData, 16, theDevice, DemoBitmapWidth, DemoBitmapHeight );
+		})) return 1;
+
+	if( ! WithNewBitmapDo( DemoBitmapWidth, DemoBitmapHeight, "DirectFunctionsDemo.data", 
+		[]( libGraphics::Devices::BitmapDevice &theDevice )
+		{
+			DrawWithTheDirectGraphicsFunctions( theDevice, DemoBitmapWidth, DemoBitmapHeight );
+		})) return 1;
+		
+	if( ! WithNewBitmapDo( DemoBitmapWidth, DemoBitmapHeight, "FontDemo.data", 
+		[]( libGraphics::Devices::AbstractDevice &theDevice )
+		{
+			DrawHorizontalPalette( theDevice, g_ColourStripData, 16, DemoBitmapWidth, DemoBitmapHeight );
+			DrawFontDemo( theDevice );
+		})) return 1;
+		
 	if( ! WithNewBitmapDo( DemoBitmapWidth, DemoBitmapHeight, "PieChart.data", 
 		[&testData]( libGraphics::Devices::AbstractDevice &theDevice )
 		{

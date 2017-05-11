@@ -528,3 +528,156 @@ void DrawOverLinesTest(
 */	
 	
 	
+	
+	
+void DrawWithTheDirectGraphicsFunctions(
+	libGraphics::Devices::BitmapDevice &theBitmapDevice,
+	int32_t demoBitmapWidth,
+	int32_t demoBitmapHeight )
+{
+	// Note the colour values are 32-bpp, so you should specify RGBA where A=255
+	// which will let you see the output in GIMP.  Obviously the "A" component is
+	// not processed by this library, only stored.  Alpha just isn't retro enough.
+	
+	auto lx = demoBitmapWidth / 10;
+	auto ly = demoBitmapHeight / 10;
+	
+	// Create pens:
+	
+	auto whitePen = std::make_shared<libGraphics::Pens::Solid>( libBasic::Colours::White );
+	auto bluePen  = std::make_shared<libGraphics::Pens::Solid>( libBasic::Colours::Blue );
+	
+	// Create brushes:
+	
+	auto patternedBrush = std::make_shared<libGraphics::Brushes::Patterned>( 
+		g_Pattern1616_Balls, libBasic::Colours::Yellow, libBasic::Colours::Green );
+
+	auto solidBrush = std::make_shared<libGraphics::Brushes::Solid>( 
+		libBasic::Colours::Blue );
+		
+	// Demo the "direct" functions, although these are for BitmapDevice only:
+
+	theBitmapDevice.SelectBrush( solidBrush );
+	theBitmapDevice.DirectRectangle( lx,ly, lx*9,ly*9 );
+	
+	theBitmapDevice.SelectBrush( patternedBrush );
+	theBitmapDevice.DirectRectangle( lx*2,ly*2, lx*3,ly*3 );
+
+	theBitmapDevice.SelectBrush( patternedBrush );
+	theBitmapDevice.DirectEllipse( lx*5,ly*2, lx*8,ly*4 );
+	theBitmapDevice.DirectTriangle( lx*2,ly*4, lx*2,ly*8, lx*4, ly*5 );
+}
+
+
+	
+	
+	
+//
+// DrawPalette
+//
+// Here's an example of drawing a 32-bpp bitmap onto a target device.
+//
+
+void DrawPalette( uint32_t *colourStrip, uint32_t numColours, libGraphics::Devices::AbstractDevice &theDevice, int32_t widthOfDisplay, int32_t heightOfDisplay )
+{
+	int32_t  lx = widthOfDisplay / 10;
+	int32_t  ly = heightOfDisplay / 10;
+
+	// Create a bitmap object that refers to the colourStrip memory space:
+	auto theBitmap = std::make_shared<libGraphics::Bitmaps::Colour>(
+		colourStrip, numColours, 1, numColours * 4 );
+
+	// Select the bitmap and draw it:
+	auto targetRect = Rect<int32_t>( lx, ly, lx*9, ly*9 );
+	auto sourceRect = Rect<int32_t>( 0, 0, theBitmap->WidthPixels, theBitmap->HeightPixels );
+	theDevice.SelectBitmap( theBitmap );
+	theDevice.DrawBitmap( targetRect, sourceRect, 0 );
+	theDevice.SelectBitmap( nullptr );
+}
+
+
+
+
+
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+//    FONT DEMO
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+
+
+//
+// DrawHorizontalPalette
+//
+// Here's an example of drawing a 32-bpp bitmap onto a target device.
+//
+
+void DrawHorizontalPalette( 
+	libGraphics::Devices::AbstractDevice &theDevice,
+	uint32_t *colourStrip, 
+	uint32_t numColours, 
+	int32_t widthOfDisplay, 
+	int32_t heightOfDisplay )
+{
+	int32_t  lx = widthOfDisplay / 10;
+	int32_t  ly = heightOfDisplay / 10;
+
+	// Create a bitmap object that refers to the colourStrip memory space:
+	auto theBitmap = std::make_shared<libGraphics::Bitmaps::Colour>(
+		colourStrip, 1, numColours, 4 );
+
+	// Select the bitmap and draw it:
+	auto targetRect = Rect<int32_t>( lx, ly, lx*9, ly*9 );
+	auto sourceRect = Rect<int32_t>( 0, 0, theBitmap->WidthPixels, theBitmap->HeightPixels );
+	theDevice.SelectBitmap( theBitmap );
+	theDevice.DrawBitmap( targetRect, sourceRect, 0 );
+	theDevice.SelectBitmap( nullptr );
+}
+
+
+
+
+
+//
+// DrawFontDemo
+//
+// This example shows how to select fonts, and render them.
+//
+// This also illustrates the scaling feature.  I can't remember
+// why I put this unusual feature in, but it's there, anyway!
+//
+
+void DrawFontDemo( libGraphics::Devices::AbstractDevice &theDevice )
+{
+	// Set the colour for the text using SetForegroundColour():
+
+	theDevice.SetForegroundColour( libBasic::Colours::White );
+	
+	// Select a font, and write a string.
+	// The nullptr means no scaling is provided, so font will render 1:1 definition-to-pixels:
+	
+	theDevice.SelectFont( "System",80 );
+	theDevice.Text( 100,88, nullptr, "This is a test of System font.", 30 );
+	
+	// Select another colour and show how to write text scaled by a ratio:
+
+	theDevice.SetForegroundColour( libBasic::Colours::Red );
+	auto scaleRatio = libGraphics::Scaling( 4, 2 );
+	theDevice.Text( 100,175, &scaleRatio, "Wide text!", 10 );
+
+	// Large text with shadow effect:
+	
+	auto scaleRatio2 = libGraphics::Scaling( 6, 7 );
+	theDevice.SetForegroundColour( libBasic::Colours::Black );   // Shadow
+	theDevice.Text( 201,351, &scaleRatio2, "Tall text!", 10 );
+	theDevice.SetForegroundColour( libBasic::Colours::Yellow );  // Text
+	theDevice.Text( 200,350, &scaleRatio2, "Tall text!", 10 );
+	
+	// Select a different font:
+	
+	theDevice.SetForegroundColour( libBasic::Colours::Black );
+	theDevice.SelectFont( "Lynx",80 );
+	theDevice.Text( 100,210, nullptr, "This is the Camputers Lynx's font.", 34 );
+}
+
+
+ 
