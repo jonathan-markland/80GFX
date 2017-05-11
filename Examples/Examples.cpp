@@ -74,6 +74,15 @@ int main()
 {
 	VectorOfInt32  testData = { 100,200,300,400,500 };
 
+	//
+	// Call the examples, emitting a bitmap file for each.
+	//
+	// The following will emit raw 32-bpp (640 x 480) image files.
+	// These can be loaded into GIMP, which uses the ".data" extension
+	// for raw files.  You'll need to specify "RGB Alpha" format, and enter
+	// 640 x 480 manually in the GIMP import screen.
+	//
+	
 	if( ! WithNewBitmapDo( DemoBitmapWidth, DemoBitmapHeight, "PaletteDemo.data", 
 		[]( libGraphics::Devices::AbstractDevice &theDevice )
 		{
