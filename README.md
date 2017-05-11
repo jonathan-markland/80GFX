@@ -107,7 +107,9 @@ adaptation to ellipses.
 
 Redesign notes
 ==============
-The code contains some TODOs to smooth internal design.
+The device interface has some oddities that the user will see.
+The code contains TODOs to smooth internal design.  I am in a 
+process of reviewing the entire design.
 There are also some optimisation opportunities currently missed.
 
 
@@ -126,19 +128,24 @@ Polygon scan converted capital letter 'A' (no beziers).
 
 ![Capital A](/Examples/CapitalA.jpg)
 
-Polygon scan converted Omega symbol with lines and bezier curves, and thickened outline.
+Polygon scan converted Omega symbol with lines and 
+bezier curves, and thickened outline.
 
 ![Omega demo - filled and outline shape with beziers](/Examples/Omega.jpg)
 
-Multiple basic shapes contributing to a polygon that is scan-converted in a single pass.
+Multiple basic shapes contributing to a polygon that is 
+scan-converted in a single pass.
 
 ![Polygon with holes](/Examples/PolyWithHoles.jpg)
 
-Multiple basic shapes contributing to a polygon that is scan-converted in a single pass.
+Multiple basic shapes contributing to a polygon that is 
+scan-converted in a single pass.
 
 ![Polygon with holes](/Examples/PolyWithHoles2.jpg)
 
-Demonstration of brush types: Solid, Patterned, Average Mix, and painting the R,G,B channels independently.
+Demonstration of brush types: Solid, Patterned, Average Mix, 
+and painting the R,G,B channels independently.  Average Mix isn't
+very retro, but its in!
 
 ![Brushes](/Examples/Brushes.jpg)
 
@@ -146,7 +153,8 @@ Font demonstration.  Bitmap fonts supported, of user-definable formats.
 
 ![Font demo](/Examples/FontDemo.jpg)
 
-"Direct" drawing:  Drawing filled shapes without a polygon scan conversion buffer (or it's associated sort() ! ).
+"Direct" drawing:  Drawing filled shapes without a polygon scan 
+conversion buffer (or it's associated sort() ! ).
 
 ![Direct drawing functions](/Examples/DirectFunctionsDemo.jpg)
 

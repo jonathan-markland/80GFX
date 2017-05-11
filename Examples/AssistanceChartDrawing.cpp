@@ -383,6 +383,9 @@ void DrawBrushesDemo(
 	auto diamondBrush = std::make_shared<libGraphics::Brushes::Patterned>(
 		g_Pattern1616_FilledDiamond, 0xFFFFFFFF, 0xFF000000 );
 
+	// TODO: We could do a "tile brush" which rasterised by copying from a given 
+	//       bitmap and wrapping at the edges.
+		
 	// Draw circles:
 	
 	// Solid brush:
@@ -637,7 +640,7 @@ void DrawFontDemo( libGraphics::Devices::AbstractDevice &theDevice )
 	// Select another colour and show how to write text scaled by a ratio:
 
 	theDevice.SetForegroundColour( libBasic::Colours::Red );
-	auto scaleRatio = libGraphics::Scaling( 4, 2 );
+	auto scaleRatio = libGraphics::Scaling( 4, 2 );  // TODO: It's a bit odd design to specify a scale ratio at the last moment?  Surely that's part of the select?
 	theDevice.Text( 100,175, &scaleRatio, "Wide text!", 10 );
 
 	// Large text with shadow effect:
@@ -719,6 +722,19 @@ void DrawOmega(
 		theDevice.Rectangle( Rect<int32_t>(0,0,640,480) );
 	theDevice.EndPoly(); // TODO: Rename EndFilledPoly() ?  // <-- This line executes the final drawing.
 	
+	// TODO: Thick pen implementation uses a brush, but will not work well 
+	//       if the AverageMixed brush is selected, because of nib overlaps.
+
+	// TODO: Thick pen rendering is hackish:  It draws a filled circle at every point!
+	//       On a modern machine this will do the business, but it isn't clever.  Would
+	//       be great to have an algorithm to thicken an outline by returning a polygon
+	//       of the thickening itself?
+
+	// TODO: Failing the above, the thick pen could at least be faster by calculating
+	//       the circle nib outline ONCE, then using translation to paint it.
+	
+	// TODO: Support different nib shapes for the pen?
+	
 	auto outlinePen = std::make_shared<libGraphics::Pens::ThickPen>( redBrush, 5 );
 	theDevice.SelectPen( outlinePen );
 
@@ -728,8 +744,12 @@ void DrawOmega(
 		// the mouse in GIMP, and making approximate notes rather than doing 
 		// anything clever.
 		
-		// Todo: BezierTo() is required, which MUST set the internal 
+		// TODO: BezierTo() is required, which MUST set the internal 
 		//       cursor position!  Then get rid of all the duplicate points!
+		
+		// TODO: The Arc() function does not fit well into outline polys for
+		//       similar reasons, but also the difficulty of calculating the
+		//       positioning(!).  Maybe support 90 degree circular arcs?
 
 		// Reminder: Your polygons will not draw if you don't close them.
 		
