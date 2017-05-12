@@ -683,6 +683,8 @@ void DrawCapitalLetterA(
 	theDevice.SelectBrush( blackBrush );
 	theDevice.StartPoly();
 	
+		// Reminder: Your polygons will not draw if you don't have enough array space
+		//           pre-allocated (TODO: Sort that out in the library!)
 		// Reminder: Your polygons will not draw if you don't close them.
 		
 		// The following has two figures:
@@ -751,6 +753,8 @@ void DrawOmega(
 		//       similar reasons, but also the difficulty of calculating the
 		//       positioning(!).  Maybe support 90 degree circular arcs?
 
+		// Reminder: Your polygons will not draw if you don't have enough array space
+		//           pre-allocated (TODO: Sort that out in the library!)
 		// Reminder: Your polygons will not draw if you don't close them.
 		
 		theDevice.MoveTo(476,331); // 1
