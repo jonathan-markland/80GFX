@@ -160,6 +160,8 @@ int main()
 	//         bitmap class, and were intended for performance drawing to bitmaps only.
 	//
 	
+	// TODO: Review all of the metafile keywords.  E.G.: "brush" does not imply "solid brush".
+	
 	WithNewMetafileDo( DemoBitmapWidth, DemoBitmapHeight, "PieChart.metafile.txt", 
 		[&testData]( libGraphics::Devices::AbstractDevice &theDevice )
 		{
