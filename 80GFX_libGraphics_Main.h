@@ -2581,7 +2581,6 @@ namespace libGraphics
 			virtual void Text( int32_t x, int32_t y, Scaling *pScaling, const char *text, size_t charCount ) override; /// does NOT call base
 
 		private:
-			void Done( SmallStringBuilder &tmpstr );
 			libBasic::AbstractTextOutputStream  *_outputTextStream;
 		};
 

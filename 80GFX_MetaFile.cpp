@@ -298,9 +298,9 @@ namespace libBasic
 
 		void MetafileWriter::Done()
 		{
-			str.AppendChar( '\n' );
-			_outputStream->Write( str.c_str() );
-			str.Clear();
+			_str.AppendChar( '\n' );
+			_outputStream->Write( _str.c_str() );
+			_str.Clear();
 		}
 
 

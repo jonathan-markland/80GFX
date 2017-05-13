@@ -104,16 +104,16 @@ namespace libBasic
 {
 	namespace MetaOut
 	{
-		void Add( SmallStringBuilder &tmpstr, intptr_t x, intptr_t y )
+		void Add( MetafileWriter &metaWriter, intptr_t x, intptr_t y )
 		{
-			Add( tmpstr, x );
-			Add( tmpstr, y );
+			metaWriter.Add( x );
+			metaWriter.Add( y );
 		}
 
-		void Add( SmallStringBuilder &tmpstr, const Rect<int32_t> &r )
+		void Add( MetafileWriter &metaWriter, const Rect<int32_t> &r )
 		{
-			Add( tmpstr, r.left, r.top );
-			Add( tmpstr, r.right, r.bottom );
+			Add( metaWriter, r.left, r.top );
+			Add( metaWriter, r.right, r.bottom );
 		}
 	}
 }
@@ -155,7 +155,7 @@ namespace libGraphics
 
 		void Solid::ToMetafileText( libBasic::AbstractTextOutputStream *logStream )
 		{
-			libBasic::MetaOut::MetaFileWriter metaWriter( _outputTextStream );
+			libBasic::MetaOut::MetafileWriter metaWriter( logStream );
 			metaWriter.Start( META_PEN_SOLID );
 			metaWriter.Add( this->Colour );
 			metaWriter.Done();
@@ -190,11 +190,11 @@ namespace libGraphics
 
 		void ThickPen::ToMetafileText( libBasic::AbstractTextOutputStream *logStream )
 		{
-			libBasic::MetaOut::MetaFileWriter metaWriter( _outputTextStream );
+			libBasic::MetaOut::MetafileWriter metaWriter( logStream );
 			metaWriter.Start( META_IN META_PEN_THICK );
 			metaWriter.Add( this->Thickness );
 			metaWriter.Done();
-			this->Brush->ToMetafileText( logStream );
+			this->Brush->ToMetafileText( logStream ); // TODO: Should pass the writer, not the underlying stream???
 			metaWriter.Start( META_OUT META_PEN_THICK );
 			metaWriter.Done();
 		}
@@ -247,7 +247,7 @@ namespace libGraphics
 
 		void Solid::ToMetafileText( libBasic::AbstractTextOutputStream *logStream )
 		{
-			libBasic::MetaOut::MetaFileWriter metaWriter( _outputTextStream );
+			libBasic::MetaOut::MetafileWriter metaWriter( logStream );
 			metaWriter.Start( META_BRUSH_SOLID );
 			metaWriter.Add( this->Settings.Colour );
 			metaWriter.Done();
@@ -281,11 +281,11 @@ namespace libGraphics
 
 		void Patterned::ToMetafileText( libBasic::AbstractTextOutputStream *logStream )
 		{
-			libBasic::MetaOut::MetaFileWriter metaWriter( logStream );
+			libBasic::MetaOut::MetafileWriter metaWriter( logStream );
 			metaWriter.Start( META_IN META_BRUSH_PATTERNED );
-			metaWriter.Add( this->Settings.ForeColour, this->Settings.BackColour );
-			metaWriter.Add( this->Settings.ForeTransparent ? 1 : 0, this->Settings.BackTransparent ? 1 : 0 );
-			metaWriter.Add( this->Settings.PatternOffsetX, this->Settings.PatternOffsetY );
+			libBasic::MetaOut::Add( metaWriter, this->Settings.ForeColour, this->Settings.BackColour );
+			libBasic::MetaOut::Add( metaWriter, this->Settings.ForeTransparent ? 1 : 0, this->Settings.BackTransparent ? 1 : 0 );
+			libBasic::MetaOut::Add( metaWriter, this->Settings.PatternOffsetX, this->Settings.PatternOffsetY );
 			metaWriter.Done();
 			metaWriter.StartBinary();
 			metaWriter.AddBinary( this->Settings.Pattern, this->Settings.Pattern+16 );
@@ -324,7 +324,7 @@ namespace libGraphics
 
 		void AverageMixed::ToMetafileText( libBasic::AbstractTextOutputStream *logStream )
 		{
-			libBasic::MetaOut::MetaFileWriter metaWriter( logStream );
+			libBasic::MetaOut::MetafileWriter metaWriter( logStream );
 			metaWriter.Start( META_BRUSH_AVERAGE_MIX );
 			metaWriter.Add( this->Settings.Colour );
 			metaWriter.Done();
@@ -360,7 +360,7 @@ namespace libGraphics
 
 		void AndXor::ToMetafileText( libBasic::AbstractTextOutputStream *logStream )
 		{
-			libBasic::MetaOut::MetaFileWriter metaWriter( logStream );
+			libBasic::MetaOut::MetafileWriter metaWriter( logStream );
 			metaWriter.Start( META_BRUSH_ANDXOR );
 			metaWriter.Add( this->Settings.AndMask );
 			metaWriter.Add( this->Settings.XorMask );
@@ -916,10 +916,10 @@ namespace libGraphics
 				libBasic::AbstractTextOutputStream *outputTextStream )
 			{
 				// Start tag
-				libBasic::MetaOut::MetaFileWriter metaWriter( outputTextStream );
+				libBasic::MetaOut::MetafileWriter metaWriter( outputTextStream );
 				metaWriter.Start( openTagName );
-				libBasic::MetaOut::Add(   tmpstr, widthPixels, heightPixels );
-				libBasic::MetaOut::Done(  tmpstr, outputTextStream );
+				libBasic::MetaOut::Add( metaWriter, widthPixels, heightPixels );
+				metaWriter.Done();
 
 				// Data
 				auto pSrc = data;
@@ -937,7 +937,7 @@ namespace libGraphics
 					pSrc += bytesPerScanLine;
 					--h;
 				}
-				metaWriter.FlushBinary( outputTextStream );
+				metaWriter.FlushBinary();
 
 				// End tag
 				metaWriter.Start( closeTagName );
@@ -1068,7 +1068,7 @@ namespace libGraphics
 		void MetafileRecorderDevice::SetForegroundColour( uint32_t foreColour )
 		{
 			BaseDevice::SetForegroundColour( foreColour ); /// call the base
-			libBasic::MetaOut::MetaFileWriter metaWriter( _outputTextStream );
+			libBasic::MetaOut::MetafileWriter metaWriter( _outputTextStream );
 			metaWriter.Start( META_COLOUR_FOREGROUND );
 			metaWriter.Add( foreColour );
 			metaWriter.Done();
@@ -1077,7 +1077,7 @@ namespace libGraphics
 		void MetafileRecorderDevice::SetBackgroundColour( uint32_t backColour )
 		{
 			BaseDevice::SetForegroundColour( backColour ); /// call the base
-			libBasic::MetaOut::MetaFileWriter metaWriter( _outputTextStream );
+			libBasic::MetaOut::MetafileWriter metaWriter( _outputTextStream );
 			metaWriter.Start( META_COLOUR_BACKGROUND );
 			metaWriter.Add( backColour );
 			metaWriter.Done();
@@ -1086,10 +1086,10 @@ namespace libGraphics
 		void MetafileRecorderDevice::SetViewport( Rect<int32_t> r )
 		{
 			BaseDevice::SetViewport(r); /// call the base
-			libBasic::MetaOut::MetaFileWriter metaWriter( _outputTextStream );
+			libBasic::MetaOut::MetafileWriter metaWriter( _outputTextStream );
 			metaWriter.Start( META_VIEWPORT );
-			metaWriter.Add( r.left, r.top );
-			metaWriter.Add( r.right, r.bottom );
+			libBasic::MetaOut::Add( metaWriter, r.left, r.top );
+			libBasic::MetaOut::Add( metaWriter, r.right, r.bottom );
 			metaWriter.Done();
 		}
 
@@ -1124,7 +1124,7 @@ namespace libGraphics
 		{
 			/// We don't need to call the base here:  BaseDevice::SelectFont( FontName, PointSizeTenths ); /// call the base
 			/// Reminder: The metafile recorder doesn't need a "font server" to be able to record the font selection.
-			libBasic::MetaOut::MetaFileWriter metaWriter( _outputTextStream );
+			libBasic::MetaOut::MetafileWriter metaWriter( _outputTextStream );
 			metaWriter.Start( META_IN META_FONT );
 			metaWriter.Add( pointSizeTenths );
 			metaWriter.Done();
@@ -1145,19 +1145,19 @@ namespace libGraphics
 			/// Reminder: The metafile recorder doesn't need a "font server" to be able to record the text.
 			if( text != 0 )
 			{
-				SmallStringBuilder  tmpstr;
+				libBasic::MetaOut::MetafileWriter metaWriter( _outputTextStream );
 
 				metaWriter.Start( META_IN META_TEXT );
-				metaWriter.Add( x, y );
+				libBasic::MetaOut::Add( metaWriter, x, y );
 				if( pScaling )
 				{
-					metaWriter.Add( pScaling->MultiplierX, pScaling->DivisorX );
-					metaWriter.Add( pScaling->MultiplierY, pScaling->DivisorY );
+					libBasic::MetaOut::Add( metaWriter, pScaling->MultiplierX, pScaling->DivisorX );
+					libBasic::MetaOut::Add( metaWriter, pScaling->MultiplierY, pScaling->DivisorY );
 				}
 				else // no scaling
 				{
-					metaWriter.Add( 1, 1 );
-					metaWriter.Add( 1, 1 );
+					libBasic::MetaOut::Add( metaWriter, 1, 1 );
+					libBasic::MetaOut::Add( metaWriter, 1, 1 );
 				}
 				metaWriter.Add( charCount );
 				metaWriter.Done();
@@ -1176,7 +1176,7 @@ namespace libGraphics
 			if( ! DoingPolygon() ) /// space save: only output the outermost one
 			{
 				// TODO: Quite a lot of effort goes into just appending a string literal.  Review all places with this problem.
-				libBasic::MetaOut::MetaFileWriter metaWriter( _outputTextStream );
+				libBasic::MetaOut::MetafileWriter metaWriter( _outputTextStream );
 				metaWriter.Start( META_IN META_POLY );
 				metaWriter.Done();
 			}
@@ -1190,7 +1190,7 @@ namespace libGraphics
 
 			if( ! DoingPolygon() ) /// space save: only output the outermost one
 			{
-				libBasic::MetaOut::MetaFileWriter metaWriter( _outputTextStream );
+				libBasic::MetaOut::MetafileWriter metaWriter( _outputTextStream );
 				metaWriter.Start( META_OUT META_POLY );
 				metaWriter.Done();
 			}
@@ -1198,81 +1198,81 @@ namespace libGraphics
 
 		void MetafileRecorderDevice::MoveTo( int32_t x,int32_t y )
 		{
-			libBasic::MetaOut::MetaFileWriter metaWriter( _outputTextStream );
+			libBasic::MetaOut::MetafileWriter metaWriter( _outputTextStream );
 			metaWriter.Start( META_MOVETO );
-			metaWriter.Add( x, y );
+			libBasic::MetaOut::Add( metaWriter, x, y );
 			metaWriter.Done();
 		}
 
 		void MetafileRecorderDevice::LineTo( int32_t x,int32_t y )
 		{
-			libBasic::MetaOut::MetaFileWriter metaWriter( _outputTextStream );
+			libBasic::MetaOut::MetafileWriter metaWriter( _outputTextStream );
 			metaWriter.Start( META_LINETO );
-			metaWriter.Add( x, y );
+			libBasic::MetaOut::Add( metaWriter, x, y );
 			metaWriter.Done();
 		}
 
 		void MetafileRecorderDevice::Arc( Rect<int32_t> r, int32_t startAngle, int32_t endAngle )
 		{
-			libBasic::MetaOut::MetaFileWriter metaWriter( _outputTextStream );
+			libBasic::MetaOut::MetafileWriter metaWriter( _outputTextStream );
 			metaWriter.Start( META_ARC );
-			metaWriter.Add( r );
-			metaWriter.Add( startAngle, endAngle );
+			libBasic::MetaOut::Add( metaWriter, r );
+			libBasic::MetaOut::Add( metaWriter, startAngle, endAngle );
 			metaWriter.Done();
 		}
 
 		void MetafileRecorderDevice::Secant( Rect<int32_t> r, int32_t startAngle, int32_t endAngle )
 		{
-			libBasic::MetaOut::MetaFileWriter metaWriter( _outputTextStream );
+			libBasic::MetaOut::MetafileWriter metaWriter( _outputTextStream );
 			metaWriter.Start( META_SECANT );
-			metaWriter.Add( r );
-			metaWriter.Add( startAngle, endAngle );
+			libBasic::MetaOut::Add( metaWriter, r );
+			libBasic::MetaOut::Add( metaWriter, startAngle, endAngle );
 			metaWriter.Done();
 		}
 
 		void MetafileRecorderDevice::Pie( Rect<int32_t> r, int32_t startAngle, int32_t endAngle )
 		{
-			libBasic::MetaOut::MetaFileWriter metaWriter( _outputTextStream );
+			libBasic::MetaOut::MetafileWriter metaWriter( _outputTextStream );
 			metaWriter.Start( META_PIE );
-			metaWriter.Add( r );
-			metaWriter.Add( startAngle, endAngle );
+			libBasic::MetaOut::Add( metaWriter, r );
+			libBasic::MetaOut::Add( metaWriter, startAngle, endAngle );
 			metaWriter.Done();
 		}
 
 		void MetafileRecorderDevice::Ellipse( Rect<int32_t> r )
 		{
-			libBasic::MetaOut::MetaFileWriter metaWriter( _outputTextStream );
+			libBasic::MetaOut::MetafileWriter metaWriter( _outputTextStream );
 			metaWriter.Start( META_ELLIPSE );
-			metaWriter.Add( r );
+			libBasic::MetaOut::Add( metaWriter, r );
 			metaWriter.Done();
 		}
 
 		void MetafileRecorderDevice::Rectangle( Rect<int32_t> r )
 		{
-			libBasic::MetaOut::MetaFileWriter metaWriter( _outputTextStream );
+			libBasic::MetaOut::MetafileWriter metaWriter( _outputTextStream );
 			metaWriter.Start( META_RECTANGLE );
-			metaWriter.Add( r );
+			libBasic::MetaOut::Add( metaWriter, r );
 			metaWriter.Done();
 		}
 
 		void MetafileRecorderDevice::Bezier( int32_t x0,int32_t y0,int32_t x1,int32_t y1,int32_t x2,int32_t y2,int32_t x3,int32_t y3 )
 		{
-			libBasic::MetaOut::MetaFileWriter metaWriter( _outputTextStream );
+			libBasic::MetaOut::MetafileWriter metaWriter( _outputTextStream );
 			metaWriter.Start( META_BEZIER );
-			metaWriter.Add( x0, y0 );
-			metaWriter.Add( x1, y1 );
-			metaWriter.Add( x2, y2 );
-			metaWriter.Add( x3, y3 );
+			libBasic::MetaOut::Add( metaWriter, x0, y0 );
+			libBasic::MetaOut::Add( metaWriter, x1, y1 );
+			libBasic::MetaOut::Add( metaWriter, x2, y2 );
+			libBasic::MetaOut::Add( metaWriter, x3, y3 );
 			metaWriter.Done();
 		}
 
 		void MetafileRecorderDevice::Triangle( int32_t x0,int32_t y0,int32_t x1,int32_t y1,int32_t x2,int32_t y2 )
 		{
-			libBasic::MetaOut::MetaFileWriter metaWriter( _outputTextStream );
+			libBasic::MetaOut::MetafileWriter metaWriter( _outputTextStream );
 			metaWriter.Start( META_TRIANGLE );
-			metaWriter.Add( x0, y0 );
-			metaWriter.Add( x1, y1 );
-			metaWriter.Add( x2, y2 );
+			libBasic::MetaOut::Add( metaWriter, x0, y0 );
+			libBasic::MetaOut::Add( metaWriter, x1, y1 );
+			libBasic::MetaOut::Add( metaWriter, x2, y2 );
 			metaWriter.Done();
 		}
 
@@ -1289,13 +1289,13 @@ namespace libGraphics
 				intptr_t visibleDataBytesPerRow,
 				libBasic::AbstractTextOutputStream *outputStream )
 			{
-				libBasic::MetaOut::MetaFileWriter metaWriter( outputStream );
+				libBasic::MetaOut::MetafileWriter metaWriter( outputStream );
 
 				// Start tag
 				metaWriter.Start( openTagName );
-				metaWriter.Add( x, y );
-				metaWriter.Add( source.WidthPixels, source.HeightPixels );
-				metaWriter.Add( source.BytesPerScanLine, visibleDataBytesPerRow );
+				libBasic::MetaOut::Add( metaWriter, x, y );
+				libBasic::MetaOut::Add( metaWriter, source.WidthPixels, source.HeightPixels );
+				libBasic::MetaOut::Add( metaWriter, source.BytesPerScanLine, visibleDataBytesPerRow );
 				metaWriter.Done();
 
 				// Data
@@ -1308,7 +1308,7 @@ namespace libGraphics
 					pSrc += source.BytesPerScanLine;
 					--h;
 				}
-				metaWriter.FlushBinary( outputStream );
+				metaWriter.FlushBinary();
 
 				// End tag
 				metaWriter.Start( closeTagName );
@@ -1322,18 +1322,13 @@ namespace libGraphics
 		{
 			if( BitmapAvailable() )
 			{
-				libBasic::MetaOut::MetaFileWriter metaWriter( _outputTextStream );
+				libBasic::MetaOut::MetafileWriter metaWriter( _outputTextStream );
 				metaWriter.Start( META_DRAW_BITMAP );
-				metaWriter.Add( areaOnTarget );
-				metaWriter.Add( areaOnSource );
+				libBasic::MetaOut::Add( metaWriter, areaOnTarget );
+				libBasic::MetaOut::Add( metaWriter, areaOnSource );
 				metaWriter.Add( flags );
 				metaWriter.Done();
 			}
-		}
-
-		void MetafileRecorderDevice::Done( SmallStringBuilder &tmpstr )
-		{
-			metaWriter.Done();
 		}
 
 	} /// end namespace
