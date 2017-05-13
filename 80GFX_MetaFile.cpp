@@ -273,28 +273,33 @@ namespace libBasic
 {
 	namespace MetaOut
 	{
+		MetafileWriter::MetafileWriter( libBasic::AbstractTextOutputStream *outputStream )
+			: _outputStream(outputStream)
+		{
+		}
+		
 		// - - TAGS and VALUES - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-		void Start( SmallStringBuilder &tmpstr, const char *tagName )
+		void MetafileWriter::Start( const char *tagName )
 		{
-			tmpstr.Clear();
-			Append( tmpstr, tagName );
+			_str.Clear();
+			Append( _str, tagName );
 		}
 
 
 
-		void Add( SmallStringBuilder &tmpstr, intptr_t value )
+		void MetafileWriter::Add( intptr_t value )
 		{
-			tmpstr.AppendChar( ' ' );
-			Append( tmpstr, ToString(value) );
+			_str.AppendChar( ' ' );
+			Append( _str, ToString(value) );
 		}
 
 
 
-		void Done( SmallStringBuilder &str, libBasic::AbstractTextOutputStream *outputStream )
+		void MetafileWriter::Done()
 		{
 			str.AppendChar( '\n' );
-			outputStream->Write( str.c_str() );
+			_outputStream->Write( str.c_str() );
 			str.Clear();
 		}
 
@@ -303,40 +308,40 @@ namespace libBasic
 
 		// - - BINARY - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-		void StartBinary( SmallStringBuilder &tmpstr )
+		void MetafileWriter::StartBinary()
 		{
-			tmpstr.Clear();
+			_str.Clear();
 		}
 
 
 
-		void AddBinary( SmallStringBuilder &str, const void *pData, const void *pEnd, libBasic::AbstractTextOutputStream *outputStream )
+		void MetafileWriter::AddBinary( const void *pData, const void *pEnd )
 		{
 			auto pData8 = reinterpret_cast<const uint8_t *>(pData);
 			auto pEnd8  = reinterpret_cast<const uint8_t *>(pEnd);
 
 			while( pData8 != pEnd8 )
 			{
-				if( str.size() == 64 )
+				if( _str.size() == 64 )
 				{
 					// Flush:
-					str.AppendChar('\n');
-					outputStream->Write(str.c_str());
-					str.Clear();
+					_str.AppendChar('\n');
+					_outputStream->Write(_str.c_str());
+					_str.Clear();
 				}
 				uint8_t v = *pData8;
-				str.AppendChar( NibbleToChar(v >> 4) );
-				str.AppendChar( NibbleToChar(v & 15) );
+				_str.AppendChar( NibbleToChar(v >> 4) );
+				_str.AppendChar( NibbleToChar(v & 15) );
 				++pData8;
 			}
 		}
 
 
 
-		void FlushBinary( SmallStringBuilder &str, libBasic::AbstractTextOutputStream *outputStream )
+		void MetafileWriter::FlushBinary()
 		{
-			str.AppendChar( META_BINARY_TERMINATOR );
-			Done( str, outputStream );
+			_str.AppendChar( META_BINARY_TERMINATOR );
+			Done();
 		}
 
 	}

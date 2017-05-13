@@ -90,32 +90,45 @@ namespace libBasic
 {
 	namespace MetaOut
 	{
-		// - - TAGS and VALUES - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+		class MetafileWriter
+		{
+		public:
+		
+			explicit MetafileWriter( libBasic::AbstractTextOutputStream *outputStream );
 
-		// Clears the tmpstr and returns the TagName in the tmpstr.
-		// Hint: This is then ready for Add() to be called to append value(s) (if desired).
-		// Hint: Call Done() when complete.
-		void Start( SmallStringBuilder &tmpstr, const char *tagName );
+			// - - TAGS and VALUES - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-		// Append a numeric value to a tag begun with Start().
-		// Hint: Call Done() when all additions complete.
-		void Add( SmallStringBuilder &tmpstr, intptr_t value );
+			// Clears the tmpstr and returns the TagName in the tmpstr.
+			// Hint: This is then ready for Add() to be called to append value(s) (if desired).
+			// Hint: Call Done() when complete.
+			void Start( const char *tagName );
 
-		// Flushes the completed Tag and values string to the output.
-		void Done( SmallStringBuilder &str, libBasic::AbstractTextOutputStream *outputStream );
+			// Append a numeric value to a tag begun with Start().
+			// Hint: Call Done() when all additions complete.
+			void Add( intptr_t value );
 
-		// - - BINARY - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+			// Flushes the completed Tag and values string to the output.
+			void Done();
 
-		// Starts a fresh binary-output sequence using tmpstr as line storage.
-		// Call AddBinary() to add chunks, passing the same tmpstr.
-		void StartBinary( SmallStringBuilder &tmpstr );
+			// - - BINARY - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-		// Call AddBinary() as many times as desired to append binary chunk(s)
-		// to the output.  Call FlushBinary() when all done, passing the same tmpstr.
-		void AddBinary( SmallStringBuilder &tmpstr, const void *dataBuffer, const void *dataBufferEnd, libBasic::AbstractTextOutputStream *outputStream );
+			// Starts a fresh binary-output sequence using tmpstr as line storage.
+			// Call AddBinary() to add chunks, passing the same tmpstr.
+			void StartBinary();
 
-		// Call once all binary has been written with AddBinary().
-		// Flushes any remaining bytes in 'tmpstr' to the output.
-		void FlushBinary( SmallStringBuilder &tmpstr, libBasic::AbstractTextOutputStream *outputStream );
+			// Call AddBinary() as many times as desired to append binary chunk(s)
+			// to the output.  Call FlushBinary() when all done, passing the same tmpstr.
+			void AddBinary( const void *dataBuffer, const void *dataBufferEnd );
+
+			// Call once all binary has been written with AddBinary().
+			// Flushes any remaining bytes in 'tmpstr' to the output.
+			void FlushBinary();
+			
+		private:
+
+			SmallStringBuilder  _smallStringBuilder;
+			libBasic::AbstractTextOutputStream *_outputStream;
+			
+		};		
 	}
 }
