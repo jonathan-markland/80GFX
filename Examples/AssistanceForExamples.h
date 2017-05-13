@@ -40,6 +40,16 @@ bool SaveMemoryToFile( const std::string &filename, const void *data, size_t siz
 
 
 
+class OutputToStandardOut: public libBasic::AbstractTextOutputStream
+{
+public:
+	// An abstract interface through which text can be reported.
+	// Reminder: Does NOT apply a new-line.
+	virtual void Write( const char *message ) override;
+};
+
+
+
 class TestFontServer: public libGraphics::Fonts::AbstractFontServer
 {
 public:
@@ -156,5 +166,52 @@ bool WithNewBitmapDo(
 	free(demoBitmapMemory);
 	
 	return functionResult;
+}
+
+
+
+
+
+
+
+
+template<typename LAMBDA>
+void WithNewMetafileDo( 
+	int32_t demoBitmapWidth, int32_t demoBitmapHeight, 
+	const char *outputFileName, LAMBDA drawingLambda )
+{
+	//
+	// Create a stream object:
+	//
+		
+	OutputToStandardOut  outputToStandardOut;
+	outputToStandardOut.Write( "\r\n" );
+	outputToStandardOut.Write( "------------------------------------------------------------------------------------------\r\n" );
+	outputToStandardOut.Write( "  Metafile: " );
+	outputToStandardOut.Write( outputFileName );
+	outputToStandardOut.Write( "\r\n" );
+	outputToStandardOut.Write( "------------------------------------------------------------------------------------------\r\n" );
+		
+	//
+	// Create a "device" object that will allow drawing routines to operate
+	// without knowing what they're drawing on:
+	//
+	
+	libGraphics::Devices::MetafileRecorderDevice  theMetafileDevice( &outputToStandardOut );
+	
+	//
+	// Create a "font server":  TODO: Should really be a high-level library responsibility to provide this.
+	// Plug the "Font server" into the device object, so that it request font definitions:
+	//
+	
+	TestFontServer::Init();
+	auto testFontServer = std::make_shared<TestFontServer>(); // <-- This is the font server instance.
+	theMetafileDevice.SetFontServer( testFontServer );
+
+	//
+	// Graphics start here...
+	//
+
+	drawingLambda( theMetafileDevice );
 }
 

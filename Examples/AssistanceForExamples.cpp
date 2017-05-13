@@ -47,6 +47,18 @@ bool SaveMemoryToFile( const std::string &filename, const void *data, size_t siz
 
 
 
+
+void OutputToStandardOut::Write( const char *message )
+{
+	// An abstract interface through which text can be reported.
+	// Reminder: Does NOT apply a new-line.
+	std::cout << message;
+}
+
+
+
+
+
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 //    FONT SERVER
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

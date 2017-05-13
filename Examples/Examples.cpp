@@ -150,6 +150,42 @@ int main()
             DrawOverLinesTest( theDevice, DemoBitmapWidth, DemoBitmapHeight );
 		})) return 1;
 
+	//
+	// Call some of the examples above, emitting a metafile instead of a bitmap.
+	// Metafiles are a simple text format that I devised, and are emitted to a 
+	// redirectable stream.
+	//
+	
+	WithNewMetafileDo( DemoBitmapWidth, DemoBitmapHeight, "PieChart.metafile.txt", 
+		[&testData]( libGraphics::Devices::AbstractDevice &theDevice )
+		{
+            DrawPieChart( theDevice, &testData, DemoBitmapWidth, DemoBitmapHeight );
+		});
+
+	WithNewMetafileDo( DemoBitmapWidth, DemoBitmapHeight, "CapitalA.metafile.txt", 
+		[]( libGraphics::Devices::AbstractDevice &theDevice )
+		{
+            DrawCapitalLetterA( theDevice, DemoBitmapWidth, DemoBitmapHeight );
+		});
+
+	WithNewMetafileDo( DemoBitmapWidth, DemoBitmapHeight, "Omega.metafile.txt", 
+		[]( libGraphics::Devices::AbstractDevice &theDevice )
+		{
+            DrawOmega( theDevice, DemoBitmapWidth, DemoBitmapHeight );
+		});
+		
+	WithNewMetafileDo( DemoBitmapWidth, DemoBitmapHeight, "PaletteDemo.metafile.txt", 
+		[]( libGraphics::Devices::AbstractDevice &theDevice )
+		{
+			DrawPalette( g_ColourStripData, 16, theDevice, DemoBitmapWidth, DemoBitmapHeight );
+		});
+
+	WithNewMetafileDo( DemoBitmapWidth, DemoBitmapHeight, "PolyWithHoles.data", 
+		[]( libGraphics::Devices::AbstractDevice &theDevice )
+		{
+            DrawFilledPolygonWithHoles( theDevice, DemoBitmapWidth, DemoBitmapHeight );
+		});
+
 	return 0;
 }
 
