@@ -30,12 +30,12 @@
 #define META_IN                 ">"   /// indent
 #define META_OUT                "<"   /// un-indent
 
-#define META_PEN_SOLID          "pen"
-#define META_PEN_THICK          "thick"
-#define META_BRUSH_SOLID        "brush"
-#define META_BRUSH_PATTERNED    "pattern"
-#define META_BRUSH_AVERAGE_MIX  "average"
-#define META_BRUSH_ANDXOR       "andxor"
+#define META_PEN_SOLID          "pixelpen"
+#define META_PEN_THICK          "thickpen"
+#define META_BRUSH_SOLID        "solidbrush"
+#define META_BRUSH_PATTERNED    "patbrush"
+#define META_BRUSH_AVERAGE_MIX  "avgbrush"
+#define META_BRUSH_ANDXOR       "andxorbrush"
 #define META_COLOUR_FOREGROUND  "fg"
 #define META_COLOUR_BACKGROUND  "bg"
 #define META_VIEWPORT           "viewport"
@@ -191,9 +191,11 @@ namespace libGraphics
 		void ThickPen::ToMetafileText( libBasic::AbstractTextOutputStream *logStream )
 		{
 			SmallStringBuilder tmpstr;
-			libBasic::MetaOut::Start( tmpstr, META_PEN_THICK );
-			this->Brush->ToMetafileText( logStream );
+			libBasic::MetaOut::Start( tmpstr, META_IN META_PEN_THICK );
 			libBasic::MetaOut::Add( tmpstr, this->Thickness );
+			libBasic::MetaOut::Done( tmpstr, logStream );
+			this->Brush->ToMetafileText( logStream );
+			libBasic::MetaOut::Start( tmpstr, META_OUT META_PEN_THICK );
 			libBasic::MetaOut::Done( tmpstr, logStream );
 		}
 		
@@ -1173,6 +1175,7 @@ namespace libGraphics
 		{
 			if( ! DoingPolygon() ) /// space save: only output the outermost one
 			{
+				// TODO: Quite a lot of effort goes into just appending a string literal.  Review all places with this problem.
 				SmallStringBuilder  tmpstr;
 				libBasic::MetaOut::Start( tmpstr, META_IN META_POLY );
 				libBasic::MetaOut::Done( tmpstr, _outputTextStream );
