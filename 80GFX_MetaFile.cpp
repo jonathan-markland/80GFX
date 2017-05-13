@@ -315,12 +315,12 @@ namespace libBasic
 
 
 
-		void MetafileWriter::AddBinary( const void *pData, const void *pEnd )
+		void MetafileWriter::AddBinary( const void *binaryData, const void *binaryDataEnd )
 		{
-			auto pData8 = reinterpret_cast<const uint8_t *>(pData);
-			auto pEnd8  = reinterpret_cast<const uint8_t *>(pEnd);
+			auto binaryData8 = reinterpret_cast<const uint8_t *>(binaryData);
+			auto binaryDataEnd8  = reinterpret_cast<const uint8_t *>(binaryDataEnd);
 
-			while( pData8 != pEnd8 )
+			while( binaryData8 != binaryDataEnd8 )
 			{
 				if( _str.size() == 64 )
 				{
@@ -329,10 +329,10 @@ namespace libBasic
 					_outputStream->Write(_str.c_str());
 					_str.Clear();
 				}
-				uint8_t v = *pData8;
+				uint8_t v = *binaryData8;
 				_str.AppendChar( NibbleToChar(v >> 4) );
 				_str.AppendChar( NibbleToChar(v & 15) );
-				++pData8;
+				++binaryData8;
 			}
 		}
 

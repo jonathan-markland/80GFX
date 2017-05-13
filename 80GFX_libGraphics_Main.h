@@ -2355,8 +2355,8 @@ namespace libGraphics
 			virtual void Bezier( int32_t x0,int32_t y0,int32_t x1,int32_t y1,int32_t x2,int32_t y2,int32_t x3,int32_t y3 ) = 0;
 			virtual void Triangle( int32_t x0,int32_t y0,int32_t x1,int32_t y1,int32_t x2,int32_t y2 ) = 0;
 			virtual void DrawBitmap( Rect<int32_t> areaOnTarget, Rect<int32_t> areaOnSource, uint32_t flags ) = 0;  // TODO: What are the flags really?
-			virtual void Text( int32_t x, int32_t y, Scaling *pScaling, const char *text, size_t charCount ) = 0;
-				/// Reminder: pScaling can be NULL to indicate "no font scaling" (use 1:1 pixel size)
+			virtual void Text( int32_t x, int32_t y, Scaling *scalingRecord, const char *text, size_t charCount ) = 0;
+				/// Reminder: scalingRecord can be nullptr to indicate "no font scaling" (use 1:1 pixel size)
 			virtual std::shared_ptr<Fonts::AbstractFont> GetFont() const = 0;
 		};
 
@@ -2386,7 +2386,7 @@ namespace libGraphics
 			virtual void SelectBrush( std::shared_ptr<Brushes::AbstractBrush> ) override;
 			virtual void SelectBitmap( std::shared_ptr<Bitmaps::AbstractBitmap> ) override;
 			virtual void SelectFont( const char *fontName, uint32_t pointSizeTenths ) override;
-			virtual void Text( int32_t x, int32_t y, Scaling *pScaling, const char *text, size_t charCount ) override; /// shared routine (does bitmaps)
+			virtual void Text( int32_t x, int32_t y, Scaling *scalingRecord, const char *text, size_t charCount ) override; /// shared routine (does bitmaps)
 			virtual Rect<int32_t> GetViewport() override;
 			virtual void StartPoly() override;
 			virtual void EndPoly() override;
@@ -2421,7 +2421,7 @@ namespace libGraphics
 				AbstractFont &font,
 				int32_t x,
 				int32_t y,
-				const Scaling *pScaling, // null if not required
+				const Scaling *scalingRecord, // nullptr if not required
 				const char *text,
 				size_t charCount );
 			// Paint text in given font onto given DC as individual bitmaps.
@@ -2480,7 +2480,7 @@ namespace libGraphics
 			{
 			public:
 				// LINE_RECEIVER for collecting the points in an array when polygon scan converting.
-				inline void Reset( Point<int32_t> *pPts, size_t capacity )                   { _sconv.Reset( pPts, capacity );  }
+				inline void Reset( Point<int32_t> *pointsArray, size_t capacity )            { _sconv.Reset( pointsArray, capacity );  }
 				inline void SetViewport( Rect<int32_t> &viewport )                           { _sconv.SetViewport( viewport );  }
 				virtual void operator()( int32_t x0, int32_t y0, int32_t x1, int32_t y1 )    { _sconv( x0,y0,x1,y1 );           }
 				virtual Rect<int32_t> GetViewportRect()                                      { return _sconv.GetViewportRect(); }
@@ -2518,8 +2518,8 @@ namespace libGraphics
 			explicit BitmapDevice( Bitmaps::Colour &Target ); /// WARNING: A copy is taken of the bitmap specifics!
 
 			// Priming:
-			void SetLRArray( System::Raster::RasterLR<int32_t> *pArray, size_t capacity );
-			void SetPointsArray( Point<int32_t> *pArray, size_t capacity );
+			void SetLRArray( System::Raster::RasterLR<int32_t> *rasterArray, size_t capacity );
+			void SetPointsArray( Point<int32_t> *pointsArray, size_t capacity );
 
 			// Query functions
 			inline Rect<int32_t> GetExtentsRect() const     { return Rect<int32_t>( 0, 0, _bitmap.WidthPixels, _bitmap.HeightPixels ); }
@@ -2578,7 +2578,7 @@ namespace libGraphics
 			virtual void SelectBrush( std::shared_ptr<Brushes::AbstractBrush> ) override;
 			virtual void SelectBitmap( std::shared_ptr<Bitmaps::AbstractBitmap> ) override;
 			virtual void SelectFont( const char *fontName, uint32_t PointSizeTenths ) override;
-			virtual void Text( int32_t x, int32_t y, Scaling *pScaling, const char *text, size_t charCount ) override; /// does NOT call base
+			virtual void Text( int32_t x, int32_t y, Scaling *scalingRecord, const char *text, size_t charCount ) override; /// does NOT call base
 
 		private:
 			libBasic::AbstractTextOutputStream  *_outputTextStream;
@@ -2618,9 +2618,9 @@ namespace libGraphics
 			Rescaler();
 
 			/// Priming
-			void SetTarget( AbstractDevice *pTarget );
+			void SetTarget( AbstractDevice *targetDevice );
 			void SetRescale( int32_t Multiplier, int32_t Divisor );
-			void SetRescale( const Scaling &sc );
+			void SetRescale( const Scaling &scalingRecord );
 			void SetTranslation( int32_t dx, int32_t dy );
 
 			/// AbstractDevice implementation:
@@ -2644,7 +2644,7 @@ namespace libGraphics
 			virtual void Bezier( int32_t x0,int32_t y0,int32_t x1,int32_t y1,int32_t x2,int32_t y2,int32_t x3,int32_t y3 ) override;
 			virtual void Triangle( int32_t x0,int32_t y0,int32_t x1,int32_t y1,int32_t x2,int32_t y2 ) override;
 			virtual void DrawBitmap( Rect<int32_t> areaOnTarget, Rect<int32_t> areaOnSource, uint32_t flags ) override;
-			virtual void Text( int32_t x, int32_t y, Scaling *pScaling, const char *text, size_t charCount ) override;
+			virtual void Text( int32_t x, int32_t y, Scaling *scalingRecord, const char *text, size_t charCount ) override;
 			virtual std::shared_ptr<Fonts::AbstractFont> GetFont() const override;
 
 		private:
@@ -2657,7 +2657,7 @@ namespace libGraphics
 			int64_t _dx;
 			int64_t _dy;
 
-			AbstractDevice *_pTarget;
+			AbstractDevice *_targetDevice;
 
 			Rect<int32_t>  _preScaledViewport;
 

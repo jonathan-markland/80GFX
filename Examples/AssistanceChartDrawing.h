@@ -48,11 +48,11 @@ void DrawWithTheDirectGraphicsFunctions(
 
 void DrawBarChart( 
 	libGraphics::Devices::AbstractDevice &theDevice, 
-	const VectorOfInt32 *pVec, int32_t projectionWidth, int32_t projectionHeight );
+	const VectorOfInt32 *dataVector, int32_t projectionWidth, int32_t projectionHeight );
 
 void DrawPieChart( 
 	libGraphics::Devices::AbstractDevice &theDevice, 
-	const VectorOfInt32 *pVec, int32_t projectionWidth, int32_t projectionHeight );
+	const VectorOfInt32 *dataVector, int32_t projectionWidth, int32_t projectionHeight );
 
 void DrawFilledPolygonWithHoles( 
 	libGraphics::Devices::AbstractDevice &theDevice, 

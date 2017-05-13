@@ -466,11 +466,11 @@ namespace libGraphics
 			}
 		}
 
-		void BaseDevice::Text( int32_t x, int32_t y, Scaling *pScaling, const char *text, size_t charCount )
+		void BaseDevice::Text( int32_t x, int32_t y, Scaling *scalingRecord, const char *text, size_t charCount )
 		{
 			if( FontAvailable() )
 			{
-				Fonts::PaintByBitmaps( *this, *_pFont, x, y, pScaling, text, charCount );
+				Fonts::PaintByBitmaps( *this, *_pFont, x, y, scalingRecord, text, charCount );
 			}
 		}
 
@@ -531,21 +531,21 @@ namespace libGraphics
 			_thickOutlinerLineRecv.SetTargetBitmap( target );
 		}
 
-		void BitmapDevice::SetLRArray( System::Raster::RasterLR<int32_t> *pArray, size_t capacity )
+		void BitmapDevice::SetLRArray( System::Raster::RasterLR<int32_t> *leftRightEdgesArray, size_t capacity )
 		{
-			if( pArray )
+			if( leftRightEdgesArray != nullptr )
 			{
 				assert( capacity >= size_t( _bitmap.HeightPixels ) ); // should match
 			}
-			_pLRArray = pArray;
+			_pLRArray = leftRightEdgesArray;
 		}
 
-		void BitmapDevice::SetPointsArray( Point<int32_t> *pArray, size_t capacity )
+		void BitmapDevice::SetPointsArray( Point<int32_t> *pointsArray, size_t capacity )
 		{
 			assert( ! DoingPolygon() ); /// changing this half way through is not supported.
-			if( pArray )
+			if( pointsArray != nullptr )
 			{
-				_pPointsArray = pArray;
+				_pPointsArray = pointsArray;
 				_pointsArrayCapacity = capacity;
 			}
 			else
@@ -701,18 +701,18 @@ namespace libGraphics
 					Height(viewport) );
 		}
 
-		void BitmapDevice::PaintPointsArrayToBitmap( Point<int32_t> *pPts, size_t numPoints )
+		void BitmapDevice::PaintPointsArrayToBitmap( Point<int32_t> *pointsArray, size_t numPoints )
 		{
 			_pBrush->PaintPolygonRasters(
 					_bitmap.TopLeft,
 					_bitmap.BytesPerScanLine,
-					pPts,
+					pointsArray,
 					numPoints );
 
 			#ifdef SHOW_POLYGON_SPOTS
 			// DEBUGGING : Show "spots" at the raster edges
 			PointPlotter<uint32_t,int32_t> pp( m_Bitmap.TopLeft, m_Bitmap.BytesPerScanLine, m_Viewport, m_pPen->KludgeGetColour() );
-			template_PlotArrayOfPoints( pPts, pPts+NumPoints, pp );
+			template_PlotArrayOfPoints( pointsArray, pointsArray+numPoints, pp );
 			#endif
 		}
 
@@ -1139,7 +1139,7 @@ namespace libGraphics
 			metaWriter.Done();
 		}
 
-		void MetafileRecorderDevice::Text( int32_t x, int32_t y, Scaling *pScaling, const char *text, size_t charCount )
+		void MetafileRecorderDevice::Text( int32_t x, int32_t y, Scaling *scalingRecord, const char *text, size_t charCount )
 		{
 			/// We do NOT call the base here (don't want bitmaps!)
 			/// Reminder: The metafile recorder doesn't need a "font server" to be able to record the text.
@@ -1149,10 +1149,10 @@ namespace libGraphics
 
 				metaWriter.Start( META_IN META_TEXT );
 				libBasic::MetaOut::Add( metaWriter, x, y );
-				if( pScaling )
+				if( scalingRecord != nullptr )
 				{
-					libBasic::MetaOut::Add( metaWriter, pScaling->MultiplierX, pScaling->DivisorX );
-					libBasic::MetaOut::Add( metaWriter, pScaling->MultiplierY, pScaling->DivisorY );
+					libBasic::MetaOut::Add( metaWriter, scalingRecord->MultiplierX, scalingRecord->DivisorX );
+					libBasic::MetaOut::Add( metaWriter, scalingRecord->MultiplierY, scalingRecord->DivisorY );
 				}
 				else // no scaling
 				{
@@ -1730,16 +1730,16 @@ namespace libGraphics
 			, _divisorY(1)
 			, _dx(0)
 			, _dy(0)
-			, _pTarget(nullptr)
+			, _targetDevice(nullptr)
 		{
 		}
 
-		void Rescaler::SetTarget( AbstractDevice *pTarget )
+		void Rescaler::SetTarget( AbstractDevice *targetDevice )
 		{
-			assert( pTarget != this );
-			if( pTarget != this ) // self reference not allowed
+			assert( targetDevice != this );
+			if( targetDevice != this ) // self reference not allowed
 			{
-				_pTarget = pTarget;
+				_targetDevice = targetDevice;
 			}
 		}
 
@@ -1773,40 +1773,40 @@ namespace libGraphics
 		void Rescaler::SetViewport( Rect<int32_t> r )
 		{
 			_preScaledViewport = r;
-			if(_pTarget)
+			if(_targetDevice)
 			{
-				_pTarget->SetViewport( ScaleRect(r) );
+				_targetDevice->SetViewport( ScaleRect(r) );
 			}
 		}
 
 		void Rescaler::SelectPen( std::shared_ptr<Pens::AbstractPen> p )
 		{
-			if(_pTarget) _pTarget->SelectPen(p);
+			if(_targetDevice) _targetDevice->SelectPen(p);
 		}
 
 		void Rescaler::SelectBrush( std::shared_ptr<Brushes::AbstractBrush> b )
 		{
-			if(_pTarget) _pTarget->SelectBrush(b);
+			if(_targetDevice) _targetDevice->SelectBrush(b);
 		}
 
 		void Rescaler::SelectBitmap( std::shared_ptr<Bitmaps::AbstractBitmap> b )
 		{
-			if(_pTarget) _pTarget->SelectBitmap(b);
+			if(_targetDevice) _targetDevice->SelectBitmap(b);
 		}
 
 		void Rescaler::SelectFont( const char *FontName, uint32_t PointSizeTenths )
 		{
-			if(_pTarget) _pTarget->SelectFont( FontName, PointSizeTenths );
+			if(_targetDevice) _targetDevice->SelectFont( FontName, PointSizeTenths );
 		}
 
 		void Rescaler::SetForegroundColour( uint32_t ForeColour )
 		{
-			if(_pTarget) _pTarget->SetForegroundColour( ForeColour );
+			if(_targetDevice) _targetDevice->SetForegroundColour( ForeColour );
 		}
 
 		void Rescaler::SetBackgroundColour( uint32_t BackColour )
 		{
-			if(_pTarget) _pTarget->SetBackgroundColour( BackColour );
+			if(_targetDevice) _targetDevice->SetBackgroundColour( BackColour );
 		}
 
 		Rect<int32_t> Rescaler::GetViewport()
@@ -1816,52 +1816,52 @@ namespace libGraphics
 
 		void Rescaler::StartPoly()
 		{
-			if( _pTarget ) _pTarget->StartPoly();
+			if( _targetDevice ) _targetDevice->StartPoly();
 		}
 
 		void Rescaler::EndPoly()
 		{
-			if( _pTarget ) _pTarget->EndPoly();
+			if( _targetDevice ) _targetDevice->EndPoly();
 		}
 
 		void Rescaler::MoveTo( int32_t x,int32_t y )
 		{
-			if( _pTarget ) _pTarget->MoveTo( ScaleX(x), ScaleY(y) );
+			if( _targetDevice ) _targetDevice->MoveTo( ScaleX(x), ScaleY(y) );
 		}
 
 		void Rescaler::LineTo( int32_t x,int32_t y )
 		{
-			if( _pTarget ) _pTarget->LineTo( ScaleX(x), ScaleY(y) );
+			if( _targetDevice ) _targetDevice->LineTo( ScaleX(x), ScaleY(y) );
 		}
 
 		void Rescaler::Arc( Rect<int32_t> r, int32_t StartAngle, int32_t EndAngle )
 		{
-			if( _pTarget ) _pTarget->Arc( ScaleRect(r), StartAngle, EndAngle );
+			if( _targetDevice ) _targetDevice->Arc( ScaleRect(r), StartAngle, EndAngle );
 		}
 
 		void Rescaler::Secant( Rect<int32_t> r, int32_t StartAngle, int32_t EndAngle )
 		{
-			if( _pTarget ) _pTarget->Secant( ScaleRect(r), StartAngle, EndAngle );
+			if( _targetDevice ) _targetDevice->Secant( ScaleRect(r), StartAngle, EndAngle );
 		}
 
 		void Rescaler::Pie( Rect<int32_t> r, int32_t StartAngle, int32_t EndAngle )
 		{
-			if( _pTarget ) _pTarget->Pie( ScaleRect(r), StartAngle, EndAngle );
+			if( _targetDevice ) _targetDevice->Pie( ScaleRect(r), StartAngle, EndAngle );
 		}
 
 		void Rescaler::Ellipse( Rect<int32_t> r )
 		{
-			if( _pTarget ) _pTarget->Ellipse( ScaleRect(r) );
+			if( _targetDevice ) _targetDevice->Ellipse( ScaleRect(r) );
 		}
 
 		void Rescaler::Rectangle( Rect<int32_t> r )
 		{
-			if( _pTarget ) _pTarget->Rectangle( ScaleRect(r) );
+			if( _targetDevice ) _targetDevice->Rectangle( ScaleRect(r) );
 		}
 
 		void Rescaler::Bezier( int32_t x0,int32_t y0,int32_t x1,int32_t y1,int32_t x2,int32_t y2,int32_t x3,int32_t y3 )
 		{
-			if( _pTarget ) _pTarget->Bezier(
+			if( _targetDevice ) _targetDevice->Bezier(
 				ScaleX(x0), ScaleY(y0),
 				ScaleX(x1), ScaleY(y1),
 				ScaleX(x2), ScaleY(y2),
@@ -1870,7 +1870,7 @@ namespace libGraphics
 
 		void Rescaler::Triangle( int32_t x0,int32_t y0,int32_t x1,int32_t y1,int32_t x2,int32_t y2 )
 		{
-			if( _pTarget ) _pTarget->Triangle(
+			if( _targetDevice ) _targetDevice->Triangle(
 				ScaleX(x0), ScaleY(y0),
 				ScaleX(x1), ScaleY(y1),
 				ScaleX(x2), ScaleY(y2) );
@@ -1878,24 +1878,24 @@ namespace libGraphics
 
 		void Rescaler::DrawBitmap( Rect<int32_t> AreaOnTarget, Rect<int32_t> AreaOnSource, uint32_t Flags )
 		{
-			if(_pTarget)
+			if(_targetDevice)
 			{
-				_pTarget->DrawBitmap( ScaleRect(AreaOnTarget), AreaOnSource, Flags );
+				_targetDevice->DrawBitmap( ScaleRect(AreaOnTarget), AreaOnSource, Flags );
 			}
 		}
 
-		void Rescaler::Text( int32_t x, int32_t y, Scaling *pScaling, const char *Text, size_t Count )
+		void Rescaler::Text( int32_t x, int32_t y, Scaling *scalingRecord, const char *Text, size_t Count )
 		{
-			if(_pTarget)
+			if(_targetDevice)
 			{
-				if( pScaling )
+				if( scalingRecord )
 				{
 					Scaling sc;
-					sc.MultiplierX = pScaling->MultiplierX * int32_t(_multiplierX);
-					sc.MultiplierY = pScaling->MultiplierY * int32_t(_multiplierY);
-					sc.DivisorX    = pScaling->DivisorX    * int32_t(_divisorX);
-					sc.DivisorY    = pScaling->DivisorY    * int32_t(_divisorY);
-					_pTarget->Text( ScaleX(x), ScaleY(y), &sc, Text, Count );
+					sc.MultiplierX = scalingRecord->MultiplierX * int32_t(_multiplierX);
+					sc.MultiplierY = scalingRecord->MultiplierY * int32_t(_multiplierY);
+					sc.DivisorX    = scalingRecord->DivisorX    * int32_t(_divisorX);
+					sc.DivisorY    = scalingRecord->DivisorY    * int32_t(_divisorY);
+					_targetDevice->Text( ScaleX(x), ScaleY(y), &sc, Text, Count );
 				}
 				else
 				{
@@ -1904,14 +1904,14 @@ namespace libGraphics
 					sc.MultiplierY = int32_t(_multiplierY);
 					sc.DivisorX    = int32_t(_divisorX);
 					sc.DivisorY    = int32_t(_divisorY);
-					_pTarget->Text( ScaleX(x), ScaleY(y), &sc, Text, Count );
+					_targetDevice->Text( ScaleX(x), ScaleY(y), &sc, Text, Count );
 				}
 			}
 		}
 
 		std::shared_ptr<Fonts::AbstractFont> Rescaler::GetFont() const
 		{
-			return _pTarget ? _pTarget->GetFont() : 0;
+			return _targetDevice ? _targetDevice->GetFont() : 0;
 		}
 
 	} /// end namespace
@@ -2121,14 +2121,14 @@ namespace libGraphics
 					// We call the AbstractHorizontalHandler to do each line rendering.
 
 					GeneralVerticalHandler(
-						AbstractHorizontalHandler *pAbsHH,
+						AbstractHorizontalHandler *horizontalHandler,
 						uint32_t *destAddress,           // topmost pixel in viewport at target
 						intptr_t bytesPerScanLineAtDestination,
 						int32_t sourceWidthPixels,
 						int32_t destWidthPixels,
 						int32_t paintWidthPixels,
 						int32_t rowPrepDecision )
-							: _pAbsHH(pAbsHH)
+							: _pAbsHH(horizontalHandler)
 							, _bytesPerScanLineAtDestination( bytesPerScanLineAtDestination )
 					{
 						_wp._destAddress       = destAddress;
@@ -2163,7 +2163,7 @@ namespace libGraphics
 					const Rect<int32_t> &callersAreaOnSource, // Can be sub-area of the source bitmap.
 					int32_t sourceBitmapWidthPixels,          // Dimensions of the source bitmap (full width)
 					int32_t sourceBitmapHeightPixels,         // Dimensions of the source bitmap (full height)
-					AbstractHorizontalHandler *pAbsHH,
+					AbstractHorizontalHandler *horizontalHandler,
 					const Rect<int32_t> &viewport )           // Must be non-zero area wholly *within* the target.
 				{
 					// This is the core bitmap scaler that abstracts the source using an AbstractHorizontalHandler.
@@ -2213,7 +2213,7 @@ namespace libGraphics
 
 					// Inform the abstract source object of the (dx,dy) delta into the source surface
 					// at which we're going to begin fetching:
-					pAbsHH->SetStartPositionInSource(
+					horizontalHandler->SetStartPositionInSource(
 						rowPrep.NumSourceIncrements + areaOnSource.left,
 						colPrep.NumSourceIncrements + areaOnSource.top );
 
@@ -2224,7 +2224,7 @@ namespace libGraphics
 
 					// Prepare the functor object that Stage2() will use:
 					GeneralVerticalHandler  vh(
-						pAbsHH,
+						horizontalHandler,
 						pDestPixel,
 						bytesPerScanLineAtDestination,
 						sourceWidthPixels,
