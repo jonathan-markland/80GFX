@@ -746,9 +746,6 @@ void DrawOmega(
 		// the mouse in GIMP, and making approximate notes rather than doing 
 		// anything clever.
 		
-		// TODO: BezierTo() is required, which MUST set the internal 
-		//       cursor position!  Then get rid of all the duplicate points!
-		
 		// TODO: The Arc() function does not fit well into outline polys for
 		//       similar reasons, but also the difficulty of calculating the
 		//       positioning(!).  Maybe support 90 degree circular arcs?
