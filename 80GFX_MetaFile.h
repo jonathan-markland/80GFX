@@ -126,7 +126,7 @@ namespace libBasic
 			
 		private:
 
-			SmallStringBuilder  _smallStringBuilder;
+			SmallStringBuilder  _str;
 			libBasic::AbstractTextOutputStream *_outputStream;
 			
 		};		
