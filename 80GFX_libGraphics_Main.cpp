@@ -50,7 +50,7 @@
 #define META_ELLIPSE            "ellipse"
 #define META_PIE                "pie"
 #define META_RECTANGLE          "rectangle"
-#define META_BEZIER             "bezier"
+#define META_BEZIER_TO          "bezierTo"
 #define META_TRIANGLE           "triangle"
 #define META_LINE               "line"
 #define META_LINES              "lines"
@@ -641,6 +641,14 @@ namespace libGraphics
 			_cursorY = y;
 		}
 
+		void BitmapDevice::BezierTo( int32_t x1,int32_t y1,int32_t x2,int32_t y2,int32_t x3,int32_t y3 )
+		{
+			System::ToLines::Bezier( 
+				_viewport,  _cursorX,_cursorY, x1,y1, x2,y2, x3,y3, *GetLineReceiverForCurrentMode() );
+			_cursorX = x3;
+			_cursorY = y3;
+		}
+
 		System::LineReceivers::AbstractLineReceiver *BitmapDevice::GetLineReceiverForCurrentMode()
 		{
 			if( DoingPolygon() ) 
@@ -678,11 +686,6 @@ namespace libGraphics
 		void BitmapDevice::Rectangle( Rect<int32_t> r )
 		{
 			System::ToLines::Rectangle<int32_t>( _viewport, r.left, r.top, r.right, r.bottom, *GetLineReceiverForCurrentMode() );
-		}
-
-		void BitmapDevice::Bezier( int32_t x0,int32_t y0,int32_t x1,int32_t y1,int32_t x2,int32_t y2,int32_t x3,int32_t y3 )
-		{
-			System::ToLines::Bezier( _viewport,  x0,y0, x1,y1, x2,y2, x3,y3, *GetLineReceiverForCurrentMode() );
 		}
 
 		void BitmapDevice::Triangle( int32_t x0,int32_t y0,int32_t x1,int32_t y1,int32_t x2,int32_t y2 )
@@ -837,6 +840,13 @@ namespace libGraphics
 			ContributePoint(x,y);
 		}
 
+		void ExtentsMeasurementDevice::BezierTo( int32_t x1,int32_t y1,int32_t x2,int32_t y2,int32_t x3,int32_t y3 )
+		{
+			ContributePoint(x1,y1);
+			ContributePoint(x2,y2);
+			ContributePoint(x3,y3);
+		}
+
 		void ExtentsMeasurementDevice::Arc( Rect<int32_t> r, int32_t startAngle, int32_t endAngle )
 		{
 			ContributeRect(r);
@@ -860,14 +870,6 @@ namespace libGraphics
 		void ExtentsMeasurementDevice::Rectangle( Rect<int32_t> r )
 		{
 			ContributeRect(r);
-		}
-
-		void ExtentsMeasurementDevice::Bezier( int32_t x0,int32_t y0,int32_t x1,int32_t y1,int32_t x2,int32_t y2,int32_t x3,int32_t y3 )
-		{
-			ContributePoint(x0,y0);
-			ContributePoint(x1,y1);
-			ContributePoint(x2,y2);
-			ContributePoint(x3,y3);
 		}
 
 		void ExtentsMeasurementDevice::Triangle( int32_t x0,int32_t y0,int32_t x1,int32_t y1,int32_t x2,int32_t y2 )
@@ -1204,6 +1206,16 @@ namespace libGraphics
 			metaWriter.Done();
 		}
 
+		void MetafileRecorderDevice::BezierTo( int32_t x1,int32_t y1,int32_t x2,int32_t y2,int32_t x3,int32_t y3 )
+		{
+			libBasic::MetaOut::MetafileWriter metaWriter( _outputTextStream );
+			metaWriter.Start( META_BEZIER_TO );
+			libBasic::MetaOut::Add( metaWriter, x1, y1 );
+			libBasic::MetaOut::Add( metaWriter, x2, y2 );
+			libBasic::MetaOut::Add( metaWriter, x3, y3 );
+			metaWriter.Done();
+		}
+
 		void MetafileRecorderDevice::LineTo( int32_t x,int32_t y )
 		{
 			libBasic::MetaOut::MetafileWriter metaWriter( _outputTextStream );
@@ -1252,17 +1264,6 @@ namespace libGraphics
 			libBasic::MetaOut::MetafileWriter metaWriter( _outputTextStream );
 			metaWriter.Start( META_RECTANGLE );
 			libBasic::MetaOut::Add( metaWriter, r );
-			metaWriter.Done();
-		}
-
-		void MetafileRecorderDevice::Bezier( int32_t x0,int32_t y0,int32_t x1,int32_t y1,int32_t x2,int32_t y2,int32_t x3,int32_t y3 )
-		{
-			libBasic::MetaOut::MetafileWriter metaWriter( _outputTextStream );
-			metaWriter.Start( META_BEZIER );
-			libBasic::MetaOut::Add( metaWriter, x0, y0 );
-			libBasic::MetaOut::Add( metaWriter, x1, y1 );
-			libBasic::MetaOut::Add( metaWriter, x2, y2 );
-			libBasic::MetaOut::Add( metaWriter, x3, y3 );
 			metaWriter.Done();
 		}
 
@@ -1678,18 +1679,16 @@ namespace libGraphics
 				METAREAD_PARSE_FIELD( r );
 				_pTarget->Rectangle( r );
 			}
-			else if( libBasic::MetaIn::ParseMetaCmd( _pos, META_BEZIER ) )
+			else if( libBasic::MetaIn::ParseMetaCmd( _pos, META_BEZIER_TO ) )
 			{
-				int32_t x0, y0, x1, y1, x2, y2, x3, y3;
-				METAREAD_PARSE_FIELD( x0 );
-				METAREAD_PARSE_FIELD( y0 );
+				int32_t x1, y1, x2, y2, x3, y3;
 				METAREAD_PARSE_FIELD( x1 );
 				METAREAD_PARSE_FIELD( y1 );
 				METAREAD_PARSE_FIELD( x2 );
 				METAREAD_PARSE_FIELD( y2 );
 				METAREAD_PARSE_FIELD( x3 );
 				METAREAD_PARSE_FIELD( y3 );
-				_pTarget->Bezier( x0,y0, x1,y1, x2,y2, x3,y3 );
+				_pTarget->BezierTo( x1,y1, x2,y2, x3,y3 );
 			}
 			else if( libBasic::MetaIn::ParseMetaCmd( _pos, META_TRIANGLE ) )
 			{
@@ -1834,6 +1833,14 @@ namespace libGraphics
 			if( _targetDevice ) _targetDevice->LineTo( ScaleX(x), ScaleY(y) );
 		}
 
+		void Rescaler::BezierTo( int32_t x1,int32_t y1,int32_t x2,int32_t y2,int32_t x3,int32_t y3 )
+		{
+			if( _targetDevice ) _targetDevice->BezierTo(
+				ScaleX(x1), ScaleY(y1),
+				ScaleX(x2), ScaleY(y2),
+				ScaleX(x3), ScaleY(y3) );
+		}
+
 		void Rescaler::Arc( Rect<int32_t> r, int32_t StartAngle, int32_t EndAngle )
 		{
 			if( _targetDevice ) _targetDevice->Arc( ScaleRect(r), StartAngle, EndAngle );
@@ -1857,15 +1864,6 @@ namespace libGraphics
 		void Rescaler::Rectangle( Rect<int32_t> r )
 		{
 			if( _targetDevice ) _targetDevice->Rectangle( ScaleRect(r) );
-		}
-
-		void Rescaler::Bezier( int32_t x0,int32_t y0,int32_t x1,int32_t y1,int32_t x2,int32_t y2,int32_t x3,int32_t y3 )
-		{
-			if( _targetDevice ) _targetDevice->Bezier(
-				ScaleX(x0), ScaleY(y0),
-				ScaleX(x1), ScaleY(y1),
-				ScaleX(x2), ScaleY(y2),
-				ScaleX(x3), ScaleY(y3) );
 		}
 
 		void Rescaler::Triangle( int32_t x0,int32_t y0,int32_t x1,int32_t y1,int32_t x2,int32_t y2 )

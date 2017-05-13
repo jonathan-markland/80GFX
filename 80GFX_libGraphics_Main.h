@@ -2347,12 +2347,12 @@ namespace libGraphics
 			virtual void EndPoly() = 0;
 			virtual void MoveTo( int32_t x,int32_t y ) = 0;
 			virtual void LineTo( int32_t x,int32_t y ) = 0;
+			virtual void BezierTo( int32_t x1,int32_t y1,int32_t x2,int32_t y2,int32_t x3,int32_t y3 ) = 0;
 			virtual void Arc(    Rect<int32_t> r, int32_t startAngle, int32_t endAngle ) = 0;
 			virtual void Secant( Rect<int32_t> r, int32_t startAngle, int32_t endAngle ) = 0;
 			virtual void Pie(    Rect<int32_t> r, int32_t startAngle, int32_t endAngle ) = 0;
 			virtual void Ellipse( Rect<int32_t> r ) = 0;
 			virtual void Rectangle( Rect<int32_t> r ) = 0;
-			virtual void Bezier( int32_t x0,int32_t y0,int32_t x1,int32_t y1,int32_t x2,int32_t y2,int32_t x3,int32_t y3 ) = 0;
 			virtual void Triangle( int32_t x0,int32_t y0,int32_t x1,int32_t y1,int32_t x2,int32_t y2 ) = 0;
 			virtual void DrawBitmap( Rect<int32_t> areaOnTarget, Rect<int32_t> areaOnSource, uint32_t flags ) = 0;  // TODO: What are the flags really?
 			virtual void Text( int32_t x, int32_t y, Scaling *scalingRecord, const char *text, size_t charCount ) = 0;
@@ -2364,12 +2364,12 @@ namespace libGraphics
 		#define ABSTRACT_DEVICE_VIRTUALS \
 			virtual void MoveTo( int32_t x,int32_t y ) override; \
 			virtual void LineTo( int32_t x,int32_t y ) override; \
+			virtual void BezierTo( int32_t x1,int32_t y1,int32_t x2,int32_t y2,int32_t x3,int32_t y3 ) override; \
 			virtual void Arc( Rect<int32_t> r, int32_t StartAngle, int32_t EndAngle ) override; \
 			virtual void Secant( Rect<int32_t> r, int32_t StartAngle, int32_t EndAngle ) override; \
 			virtual void Pie( Rect<int32_t> r, int32_t StartAngle, int32_t EndAngle ) override; \
 			virtual void Ellipse( Rect<int32_t> r ) override; \
 			virtual void Rectangle( Rect<int32_t> r ) override; \
-			virtual void Bezier( int32_t x0,int32_t y0,int32_t x1,int32_t y1,int32_t x2,int32_t y2,int32_t x3,int32_t y3 ) override; \
 			virtual void Triangle( int32_t x0,int32_t y0,int32_t x1,int32_t y1,int32_t x2,int32_t y2 ) override; \
 			virtual void DrawBitmap( Rect<int32_t> AreaOnTarget, Rect<int32_t> AreaOnSource, uint32_t Flags ) override;
 
@@ -2636,12 +2636,12 @@ namespace libGraphics
 			virtual void EndPoly() override;
 			virtual void MoveTo( int32_t x,int32_t y ) override;
 			virtual void LineTo( int32_t x,int32_t y ) override;
+			virtual void BezierTo( int32_t x1,int32_t y1,int32_t x2,int32_t y2,int32_t x3,int32_t y3 ) override;
 			virtual void Arc(    Rect<int32_t> r, int32_t startAngle, int32_t endAngle ) override;
 			virtual void Secant( Rect<int32_t> r, int32_t startAngle, int32_t endAngle ) override;
 			virtual void Pie(    Rect<int32_t> r, int32_t startAngle, int32_t endAngle ) override;
 			virtual void Ellipse( Rect<int32_t> r ) override;
 			virtual void Rectangle( Rect<int32_t> r ) override;
-			virtual void Bezier( int32_t x0,int32_t y0,int32_t x1,int32_t y1,int32_t x2,int32_t y2,int32_t x3,int32_t y3 ) override;
 			virtual void Triangle( int32_t x0,int32_t y0,int32_t x1,int32_t y1,int32_t x2,int32_t y2 ) override;
 			virtual void DrawBitmap( Rect<int32_t> areaOnTarget, Rect<int32_t> areaOnSource, uint32_t flags ) override;
 			virtual void Text( int32_t x, int32_t y, Scaling *scalingRecord, const char *text, size_t charCount ) override;
