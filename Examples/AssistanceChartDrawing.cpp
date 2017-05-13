@@ -759,32 +759,28 @@ void DrawOmega(
 		
 		theDevice.MoveTo(476,331); // 1
 		theDevice.LineTo(466,370); // 2
-		theDevice.Bezier(466,370   ,464,378, 462,382, 431,382); // 3
-		theDevice.MoveTo(431,382); // TODO: extraneous
+		theDevice.BezierTo(464,378, 462,382, 431,382); // 3
 		theDevice.LineTo(388,383); // 4
-		theDevice.Bezier(388,383   ,395,356, 407,336, 431,299); // 5
-		theDevice.Bezier(431,299   ,460,259, 486,223, 486,177); // 6
-		theDevice.Bezier(486,177   ,486,105, 412, 45, 320, 45); // 7
-		theDevice.Bezier(320, 45   ,224, 45, 154,105, 153,176); // 8
-		theDevice.Bezier(153,176   ,153,222, 179,261, 204,298); // 9
-		theDevice.Bezier(204,298   ,233,338, 244,360, 249,381); // 10
-		theDevice.MoveTo(249,381); // TODO: extraneous
+		theDevice.BezierTo(395,356, 407,336, 431,299); // 5
+		theDevice.BezierTo(460,259, 486,223, 486,177); // 6
+		theDevice.BezierTo(486,105, 412, 45, 320, 45); // 7
+		theDevice.BezierTo(224, 45, 154,105, 153,176); // 8
+		theDevice.BezierTo(153,222, 179,261, 204,298); // 9
+		theDevice.BezierTo(233,338, 244,360, 249,381); // 10
 		theDevice.LineTo(207,381); // 11
-		theDevice.Bezier(207,381   ,177,382, 175,378, 171,371); // 12
-		theDevice.Bezier(171,371   ,169,364, 165,345, 162,332); // 13
-		theDevice.MoveTo(162,332); // TODO: extraneous
+		theDevice.BezierTo(177,382, 175,378, 171,371); // 12
+		theDevice.BezierTo(169,364, 165,345, 162,332); // 13
 		theDevice.LineTo(147,330); 
 		theDevice.LineTo(166,416); 
 		theDevice.LineTo(250,416); 
-		theDevice.Bezier(250,416   ,263,417, 266,417, 267,406); 
-		theDevice.Bezier(267,406   ,266,369, 249,325, 233,284); 
-		theDevice.Bezier(233,284   ,220,250, 208,214, 208,177); 
-		theDevice.Bezier(208,177   ,208, 97, 265, 58, 318, 56); 
-		theDevice.Bezier(318, 56   ,374, 56, 430, 98, 431,176); 
-		theDevice.Bezier(431,176   ,431,216, 416,251, 405,283); 
-		theDevice.Bezier(405,283   ,388,323, 371,368, 371,406); 
-		theDevice.Bezier(371,406   ,371,417, 374,417, 387,416); 
-		theDevice.MoveTo(387,416); // TODO: extraneous
+		theDevice.BezierTo(263,417, 266,417, 267,406); 
+		theDevice.BezierTo(266,369, 249,325, 233,284); 
+		theDevice.BezierTo(220,250, 208,214, 208,177); 
+		theDevice.BezierTo(208, 97, 265, 58, 318, 56); 
+		theDevice.BezierTo(374, 56, 430, 98, 431,176); 
+		theDevice.BezierTo(431,216, 416,251, 405,283); 
+		theDevice.BezierTo(388,323, 371,368, 371,406); 
+		theDevice.BezierTo(371,417, 374,417, 387,416); 
 		theDevice.LineTo(473,418); 
 		theDevice.LineTo(491,333); 
 		theDevice.LineTo(476,331);
