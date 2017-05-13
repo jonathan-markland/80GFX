@@ -43,9 +43,21 @@ bool SaveMemoryToFile( const std::string &filename, const void *data, size_t siz
 class OutputToStandardOut: public libBasic::AbstractTextOutputStream
 {
 public:
-	// An abstract interface through which text can be reported.
 	// Reminder: Does NOT apply a new-line.
 	virtual void Write( const char *message ) override;
+};
+
+
+
+class OutputToFile: public libBasic::AbstractTextOutputStream
+{
+public:
+	// Reminder: Does NOT apply a new-line.
+	OutputToFile( const char *filePath );
+	~OutputToFile();
+	virtual void Write( const char *message ) override;
+private:
+	void *_body;
 };
 
 
@@ -184,20 +196,22 @@ void WithNewMetafileDo(
 	// Create a stream object:
 	//
 		
-	OutputToStandardOut  outputToStandardOut;
-	outputToStandardOut.Write( "\r\n" );
-	outputToStandardOut.Write( "------------------------------------------------------------------------------------------\r\n" );
-	outputToStandardOut.Write( "  Metafile: " );
-	outputToStandardOut.Write( outputFileName );
-	outputToStandardOut.Write( "\r\n" );
-	outputToStandardOut.Write( "------------------------------------------------------------------------------------------\r\n" );
+	// OutputToStandardOut  outputStream;
+	// outputStream.Write( "\r\n" );
+	// outputStream.Write( "------------------------------------------------------------------------------------------\r\n" );
+	// outputStream.Write( "  Metafile: " );
+	// outputStream.Write( outputFileName );
+	// outputStream.Write( "\r\n" );
+	// outputStream.Write( "------------------------------------------------------------------------------------------\r\n" );
 		
+	OutputToFile         outputStream( outputFileName );
+	
 	//
 	// Create a "device" object that will allow drawing routines to operate
 	// without knowing what they're drawing on:
 	//
 	
-	libGraphics::Devices::MetafileRecorderDevice  theMetafileDevice( &outputToStandardOut );
+	libGraphics::Devices::MetafileRecorderDevice  theMetafileDevice( &outputStream );
 	
 	//
 	// Create a "font server":  TODO: Should really be a high-level library responsibility to provide this.

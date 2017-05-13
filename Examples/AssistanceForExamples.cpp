@@ -58,6 +58,35 @@ void OutputToStandardOut::Write( const char *message )
 
 
 
+OutputToFile::OutputToFile( const char *filePath )
+{
+	_body = new std::ofstream( filePath );
+}
+
+
+
+OutputToFile::~OutputToFile()
+{
+	auto pStream = (std::ofstream *) _body;
+	if(pStream != nullptr)
+	{
+		pStream->close();
+		delete pStream;
+		_body = nullptr;
+	}
+}
+
+
+
+void OutputToFile::Write( const char *message )
+{
+	auto &theStream = *((std::ofstream *) _body);
+	theStream << message;
+}
+
+
+
+
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 //    FONT SERVER

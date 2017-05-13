@@ -155,6 +155,10 @@ int main()
 	// Metafiles are a simple text format that I devised, and are emitted to a 
 	// redirectable stream.
 	//
+	// - Note: You cannot use DrawWithTheDirectGraphicsFunctions with metafiles
+	//         because the so-called "direct" functions are only defined on the
+	//         bitmap class, and were intended for performance drawing to bitmaps only.
+	//
 	
 	WithNewMetafileDo( DemoBitmapWidth, DemoBitmapHeight, "PieChart.metafile.txt", 
 		[&testData]( libGraphics::Devices::AbstractDevice &theDevice )
@@ -180,7 +184,7 @@ int main()
 			DrawPalette( g_ColourStripData, 16, theDevice, DemoBitmapWidth, DemoBitmapHeight );
 		});
 
-	WithNewMetafileDo( DemoBitmapWidth, DemoBitmapHeight, "PolyWithHoles.data", 
+	WithNewMetafileDo( DemoBitmapWidth, DemoBitmapHeight, "PolyWithHoles.metafile.txt", 
 		[]( libGraphics::Devices::AbstractDevice &theDevice )
 		{
             DrawFilledPolygonWithHoles( theDevice, DemoBitmapWidth, DemoBitmapHeight );
