@@ -45,12 +45,12 @@
 
 #define META_MOVETO             "moveto"
 #define META_LINETO             "lineto"
+#define META_BEZIER_TO          "bezierTo"
 #define META_ARC                "arc"
 #define META_SECANT             "secant"
 #define META_ELLIPSE            "ellipse"
 #define META_PIE                "pie"
 #define META_RECTANGLE          "rectangle"
-#define META_BEZIER_TO          "bezierTo"
 #define META_TRIANGLE           "triangle"
 #define META_LINE               "line"
 #define META_LINES              "lines"
