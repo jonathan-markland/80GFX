@@ -23,10 +23,10 @@
 
 #pragma once
 
-#include "80GFX_Geometric.h"
-#include "80GFX_Abstractions.h"
-#include "80GFX_SmallStringBuilder.h"
-#include "80GFX_NumStr.h"
+#include "lib80GFX_Geometric.h"
+#include "lib80GFX_Abstractions.h"
+#include "lib80GFX_SmallStringBuilder.h"
+#include "lib80GFX_NumStr.h"
 
 
 // --------------------------------------------------------------------------------------------------------

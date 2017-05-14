@@ -25,8 +25,8 @@
 #pragma once
 
 #include <string>
-#include "80GFX_libGraphics_Main.h"
-#include "80GFX_libGraphics_Fonts.h"
+#include "lib80GFX_Main.h"
+#include "lib80GFX_Fonts.h"
 
 
 // If any of your polygons are not showing, increase this:

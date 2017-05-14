@@ -26,10 +26,10 @@
 #include <fstream>
 #include <string>
 #include <iostream>
-#include "80GFX_libGraphics_Main.h"
-#include "80GFX_libGraphics_Fonts.h"
-#include "80GFX_ColoursEnum.h"
-#include "80GFX_Resources_FixedFont.h"
+#include "lib80GFX_Main.h"
+#include "lib80GFX_Fonts.h"
+#include "lib80GFX_ColoursEnum.h"
+#include "lib80GFX_Resources_FixedFont.h"
 #include "AssistanceForExamples.h"
 #include "AssistanceChartDrawing.h"
 

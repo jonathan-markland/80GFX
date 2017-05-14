@@ -26,12 +26,12 @@
 #include <memory>
 #include <algorithm>        // for std::sort()
 
-#include "80GFX_Maths.h"
-#include "80GFX_Geometric.h"
-#include "80GFX_SineTable.h"
-#include "80GFX_Abstractions.h"   // for libBasic::AbstractTextOutputStream (for metafiles)
-#include "80GFX_SmallStringBuilder.h"
-#include "80GFX_Resources_Pattern1616.h"
+#include "lib80GFX_Maths.h"
+#include "lib80GFX_Geometric.h"
+#include "lib80GFX_SineTable.h"
+#include "lib80GFX_Abstractions.h"   // for libBasic::AbstractTextOutputStream (for metafiles)
+#include "lib80GFX_SmallStringBuilder.h"
+#include "lib80GFX_Resources_Pattern1616.h"
 
 extern const int32_t BezierConstants[15*4];
 

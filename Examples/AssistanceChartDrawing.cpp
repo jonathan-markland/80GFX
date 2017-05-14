@@ -25,9 +25,9 @@
 #include <stdint.h>
 #include <memory>
 #include <vector>
-#include "80GFX_libGraphics_Main.h"
-#include "80GFX_libGraphics_Fonts.h"
-#include "80GFX_ColoursEnum.h"
+#include "lib80GFX_Main.h"
+#include "lib80GFX_Fonts.h"
+#include "lib80GFX_ColoursEnum.h"
 #include "AssistanceChartDrawing.h"
 
 

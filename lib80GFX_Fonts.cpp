@@ -21,8 +21,8 @@
 
 // [ ] Use of exception raising - to be considered.
 
-#include "80GFX_libGraphics_Main.h"
-#include "80GFX_libGraphics_Fonts.h"
+#include "lib80GFX_Main.h"
+#include "lib80GFX_Fonts.h"
 
 
 
