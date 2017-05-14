@@ -21,7 +21,7 @@
 
 #pragma once
 
-namespace libBasic
+namespace lib80GFX
 {
 	namespace Colours
 	{

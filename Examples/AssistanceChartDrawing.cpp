@@ -119,12 +119,12 @@ void DrawBarChart(
 	auto ly = projectionHeight / 10;
 
 	// Create pens:
-	auto axisPen    = std::make_shared<lib80GFX::Pens::Solid>( libBasic::Colours::White );
-	auto outlinePen = std::make_shared<lib80GFX::Pens::Solid>( libBasic::Colours::Blue );
+	auto axisPen    = std::make_shared<lib80GFX::Pens::Solid>( lib80GFX::Colours::White );
+	auto outlinePen = std::make_shared<lib80GFX::Pens::Solid>( lib80GFX::Colours::Blue );
 
 	// Create brush:
 	auto patternedBrush = std::make_shared<lib80GFX::Brushes::Patterned>( 
-		g_Pattern1616_RoughWeave, libBasic::Colours::Black, libBasic::Colours::Black );
+		g_Pattern1616_RoughWeave, lib80GFX::Colours::Black, lib80GFX::Colours::Black );
 
 	// Draw AXES
 	theDevice.SelectPen( axisPen );
@@ -179,15 +179,15 @@ void DrawPieChart(
 
 	// Create brush:
 	auto patternedBrush = std::make_shared<lib80GFX::Brushes::Patterned>(
-		g_Pattern1616_Balls, libBasic::Colours::Black, libBasic::Colours::Black );
+		g_Pattern1616_Balls, lib80GFX::Colours::Black, lib80GFX::Colours::Black );
 
 	//auto outlineBrush = std::make_shared<lib80GFX::Brushes::Patterned>(
-	//	g_Pattern1616_RoughWeave, libBasic::Colours::White, libBasic::Colours::Blue );
+	//	g_Pattern1616_RoughWeave, lib80GFX::Colours::White, lib80GFX::Colours::Blue );
 	
-	auto outlineBrush = std::make_shared<lib80GFX::Brushes::Solid>( libBasic::Colours::White );
+	auto outlineBrush = std::make_shared<lib80GFX::Brushes::Solid>( lib80GFX::Colours::White );
 		
 	// Create pens:
-	// auto outlinePen = std::make_shared<lib80GFX::Pens::Solid>( libBasic::Colours::White );
+	// auto outlinePen = std::make_shared<lib80GFX::Pens::Solid>( lib80GFX::Colours::White );
 	auto outlinePen = std::make_shared<lib80GFX::Pens::ThickPen>( outlineBrush, 10 );
 
 	// Draw series
@@ -441,8 +441,8 @@ void private_DrawLineOutAndBack(
 	int32_t x, int32_t y,
 	int32_t dx, int32_t dy, bool drawBack )
 {
-	auto redPen  = std::make_shared<lib80GFX::Pens::Solid>( libBasic::Colours::Red );
-	auto bluePen = std::make_shared<lib80GFX::Pens::Solid>( libBasic::Colours::Blue );
+	auto redPen  = std::make_shared<lib80GFX::Pens::Solid>( lib80GFX::Colours::Red );
+	auto bluePen = std::make_shared<lib80GFX::Pens::Solid>( lib80GFX::Colours::Blue );
 
 	auto ox = x + dx;
 	auto oy = y + dy;
@@ -521,16 +521,16 @@ void DrawWithTheDirectGraphicsFunctions(
 	
 	// Create pens:
 	
-	auto whitePen = std::make_shared<lib80GFX::Pens::Solid>( libBasic::Colours::White );
-	auto bluePen  = std::make_shared<lib80GFX::Pens::Solid>( libBasic::Colours::Blue );
+	auto whitePen = std::make_shared<lib80GFX::Pens::Solid>( lib80GFX::Colours::White );
+	auto bluePen  = std::make_shared<lib80GFX::Pens::Solid>( lib80GFX::Colours::Blue );
 	
 	// Create brushes:
 	
 	auto patternedBrush = std::make_shared<lib80GFX::Brushes::Patterned>( 
-		g_Pattern1616_Balls, libBasic::Colours::Yellow, libBasic::Colours::Green );
+		g_Pattern1616_Balls, lib80GFX::Colours::Yellow, lib80GFX::Colours::Green );
 
 	auto solidBrush = std::make_shared<lib80GFX::Brushes::Solid>( 
-		libBasic::Colours::Blue );
+		lib80GFX::Colours::Blue );
 		
 	// Demo the "direct" functions, although these are for BitmapDevice only:
 
@@ -629,7 +629,7 @@ void DrawFontDemo( lib80GFX::Devices::AbstractDevice &theDevice )
 	
 	// Set the colour for the text using SetForegroundColour():
 
-	theDevice.SetForegroundColour( libBasic::Colours::White );
+	theDevice.SetForegroundColour( lib80GFX::Colours::White );
 	
 	// Select a font, and write a string.
 	// The nullptr means no scaling is provided, so font will render 1:1 definition-to-pixels:
@@ -639,21 +639,21 @@ void DrawFontDemo( lib80GFX::Devices::AbstractDevice &theDevice )
 	
 	// Select another colour and show how to write text scaled by a ratio:
 
-	theDevice.SetForegroundColour( libBasic::Colours::Red );
+	theDevice.SetForegroundColour( lib80GFX::Colours::Red );
 	auto scaleRatio = lib80GFX::Scaling( 4, 2 );  // TODO: It's a bit odd design to specify a scale ratio at the last moment?  Surely that's part of the select?
 	theDevice.Text( 100,175, &scaleRatio, "Wide text!", 10 );
 
 	// Large text with shadow effect:
 	
 	auto scaleRatio2 = lib80GFX::Scaling( 6, 7 );
-	theDevice.SetForegroundColour( libBasic::Colours::Black );   // Shadow
+	theDevice.SetForegroundColour( lib80GFX::Colours::Black );   // Shadow
 	theDevice.Text( 201,351, &scaleRatio2, "Tall text!", 10 );
-	theDevice.SetForegroundColour( libBasic::Colours::Yellow );  // Text
+	theDevice.SetForegroundColour( lib80GFX::Colours::Yellow );  // Text
 	theDevice.Text( 200,350, &scaleRatio2, "Tall text!", 10 );
 	
 	// Select a different font:
 	
-	theDevice.SetForegroundColour( libBasic::Colours::Black );
+	theDevice.SetForegroundColour( lib80GFX::Colours::Black );
 	theDevice.SelectFont( "Lynx",80 );
 	theDevice.Text( 100,210, nullptr, "This is the Camputers Lynx's font.", 34 );
 }
@@ -717,7 +717,7 @@ void DrawOmega(
 {
 	auto whiteBrush = std::make_shared<lib80GFX::Brushes::Solid>( 0xFFFFFFFF );
 	auto blackBrush = std::make_shared<lib80GFX::Brushes::Solid>( 0xFF000000 );
-	auto redBrush   = std::make_shared<lib80GFX::Brushes::Solid>( libBasic::Colours::Red );
+	auto redBrush   = std::make_shared<lib80GFX::Brushes::Solid>( lib80GFX::Colours::Red );
 	
 	theDevice.SelectBrush( whiteBrush );
 	theDevice.StartPoly(); // TODO: Rename StartFilledPoly() ?
