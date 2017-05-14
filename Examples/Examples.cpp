@@ -84,68 +84,68 @@ int main()
 	//
 	
 	if( ! WithNewBitmapDo( DemoBitmapWidth, DemoBitmapHeight, "PaletteDemo.data", 
-		[]( libGraphics::Devices::AbstractDevice &theDevice )
+		[]( lib80GFX::Devices::AbstractDevice &theDevice )
 		{
 			DrawPalette( g_ColourStripData, 16, theDevice, DemoBitmapWidth, DemoBitmapHeight );
 		})) return 1;
 
 	if( ! WithNewBitmapDo( DemoBitmapWidth, DemoBitmapHeight, "DirectFunctionsDemo.data", 
-		[]( libGraphics::Devices::BitmapDevice &theDevice )
+		[]( lib80GFX::Devices::BitmapDevice &theDevice )
 		{
 			DrawWithTheDirectGraphicsFunctions( theDevice, DemoBitmapWidth, DemoBitmapHeight );
 		})) return 1;
 		
 	if( ! WithNewBitmapDo( DemoBitmapWidth, DemoBitmapHeight, "FontDemo.data", 
-		[]( libGraphics::Devices::AbstractDevice &theDevice )
+		[]( lib80GFX::Devices::AbstractDevice &theDevice )
 		{
 			DrawHorizontalPalette( theDevice, g_ColourStripData, 16, DemoBitmapWidth, DemoBitmapHeight );
 			DrawFontDemo( theDevice );
 		})) return 1;
 		
 	if( ! WithNewBitmapDo( DemoBitmapWidth, DemoBitmapHeight, "PieChart.data", 
-		[&testData]( libGraphics::Devices::AbstractDevice &theDevice )
+		[&testData]( lib80GFX::Devices::AbstractDevice &theDevice )
 		{
             DrawPieChart( theDevice, &testData, DemoBitmapWidth, DemoBitmapHeight );
 		})) return 1;
 
 	if( ! WithNewBitmapDo( DemoBitmapWidth, DemoBitmapHeight, "BarChart.data", 
-		[&testData]( libGraphics::Devices::AbstractDevice &theDevice )
+		[&testData]( lib80GFX::Devices::AbstractDevice &theDevice )
 		{
             DrawBarChart( theDevice, &testData, DemoBitmapWidth, DemoBitmapHeight );
 		})) return 1;
 
 	if( ! WithNewBitmapDo( DemoBitmapWidth, DemoBitmapHeight, "CapitalA.data", 
-		[]( libGraphics::Devices::AbstractDevice &theDevice )
+		[]( lib80GFX::Devices::AbstractDevice &theDevice )
 		{
             DrawCapitalLetterA( theDevice, DemoBitmapWidth, DemoBitmapHeight );
 		})) return 1;
 
 	if( ! WithNewBitmapDo( DemoBitmapWidth, DemoBitmapHeight, "Omega.data", 
-		[]( libGraphics::Devices::AbstractDevice &theDevice )
+		[]( lib80GFX::Devices::AbstractDevice &theDevice )
 		{
             DrawOmega( theDevice, DemoBitmapWidth, DemoBitmapHeight );
 		})) return 1;
 
 	if( ! WithNewBitmapDo( DemoBitmapWidth, DemoBitmapHeight, "PolyWithHoles.data", 
-		[]( libGraphics::Devices::AbstractDevice &theDevice )
+		[]( lib80GFX::Devices::AbstractDevice &theDevice )
 		{
             DrawFilledPolygonWithHoles( theDevice, DemoBitmapWidth, DemoBitmapHeight );
 		})) return 1;
 
 	if( ! WithNewBitmapDo( DemoBitmapWidth, DemoBitmapHeight, "PolyWithHoles2.data", 
-		[]( libGraphics::Devices::AbstractDevice &theDevice )
+		[]( lib80GFX::Devices::AbstractDevice &theDevice )
 		{
             DrawFilledPolygonWithHoles2( theDevice, DemoBitmapWidth, DemoBitmapHeight );
 		})) return 1;
 
 	if( ! WithNewBitmapDo( DemoBitmapWidth, DemoBitmapHeight, "Brushes.data", 
-		[]( libGraphics::Devices::AbstractDevice &theDevice )
+		[]( lib80GFX::Devices::AbstractDevice &theDevice )
 		{
             DrawBrushesDemo( theDevice, DemoBitmapWidth, DemoBitmapHeight );
 		})) return 1;
 
 	if( ! WithNewBitmapDo( DemoBitmapWidth, DemoBitmapHeight, "DrawOverLines.data", 
-		[]( libGraphics::Devices::AbstractDevice &theDevice )
+		[]( lib80GFX::Devices::AbstractDevice &theDevice )
 		{
             DrawOverLinesTest( theDevice, DemoBitmapWidth, DemoBitmapHeight );
 		})) return 1;
@@ -163,31 +163,31 @@ int main()
 	// TODO: Review all of the metafile keywords.  E.G.: "brush" does not imply "solid brush".
 	
 	WithNewMetafileDo( DemoBitmapWidth, DemoBitmapHeight, "PieChart.metafile.txt", 
-		[&testData]( libGraphics::Devices::AbstractDevice &theDevice )
+		[&testData]( lib80GFX::Devices::AbstractDevice &theDevice )
 		{
             DrawPieChart( theDevice, &testData, DemoBitmapWidth, DemoBitmapHeight );
 		});
 
 	WithNewMetafileDo( DemoBitmapWidth, DemoBitmapHeight, "CapitalA.metafile.txt", 
-		[]( libGraphics::Devices::AbstractDevice &theDevice )
+		[]( lib80GFX::Devices::AbstractDevice &theDevice )
 		{
             DrawCapitalLetterA( theDevice, DemoBitmapWidth, DemoBitmapHeight );
 		});
 
 	WithNewMetafileDo( DemoBitmapWidth, DemoBitmapHeight, "Omega.metafile.txt", 
-		[]( libGraphics::Devices::AbstractDevice &theDevice )
+		[]( lib80GFX::Devices::AbstractDevice &theDevice )
 		{
             DrawOmega( theDevice, DemoBitmapWidth, DemoBitmapHeight );
 		});
 		
 	WithNewMetafileDo( DemoBitmapWidth, DemoBitmapHeight, "PaletteDemo.metafile.txt", 
-		[]( libGraphics::Devices::AbstractDevice &theDevice )
+		[]( lib80GFX::Devices::AbstractDevice &theDevice )
 		{
 			DrawPalette( g_ColourStripData, 16, theDevice, DemoBitmapWidth, DemoBitmapHeight );
 		});
 
 	WithNewMetafileDo( DemoBitmapWidth, DemoBitmapHeight, "PolyWithHoles.metafile.txt", 
-		[]( libGraphics::Devices::AbstractDevice &theDevice )
+		[]( lib80GFX::Devices::AbstractDevice &theDevice )
 		{
             DrawFilledPolygonWithHoles( theDevice, DemoBitmapWidth, DemoBitmapHeight );
 		});

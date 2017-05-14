@@ -62,7 +62,7 @@ private:
 
 
 
-class TestFontServer: public libGraphics::Fonts::AbstractFontServer
+class TestFontServer: public lib80GFX::Fonts::AbstractFontServer
 {
 public:
 
@@ -73,8 +73,8 @@ public:
 	// present for the duration of the program run.
 	
 	static void Init();
-	virtual std::shared_ptr<libGraphics::Fonts::AbstractFont> AddRefFont( const char *fontName, uint32_t pointSizeTenths ) override;
-	virtual bool ReleaseFont( std::shared_ptr<libGraphics::Fonts::AbstractFont> font ) override;
+	virtual std::shared_ptr<lib80GFX::Fonts::AbstractFont> AddRefFont( const char *fontName, uint32_t pointSizeTenths ) override;
+	virtual bool ReleaseFont( std::shared_ptr<lib80GFX::Fonts::AbstractFont> font ) override;
 };
 
 
@@ -87,7 +87,7 @@ bool WithNewBitmapDo(
 	bool functionResult = false;
 	
 	//
-	// In this version of the library, the 32-bpp bitmap class "libGraphics::Bitmaps::Colour"
+	// In this version of the library, the 32-bpp bitmap class "lib80GFX::Bitmaps::Colour"
 	// doesn't allocate bitmap memory.  So we do it separately:
 	//
 	
@@ -114,14 +114,14 @@ bool WithNewBitmapDo(
 	// It must have one entry per row in the target bitmap:
 	// TODO: Upgrade library:  It's a bit annoying to have to do this!
 	
-	auto lrArray = new libGraphics::System::Raster::RasterLR<int32_t>[ demoBitmapHeight ]; // TODO: avoid bare new really!
+	auto lrArray = new lib80GFX::System::Raster::RasterLR<int32_t>[ demoBitmapHeight ]; // TODO: avoid bare new really!
 	
 	{	
 		//
 		// Now set up a bitmap object to reference this memory:
 		//
 		
-		libGraphics::Bitmaps::Colour  theColourBitmap(
+		lib80GFX::Bitmaps::Colour  theColourBitmap(
 			(uint32_t *) demoBitmapMemory,
 			demoBitmapWidth, demoBitmapHeight,
 			demoBitmapWidth * 4 ); // <-- inter-row offset, in bytes
@@ -131,7 +131,7 @@ bool WithNewBitmapDo(
 		// without knowing what they're drawing on:
 		//
 		
-		libGraphics::Devices::BitmapDevice  theBitmapDevice( theColourBitmap );
+		lib80GFX::Devices::BitmapDevice  theBitmapDevice( theColourBitmap );
 		
 		//
 		// Create a "font server":  TODO: Should really be a high-level library responsibility to provide this.
@@ -211,7 +211,7 @@ void WithNewMetafileDo(
 	// without knowing what they're drawing on:
 	//
 	
-	libGraphics::Devices::MetafileRecorderDevice  theMetafileDevice( &outputStream );
+	lib80GFX::Devices::MetafileRecorderDevice  theMetafileDevice( &outputStream );
 	
 	//
 	// Create a "font server":  TODO: Should really be a high-level library responsibility to provide this.

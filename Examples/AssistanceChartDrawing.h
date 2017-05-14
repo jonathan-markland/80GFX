@@ -27,10 +27,10 @@
 typedef std::vector<int32_t> VectorOfInt32;
 
 void DrawFontDemo(
-	libGraphics::Devices::AbstractDevice &theDevice );
+	lib80GFX::Devices::AbstractDevice &theDevice );
 
 void DrawHorizontalPalette( 
-	libGraphics::Devices::AbstractDevice &theDevice,
+	lib80GFX::Devices::AbstractDevice &theDevice,
 	uint32_t *colourStrip, 
 	uint32_t numColours, 
 	int32_t widthOfDisplay, 
@@ -38,42 +38,42 @@ void DrawHorizontalPalette(
 
 void DrawPalette(
 	uint32_t *colourStrip, uint32_t numColours, 
-	libGraphics::Devices::AbstractDevice &theDevice, 
+	lib80GFX::Devices::AbstractDevice &theDevice, 
 	int32_t widthOfDisplay, int32_t heightOfDisplay );
 
 void DrawWithTheDirectGraphicsFunctions(
-	libGraphics::Devices::BitmapDevice &theBitmapDevice,
+	lib80GFX::Devices::BitmapDevice &theBitmapDevice,
 	int32_t demoBitmapWidth,
 	int32_t demoBitmapHeight );
 
 void DrawBarChart( 
-	libGraphics::Devices::AbstractDevice &theDevice, 
+	lib80GFX::Devices::AbstractDevice &theDevice, 
 	const VectorOfInt32 *dataVector, int32_t projectionWidth, int32_t projectionHeight );
 
 void DrawPieChart( 
-	libGraphics::Devices::AbstractDevice &theDevice, 
+	lib80GFX::Devices::AbstractDevice &theDevice, 
 	const VectorOfInt32 *dataVector, int32_t projectionWidth, int32_t projectionHeight );
 
 void DrawFilledPolygonWithHoles( 
-	libGraphics::Devices::AbstractDevice &theDevice, 
+	lib80GFX::Devices::AbstractDevice &theDevice, 
 	int32_t projectionWidth, int32_t projectionHeight );
 
 void DrawFilledPolygonWithHoles2( 
-	libGraphics::Devices::AbstractDevice &theDevice, 
+	lib80GFX::Devices::AbstractDevice &theDevice, 
 	int32_t projectionWidth, int32_t projectionHeight );
 
 void DrawBrushesDemo( 
-	libGraphics::Devices::AbstractDevice &theDevice, 
+	lib80GFX::Devices::AbstractDevice &theDevice, 
 	int32_t projectionWidth, int32_t projectionHeight );
 
 void DrawOverLinesTest(
-	libGraphics::Devices::AbstractDevice &theDevice, 
+	lib80GFX::Devices::AbstractDevice &theDevice, 
 	int32_t projectionWidth, int32_t projectionHeight );
 
 void DrawCapitalLetterA(
-	libGraphics::Devices::AbstractDevice &theDevice, 
+	lib80GFX::Devices::AbstractDevice &theDevice, 
 	int32_t projectionWidth, int32_t projectionHeight );
 
 void DrawOmega(
-	libGraphics::Devices::AbstractDevice &theDevice, 
+	lib80GFX::Devices::AbstractDevice &theDevice, 
 	int32_t projectionWidth, int32_t projectionHeight );

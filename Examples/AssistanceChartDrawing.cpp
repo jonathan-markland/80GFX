@@ -65,10 +65,10 @@ SCALAR  Max( const std::vector<SCALAR> &vec )
 
 
 void DrawBackground(
-	libGraphics::Devices::AbstractDevice &theDevice, 
+	lib80GFX::Devices::AbstractDevice &theDevice, 
 	int32_t projectionWidth, int32_t projectionHeight )
 {
-	auto blackBrush = std::make_shared<libGraphics::Brushes::Solid>( 0xFF000000 );
+	auto blackBrush = std::make_shared<lib80GFX::Brushes::Solid>( 0xFF000000 );
 	
 	theDevice.SelectBrush( blackBrush );
 	theDevice.StartPoly();
@@ -110,7 +110,7 @@ uint32_t  g_ChartDrawingPalette[16]=
 
 
 void DrawBarChart( 
-	libGraphics::Devices::AbstractDevice &theDevice, 
+	lib80GFX::Devices::AbstractDevice &theDevice, 
 	const VectorOfInt32 *dataSet, int32_t projectionWidth, int32_t projectionHeight )
 {
 	DrawBackground( theDevice, projectionWidth, projectionHeight );
@@ -119,11 +119,11 @@ void DrawBarChart(
 	auto ly = projectionHeight / 10;
 
 	// Create pens:
-	auto axisPen    = std::make_shared<libGraphics::Pens::Solid>( libBasic::Colours::White );
-	auto outlinePen = std::make_shared<libGraphics::Pens::Solid>( libBasic::Colours::Blue );
+	auto axisPen    = std::make_shared<lib80GFX::Pens::Solid>( libBasic::Colours::White );
+	auto outlinePen = std::make_shared<lib80GFX::Pens::Solid>( libBasic::Colours::Blue );
 
 	// Create brush:
-	auto patternedBrush = std::make_shared<libGraphics::Brushes::Patterned>( 
+	auto patternedBrush = std::make_shared<lib80GFX::Brushes::Patterned>( 
 		g_Pattern1616_RoughWeave, libBasic::Colours::Black, libBasic::Colours::Black );
 
 	// Draw AXES
@@ -169,7 +169,7 @@ void DrawBarChart(
 
 
 void DrawPieChart( 
-	libGraphics::Devices::AbstractDevice &theDevice, 
+	lib80GFX::Devices::AbstractDevice &theDevice, 
 	const VectorOfInt32 *dataSet, int32_t projectionWidth, int32_t projectionHeight )
 {
 	DrawBackground( theDevice, projectionWidth, projectionHeight );
@@ -178,17 +178,17 @@ void DrawPieChart(
 	auto ly = projectionHeight / 10;
 
 	// Create brush:
-	auto patternedBrush = std::make_shared<libGraphics::Brushes::Patterned>(
+	auto patternedBrush = std::make_shared<lib80GFX::Brushes::Patterned>(
 		g_Pattern1616_Balls, libBasic::Colours::Black, libBasic::Colours::Black );
 
-	//auto outlineBrush = std::make_shared<libGraphics::Brushes::Patterned>(
+	//auto outlineBrush = std::make_shared<lib80GFX::Brushes::Patterned>(
 	//	g_Pattern1616_RoughWeave, libBasic::Colours::White, libBasic::Colours::Blue );
 	
-	auto outlineBrush = std::make_shared<libGraphics::Brushes::Solid>( libBasic::Colours::White );
+	auto outlineBrush = std::make_shared<lib80GFX::Brushes::Solid>( libBasic::Colours::White );
 		
 	// Create pens:
-	// auto outlinePen = std::make_shared<libGraphics::Pens::Solid>( libBasic::Colours::White );
-	auto outlinePen = std::make_shared<libGraphics::Pens::ThickPen>( outlineBrush, 10 );
+	// auto outlinePen = std::make_shared<lib80GFX::Pens::Solid>( libBasic::Colours::White );
+	auto outlinePen = std::make_shared<lib80GFX::Pens::ThickPen>( outlineBrush, 10 );
 
 	// Draw series
 	theDevice.SelectPen( outlinePen );
@@ -227,7 +227,7 @@ void DrawPieChart(
 
 
 void DrawFilledPolygonWithHoles( 
-	libGraphics::Devices::AbstractDevice &theDevice, 
+	lib80GFX::Devices::AbstractDevice &theDevice, 
 	int32_t projectionWidth, int32_t projectionHeight )
 {
 	DrawBackground( theDevice, projectionWidth, projectionHeight );
@@ -244,7 +244,7 @@ void DrawFilledPolygonWithHoles(
 	auto ly = projectionHeight / 10;
 
 	// Create brush:
-	auto theBrush = std::make_shared<libGraphics::Brushes::Solid>( 0xFFF3CDFF );
+	auto theBrush = std::make_shared<lib80GFX::Brushes::Solid>( 0xFFF3CDFF );
 
 	// Draw series
 	auto  cx = lx * 5;
@@ -291,7 +291,7 @@ void DrawFilledPolygonWithHoles(
 
 
 void DrawFilledPolygonWithHoles2( 
-	libGraphics::Devices::AbstractDevice &theDevice, 
+	lib80GFX::Devices::AbstractDevice &theDevice, 
 	int32_t projectionWidth, int32_t projectionHeight )
 {
 	DrawBackground( theDevice, projectionWidth, projectionHeight );
@@ -300,7 +300,7 @@ void DrawFilledPolygonWithHoles2(
 	auto ly = projectionHeight / 10;
 
 	// Create brush:
-	auto theBrush = std::make_shared<libGraphics::Brushes::Solid>( 0xFFF3CDFF );
+	auto theBrush = std::make_shared<lib80GFX::Brushes::Solid>( 0xFFF3CDFF );
 
 	// Draw series
 	auto  cx = lx * 5;
@@ -348,7 +348,7 @@ void DrawFilledPolygonWithHoles2(
 
 
 void DrawBrushesDemo( 
-	libGraphics::Devices::AbstractDevice &theDevice, 
+	lib80GFX::Devices::AbstractDevice &theDevice, 
 	int32_t projectionWidth, int32_t projectionHeight )
 {
 	// Demonstrate the brushes
@@ -369,18 +369,18 @@ void DrawBrushesDemo(
 
 	// Create brushes:
 
-	auto blackBrush   = std::make_shared<libGraphics::Brushes::Solid>( 0xFF000000 );
-	auto yellowBrush  = std::make_shared<libGraphics::Brushes::Solid>( 0xFF00FFFF );
-	auto redBrush     = std::make_shared<libGraphics::Brushes::Solid>( 0xFF0000FF );
+	auto blackBrush   = std::make_shared<lib80GFX::Brushes::Solid>( 0xFF000000 );
+	auto yellowBrush  = std::make_shared<lib80GFX::Brushes::Solid>( 0xFF00FFFF );
+	auto redBrush     = std::make_shared<lib80GFX::Brushes::Solid>( 0xFF0000FF );
 	
-	auto cyanMixBrush = std::make_shared<libGraphics::Brushes::AverageMixed>( 0xFFFFFF00 );
-	auto blueMixBrush = std::make_shared<libGraphics::Brushes::AverageMixed>( 0xFFFF0000 );
+	auto cyanMixBrush = std::make_shared<lib80GFX::Brushes::AverageMixed>( 0xFFFFFF00 );
+	auto blueMixBrush = std::make_shared<lib80GFX::Brushes::AverageMixed>( 0xFFFF0000 );
 	
-	auto redChannelBrush   = std::make_shared<libGraphics::Brushes::AndXor>( 0xFFFFFF00, 0x000000FF );
-	auto blueChannelBrush  = std::make_shared<libGraphics::Brushes::AndXor>( 0xFF00FFFF, 0x00FF0000 );
-	auto greenChannelBrush = std::make_shared<libGraphics::Brushes::AndXor>( 0xFFFF00FF, 0x0000FF00 );
+	auto redChannelBrush   = std::make_shared<lib80GFX::Brushes::AndXor>( 0xFFFFFF00, 0x000000FF );
+	auto blueChannelBrush  = std::make_shared<lib80GFX::Brushes::AndXor>( 0xFF00FFFF, 0x00FF0000 );
+	auto greenChannelBrush = std::make_shared<lib80GFX::Brushes::AndXor>( 0xFFFF00FF, 0x0000FF00 );
 	
-	auto diamondBrush = std::make_shared<libGraphics::Brushes::Patterned>(
+	auto diamondBrush = std::make_shared<lib80GFX::Brushes::Patterned>(
 		g_Pattern1616_FilledDiamond, 0xFFFFFFFF, 0xFF000000 );
 
 	// TODO: We could do a "tile brush" which rasterised by copying from a given 
@@ -437,12 +437,12 @@ void DrawBrushesDemo(
 
 
 void private_DrawLineOutAndBack(
-	libGraphics::Devices::AbstractDevice &theDevice, 
+	lib80GFX::Devices::AbstractDevice &theDevice, 
 	int32_t x, int32_t y,
 	int32_t dx, int32_t dy, bool drawBack )
 {
-	auto redPen  = std::make_shared<libGraphics::Pens::Solid>( libBasic::Colours::Red );
-	auto bluePen = std::make_shared<libGraphics::Pens::Solid>( libBasic::Colours::Blue );
+	auto redPen  = std::make_shared<lib80GFX::Pens::Solid>( libBasic::Colours::Red );
+	auto bluePen = std::make_shared<lib80GFX::Pens::Solid>( libBasic::Colours::Blue );
 
 	auto ox = x + dx;
 	auto oy = y + dy;
@@ -468,7 +468,7 @@ void private_DrawLineOutAndBack(
 
 
 void private_DrawFanOutAndBack(
-	libGraphics::Devices::AbstractDevice &theDevice, 
+	lib80GFX::Devices::AbstractDevice &theDevice, 
 	int32_t x, int32_t y,
 	int32_t dx, int32_t dy, bool drawBack )
 {
@@ -486,7 +486,7 @@ void private_DrawFanOutAndBack(
 
 
 void DrawOverLinesTest(
-	libGraphics::Devices::AbstractDevice &theDevice, 
+	lib80GFX::Devices::AbstractDevice &theDevice, 
 	int32_t projectionWidth, int32_t projectionHeight )
 {
 	private_DrawFanOutAndBack( theDevice, 100,100, 11,6, true );
@@ -506,7 +506,7 @@ void DrawOverLinesTest(
 	
 	
 void DrawWithTheDirectGraphicsFunctions(
-	libGraphics::Devices::BitmapDevice &theBitmapDevice,
+	lib80GFX::Devices::BitmapDevice &theBitmapDevice,
 	int32_t demoBitmapWidth,
 	int32_t demoBitmapHeight )
 {
@@ -521,15 +521,15 @@ void DrawWithTheDirectGraphicsFunctions(
 	
 	// Create pens:
 	
-	auto whitePen = std::make_shared<libGraphics::Pens::Solid>( libBasic::Colours::White );
-	auto bluePen  = std::make_shared<libGraphics::Pens::Solid>( libBasic::Colours::Blue );
+	auto whitePen = std::make_shared<lib80GFX::Pens::Solid>( libBasic::Colours::White );
+	auto bluePen  = std::make_shared<lib80GFX::Pens::Solid>( libBasic::Colours::Blue );
 	
 	// Create brushes:
 	
-	auto patternedBrush = std::make_shared<libGraphics::Brushes::Patterned>( 
+	auto patternedBrush = std::make_shared<lib80GFX::Brushes::Patterned>( 
 		g_Pattern1616_Balls, libBasic::Colours::Yellow, libBasic::Colours::Green );
 
-	auto solidBrush = std::make_shared<libGraphics::Brushes::Solid>( 
+	auto solidBrush = std::make_shared<lib80GFX::Brushes::Solid>( 
 		libBasic::Colours::Blue );
 		
 	// Demo the "direct" functions, although these are for BitmapDevice only:
@@ -555,13 +555,13 @@ void DrawWithTheDirectGraphicsFunctions(
 // Here's an example of drawing a 32-bpp bitmap onto a target device.
 //
 
-void DrawPalette( uint32_t *colourStrip, uint32_t numColours, libGraphics::Devices::AbstractDevice &theDevice, int32_t widthOfDisplay, int32_t heightOfDisplay )
+void DrawPalette( uint32_t *colourStrip, uint32_t numColours, lib80GFX::Devices::AbstractDevice &theDevice, int32_t widthOfDisplay, int32_t heightOfDisplay )
 {
 	int32_t  lx = widthOfDisplay / 10;
 	int32_t  ly = heightOfDisplay / 10;
 
 	// Create a bitmap object that refers to the colourStrip memory space:
-	auto theBitmap = std::make_shared<libGraphics::Bitmaps::Colour>(
+	auto theBitmap = std::make_shared<lib80GFX::Bitmaps::Colour>(
 		colourStrip, numColours, 1, numColours * 4 );
 
 	// Select the bitmap and draw it:
@@ -589,7 +589,7 @@ void DrawPalette( uint32_t *colourStrip, uint32_t numColours, libGraphics::Devic
 //
 
 void DrawHorizontalPalette( 
-	libGraphics::Devices::AbstractDevice &theDevice,
+	lib80GFX::Devices::AbstractDevice &theDevice,
 	uint32_t *colourStrip, 
 	uint32_t numColours, 
 	int32_t widthOfDisplay, 
@@ -599,7 +599,7 @@ void DrawHorizontalPalette(
 	int32_t  ly = heightOfDisplay / 10;
 
 	// Create a bitmap object that refers to the colourStrip memory space:
-	auto theBitmap = std::make_shared<libGraphics::Bitmaps::Colour>(
+	auto theBitmap = std::make_shared<lib80GFX::Bitmaps::Colour>(
 		colourStrip, 1, numColours, 4 );
 
 	// Select the bitmap and draw it:
@@ -623,7 +623,7 @@ void DrawHorizontalPalette(
 // why I put this unusual feature in, but it's there, anyway!
 //
 
-void DrawFontDemo( libGraphics::Devices::AbstractDevice &theDevice )
+void DrawFontDemo( lib80GFX::Devices::AbstractDevice &theDevice )
 {
 	DrawBackground( theDevice, 640, 480 ); // TODO: Sort out constants
 	
@@ -640,12 +640,12 @@ void DrawFontDemo( libGraphics::Devices::AbstractDevice &theDevice )
 	// Select another colour and show how to write text scaled by a ratio:
 
 	theDevice.SetForegroundColour( libBasic::Colours::Red );
-	auto scaleRatio = libGraphics::Scaling( 4, 2 );  // TODO: It's a bit odd design to specify a scale ratio at the last moment?  Surely that's part of the select?
+	auto scaleRatio = lib80GFX::Scaling( 4, 2 );  // TODO: It's a bit odd design to specify a scale ratio at the last moment?  Surely that's part of the select?
 	theDevice.Text( 100,175, &scaleRatio, "Wide text!", 10 );
 
 	// Large text with shadow effect:
 	
-	auto scaleRatio2 = libGraphics::Scaling( 6, 7 );
+	auto scaleRatio2 = lib80GFX::Scaling( 6, 7 );
 	theDevice.SetForegroundColour( libBasic::Colours::Black );   // Shadow
 	theDevice.Text( 201,351, &scaleRatio2, "Tall text!", 10 );
 	theDevice.SetForegroundColour( libBasic::Colours::Yellow );  // Text
@@ -669,11 +669,11 @@ void DrawFontDemo( libGraphics::Devices::AbstractDevice &theDevice )
 
  
 void DrawCapitalLetterA(
-	libGraphics::Devices::AbstractDevice &theDevice, 
+	lib80GFX::Devices::AbstractDevice &theDevice, 
 	int32_t projectionWidth, int32_t projectionHeight )
 {
-	auto whiteBrush = std::make_shared<libGraphics::Brushes::Solid>( 0xFFFFFFFF );
-	auto blackBrush = std::make_shared<libGraphics::Brushes::Solid>( 0xFF000000 );
+	auto whiteBrush = std::make_shared<lib80GFX::Brushes::Solid>( 0xFFFFFFFF );
+	auto blackBrush = std::make_shared<lib80GFX::Brushes::Solid>( 0xFF000000 );
 
 	theDevice.SelectBrush( whiteBrush );
 	theDevice.StartPoly(); // TODO: Rename StartFilledPoly() ?
@@ -712,12 +712,12 @@ void DrawCapitalLetterA(
 
 
 void DrawOmega(
-	libGraphics::Devices::AbstractDevice &theDevice, 
+	lib80GFX::Devices::AbstractDevice &theDevice, 
 	int32_t projectionWidth, int32_t projectionHeight )
 {
-	auto whiteBrush = std::make_shared<libGraphics::Brushes::Solid>( 0xFFFFFFFF );
-	auto blackBrush = std::make_shared<libGraphics::Brushes::Solid>( 0xFF000000 );
-	auto redBrush   = std::make_shared<libGraphics::Brushes::Solid>( libBasic::Colours::Red );
+	auto whiteBrush = std::make_shared<lib80GFX::Brushes::Solid>( 0xFFFFFFFF );
+	auto blackBrush = std::make_shared<lib80GFX::Brushes::Solid>( 0xFF000000 );
+	auto redBrush   = std::make_shared<lib80GFX::Brushes::Solid>( libBasic::Colours::Red );
 	
 	theDevice.SelectBrush( whiteBrush );
 	theDevice.StartPoly(); // TODO: Rename StartFilledPoly() ?
@@ -737,7 +737,7 @@ void DrawOmega(
 	
 	// TODO: Support different nib shapes for the pen?
 	
-	auto outlinePen = std::make_shared<libGraphics::Pens::ThickPen>( redBrush, 5 );
+	auto outlinePen = std::make_shared<lib80GFX::Pens::ThickPen>( redBrush, 5 );
 	theDevice.SelectPen( outlinePen );
 
 	auto DrawOmegaOutline = [&]()

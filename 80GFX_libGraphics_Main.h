@@ -39,7 +39,7 @@ extern const int32_t BezierConstants[15*4];
 
 
 
-namespace libGraphics
+namespace lib80GFX
 {
 	namespace System
 	{
@@ -61,7 +61,7 @@ namespace libGraphics
 
 // - - - POINT PLOTTER -> BITMAP - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-namespace libGraphics
+namespace lib80GFX
 {
 	namespace System
 	{
@@ -124,7 +124,7 @@ namespace libGraphics
 
 
 
-namespace libGraphics
+namespace lib80GFX
 {
 	namespace System
 	{
@@ -654,7 +654,7 @@ namespace libGraphics
 
 // - - - SHAPES using RasterLR<> array - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-namespace libGraphics
+namespace lib80GFX
 {
 	namespace System
 	{
@@ -775,7 +775,7 @@ namespace libGraphics
 
 // - - - MISC - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-namespace libGraphics
+namespace lib80GFX
 {
 	namespace System
 	{
@@ -809,7 +809,7 @@ namespace libGraphics
 
 // - - - OUTLINE PLOTTERS - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-namespace libGraphics
+namespace lib80GFX
 {
 	namespace System
 	{
@@ -1178,7 +1178,7 @@ namespace libGraphics
 
 // - - - LINE_RECEIVER -> POINT_RECEIVER Functors - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-namespace libGraphics
+namespace lib80GFX
 {
 	namespace System
 	{
@@ -1591,7 +1591,7 @@ namespace libGraphics
 
 // - - - SHAPES -> LINE_RECEIVER - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-namespace libGraphics
+namespace lib80GFX
 {
 	namespace System
 	{
@@ -1954,7 +1954,7 @@ namespace libGraphics
 
 // - - - Pens and Brushes - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-namespace libGraphics
+namespace lib80GFX
 {
 	namespace Brushes
 	{
@@ -2021,7 +2021,7 @@ namespace libGraphics
 
 
 	
-namespace libGraphics
+namespace lib80GFX
 {
 	// Some pens use brushes!
 	
@@ -2073,7 +2073,7 @@ namespace libGraphics
 
 
 
-namespace libGraphics
+namespace lib80GFX
 {
 	namespace System
 	{
@@ -2164,7 +2164,7 @@ namespace libGraphics
 
 // - - - Bitmaps - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-namespace libGraphics
+namespace lib80GFX
 {
 	namespace System
 	{
@@ -2225,7 +2225,7 @@ namespace libGraphics
 
 // - - - (Stretchblt) - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-namespace libGraphics
+namespace lib80GFX
 {
 	namespace Bitmaps
 	{
@@ -2264,7 +2264,7 @@ namespace libGraphics
 
 
 
-namespace libGraphics
+namespace lib80GFX
 {
 	struct Scaling
 	{
@@ -2286,7 +2286,7 @@ namespace libGraphics
 
 // - - - Abstract classes - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-namespace libGraphics
+namespace lib80GFX
 {
 	namespace System
 	{
@@ -2444,7 +2444,7 @@ namespace libGraphics
 
 // - - - (Line Receivers) - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-namespace libGraphics
+namespace lib80GFX
 {
 	namespace System
 	{
@@ -2505,7 +2505,7 @@ namespace libGraphics
 
 // - - - (Concrete DCs : Drawing to bitmaps, Metafile recorder, Measuring, Rescale/Translation ) - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-namespace libGraphics
+namespace lib80GFX
 {
 	namespace Devices
 	{
@@ -2696,7 +2696,7 @@ namespace libGraphics
 
 // - - - Bitmap functions - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-namespace libGraphics
+namespace lib80GFX
 {
 	namespace Bitmaps
 	{
@@ -2735,7 +2735,7 @@ namespace libGraphics
 
 // - - - (Metafile player) - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-namespace libGraphics
+namespace lib80GFX
 {
 	namespace Meta
 	{

@@ -30,7 +30,7 @@
 
 
 // ** FIX: Not sure what's going to happen with these (where kept, namespace name):
-namespace libGraphics
+namespace lib80GFX
 {
 	namespace Fonts
 	{
@@ -320,7 +320,7 @@ namespace libGraphics
 
 // TODO: Terminology "separator" should be "terminator"
 
-namespace libGraphics
+namespace lib80GFX
 {
 	namespace Fonts
 	{
@@ -706,7 +706,7 @@ namespace libGraphics
 
 
 
-namespace libGraphics
+namespace lib80GFX
 {
 	namespace Fonts
 	{
@@ -749,7 +749,7 @@ namespace libGraphics
 
 
 
-namespace libGraphics
+namespace lib80GFX
 {
 	namespace Fonts
 	{
@@ -798,7 +798,7 @@ namespace libGraphics
 
 
 
-namespace libGraphics
+namespace lib80GFX
 {
 	namespace Fonts
 	{
@@ -861,7 +861,7 @@ namespace libGraphics
 
 
 
-namespace libGraphics
+namespace lib80GFX
 {
 	namespace Fonts
 	{
@@ -1206,7 +1206,7 @@ namespace libGraphics
 
 
 
-namespace libGraphics
+namespace lib80GFX
 {
 	namespace Fonts
 	{

@@ -27,7 +27,7 @@
 #include <memory>
 
 
-namespace libGraphics
+namespace lib80GFX
 {
 	namespace Fonts
 	{
@@ -89,7 +89,7 @@ namespace libGraphics
 
 
 // ** FIX: Not sure what's going to happen with these (where kept, namespace name):
-namespace libGraphics
+namespace lib80GFX
 {
 	namespace Fonts
 	{
@@ -223,7 +223,7 @@ End of Appendix G
 
 
 
-namespace libGraphics
+namespace lib80GFX
 {
 	namespace Fonts
 	{

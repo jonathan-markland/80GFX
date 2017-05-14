@@ -124,7 +124,7 @@ namespace libBasic
 
 
 
-namespace libGraphics
+namespace lib80GFX
 {
 	namespace Pens
 	{
@@ -215,7 +215,7 @@ namespace libGraphics
 
 
 
-namespace libGraphics
+namespace lib80GFX
 {
 	namespace Brushes
 	{
@@ -399,7 +399,7 @@ namespace libGraphics
 
 
 
-namespace libGraphics
+namespace lib80GFX
 {
 	namespace Devices
 	{
@@ -514,7 +514,7 @@ namespace libGraphics
 
 
 
-namespace libGraphics
+namespace lib80GFX
 {
 	namespace Devices
 	{
@@ -792,7 +792,7 @@ namespace libGraphics
 
 
 
-namespace libGraphics
+namespace lib80GFX
 {
 	namespace Devices
 	{
@@ -899,7 +899,7 @@ namespace libGraphics
 
 
 
-namespace libGraphics
+namespace lib80GFX
 {
 	namespace Bitmaps
 	{
@@ -1057,7 +1057,7 @@ namespace libGraphics
 
 
 
-namespace libGraphics
+namespace lib80GFX
 {
 	namespace Devices
 	{
@@ -1342,7 +1342,7 @@ namespace libGraphics
 
 
 
-namespace libGraphics
+namespace lib80GFX
 {
 	namespace Meta
 	{
@@ -1718,7 +1718,7 @@ namespace libGraphics
 
 
 
-namespace libGraphics
+namespace lib80GFX
 {
 	namespace Devices
 	{
@@ -1932,7 +1932,7 @@ namespace libGraphics
 
 
 
-namespace libGraphics
+namespace lib80GFX
 {
 	namespace System
 	{
@@ -2085,7 +2085,7 @@ namespace libGraphics
 
 // - - EXPAND abstract sources -> 32bpp - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-namespace libGraphics
+namespace lib80GFX
 {
 	namespace System
 	{
@@ -2244,7 +2244,7 @@ namespace libGraphics
 
 // - - EXPAND 32bpp -> 32bpp - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-namespace libGraphics
+namespace lib80GFX
 {
 	namespace System
 	{
@@ -2379,7 +2379,7 @@ namespace libGraphics
 
 // - - EXPAND 1bpp -> 32bpp - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-namespace libGraphics
+namespace lib80GFX
 {
 	namespace System
 	{

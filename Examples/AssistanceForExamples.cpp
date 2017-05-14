@@ -94,8 +94,8 @@ void OutputToFile::Write( const char *message )
 
 // This simple font server will only serve these font objects:
 
-std::shared_ptr<libGraphics::Fonts::Fixed8byNFont>  g_pSystemFont;
-std::shared_ptr<libGraphics::Fonts::Fixed8byNFont>  g_pCamLynxFont;
+std::shared_ptr<lib80GFX::Fonts::Fixed8byNFont>  g_pSystemFont;
+std::shared_ptr<lib80GFX::Fonts::Fixed8byNFont>  g_pCamLynxFont;
 
 	// Note: The Font object must provide 1-bpp bitmaps for each character,
 	//       upon request, but all that's hidden in the library!  You could
@@ -107,7 +107,7 @@ std::shared_ptr<libGraphics::Fonts::Fixed8byNFont>  g_pCamLynxFont;
 void TestFontServer::Init()
 {
 	// SYSTEM 80
-	g_pSystemFont = std::make_shared<libGraphics::Fonts::Fixed8byNFont>( 
+	g_pSystemFont = std::make_shared<lib80GFX::Fonts::Fixed8byNFont>( 
 		80,     // Font size (for SelectFont() call)
 		g_PcBios8x16Font,   // Font definition.  (As you would expect, just array of bytes in character order).
 		16,     // Height of cell (pixels)
@@ -115,13 +115,13 @@ void TestFontServer::Init()
 		10 );   // Offset of the base-line (from top) in pixels.
 
 	// LYNX font
-	g_pCamLynxFont = std::make_shared<libGraphics::Fonts::Fixed8byNFont>( 
+	g_pCamLynxFont = std::make_shared<lib80GFX::Fonts::Fixed8byNFont>( 
 		80, g_CamputersLynxIIFont,  10,  32,126,  7 );
 }
 
 
 
-std::shared_ptr<libGraphics::Fonts::AbstractFont>  TestFontServer::AddRefFont( const char *fontName, uint32_t pointSizeTenths )
+std::shared_ptr<lib80GFX::Fonts::AbstractFont>  TestFontServer::AddRefFont( const char *fontName, uint32_t pointSizeTenths )
 {
 	// - FontName is the name of the font the caller desires.  Hint:  The SelectFont() function passes in this string.
 	// - PointSizeTenths gives the font size desired.
@@ -145,7 +145,7 @@ std::shared_ptr<libGraphics::Fonts::AbstractFont>  TestFontServer::AddRefFont( c
 
 
 
-bool TestFontServer::ReleaseFont( std::shared_ptr<libGraphics::Fonts::AbstractFont> fontToRelease )
+bool TestFontServer::ReleaseFont( std::shared_ptr<lib80GFX::Fonts::AbstractFont> fontToRelease )
 {
 	if( fontToRelease == g_pSystemFont || fontToRelease == g_pCamLynxFont ) // <-- TODO: not proper "addref/release" usage-count faking but is close enough
 	{
