@@ -31,7 +31,7 @@
 //    SERIALISATION -- IN
 // --------------------------------------------------------------------------------------------------------
 
-namespace libBasic
+namespace lib80GFX
 {
 	namespace MetaIn
 	{
@@ -269,7 +269,7 @@ namespace libBasic
 //    SERIALISATION -- OUT
 // --------------------------------------------------------------------------------------------------------
 
-namespace libBasic
+namespace lib80GFX
 {
 	namespace MetaOut
 	{

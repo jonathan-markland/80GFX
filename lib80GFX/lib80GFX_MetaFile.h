@@ -33,7 +33,7 @@
 //    SERIALISATION -- IN
 // --------------------------------------------------------------------------------------------------------
 
-namespace libBasic
+namespace lib80GFX
 {
 	namespace MetaIn
 	{
@@ -68,9 +68,9 @@ namespace libBasic
 
 // Convenience macros for parsing:
 
-#define METAREAD_CMD( TAGNAME )                if( ! libBasic::MetaIn::ParseMetaCmd( _pos, TAGNAME ) ) return false;
-#define METAREAD_PARSE_FIELD( DEST )           if( ! libBasic::MetaIn::ParseMetaField( _pos, DEST ) ) return false;
-#define METAREAD_PARSE_BINARY( DEST, LENGTH )  if( ! libBasic::MetaIn::ParseBinary( _pos, DEST, LENGTH ) ) return false;
+#define METAREAD_CMD( TAGNAME )                if( ! lib80GFX::MetaIn::ParseMetaCmd( _pos, TAGNAME ) ) return false;
+#define METAREAD_PARSE_FIELD( DEST )           if( ! lib80GFX::MetaIn::ParseMetaField( _pos, DEST ) ) return false;
+#define METAREAD_PARSE_BINARY( DEST, LENGTH )  if( ! lib80GFX::MetaIn::ParseBinary( _pos, DEST, LENGTH ) ) return false;
 
 
 
@@ -86,7 +86,7 @@ namespace libBasic
 #define META_IN                 ">"   /// indent
 #define META_OUT                "<"   /// un-indent
 
-namespace libBasic
+namespace lib80GFX
 {
 	namespace MetaOut
 	{

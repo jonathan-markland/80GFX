@@ -21,6 +21,3 @@
 
 #include "lib80GFX_Abstractions.h"
 
-namespace libBasic
-{
-}
