@@ -22,33 +22,6 @@ const uint32_t PolyScanArrayElementCount = 10000; // TODO: Need to eliminate the
 
 
 
-bool SaveMemoryToFile( const std::string &filename, const void *data, size_t sizeBytes );
-
-
-
-
-class OutputToStandardOut: public libBasic::AbstractTextOutputStream
-{
-public:
-	// Reminder: Does NOT apply a new-line.
-	virtual void Write( const char *message ) override;
-};
-
-
-
-class OutputToFile: public libBasic::AbstractTextOutputStream
-{
-public:
-	// Reminder: Does NOT apply a new-line.
-	OutputToFile( const char *filePath );
-	~OutputToFile();
-	virtual void Write( const char *message ) override;
-private:
-	void *_body;
-};
-
-
-
 class TestFontServer: public lib80GFX::Fonts::AbstractFontServer
 {
 public:
@@ -66,28 +39,15 @@ public:
 
 
 
+
+
 template<typename LAMBDA>
-bool WithNewBitmapDo( 
+bool WithSdlSurfaceDo( 
 	int32_t demoBitmapWidth, int32_t demoBitmapHeight, 
-	const char *outputFileName, LAMBDA drawingLambda )
+	SDL_Surface *sdlSurface, LAMBDA drawingLambda )
 {
 	bool functionResult = false;
 	
-	//
-	// In this version of the library, the 32-bpp bitmap class "lib80GFX::Bitmaps::Colour"
-	// doesn't allocate bitmap memory.  So we do it separately:
-	//
-	
-	auto sizeBytes = demoBitmapWidth * demoBitmapHeight * 4;
-	void *demoBitmapMemory = malloc( sizeBytes );
-	if( demoBitmapMemory == nullptr ) return false;
-
-	//
-	// Just ensure memory is clean:
-	//
-	
-	memset( demoBitmapMemory, 0, sizeBytes );
-
 	//
 	// Allocate polygon scan conversion array.
 	// TODO: Upgrade library:  It's a bit annoying to have to do this!
@@ -109,9 +69,9 @@ bool WithNewBitmapDo(
 		//
 		
 		lib80GFX::Bitmaps::Colour  theColourBitmap(
-			(uint32_t *) demoBitmapMemory,
+			(uint32_t *) (sdlSurface->pixels),
 			demoBitmapWidth, demoBitmapHeight,
-			demoBitmapWidth * 4 ); // <-- inter-row offset, in bytes
+			sdlSurface->pitch ); // <-- inter-row offset, in bytes
 
 		//
 		// Create a "device" object that will allow drawing routines to operate
@@ -149,11 +109,6 @@ bool WithNewBitmapDo(
 
 		drawingLambda( theBitmapDevice );
 		
-		// Save the file as ".data" so you can import it into GIMP and use the RAW import
-		// format.  You would enter the dimensions, and set the format to RGBA:
-
-		functionResult = SaveMemoryToFile( outputFileName, demoBitmapMemory, sizeBytes );
-
 		// This is how to disconnect the temporary arrays from the bitmap device:
 		
 		theBitmapDevice.SetLRArray( nullptr, 0 );
@@ -162,7 +117,6 @@ bool WithNewBitmapDo(
 
 	delete [] lrArray;
 	delete [] polygonScanConversionArray;
-	free(demoBitmapMemory);
 	
 	return functionResult;
 }
@@ -176,64 +130,6 @@ bool WithNewBitmapDo(
 
 
 
-
-
-
-
-
-
-
-
-bool SaveMemoryToFile( const std::string &filename, const void *data, size_t sizeBytes )
-{
-	std::ofstream b_stream( filename.c_str(), std::fstream::out | std::fstream::binary );
-	if (b_stream)
-	{
-		b_stream.write( (const char *) data, sizeBytes );
-		return b_stream.good();
-	}
-	return false;
-}
-
-
-
-
-
-void OutputToStandardOut::Write( const char *message )
-{
-	// An abstract interface through which text can be reported.
-	// Reminder: Does NOT apply a new-line.
-	std::cout << message;
-}
-
-
-
-
-OutputToFile::OutputToFile( const char *filePath )
-{
-	_body = new std::ofstream( filePath );
-}
-
-
-
-OutputToFile::~OutputToFile()
-{
-	auto pStream = (std::ofstream *) _body;
-	if(pStream != nullptr)
-	{
-		pStream->close();
-		delete pStream;
-		_body = nullptr;
-	}
-}
-
-
-
-void OutputToFile::Write( const char *message )
-{
-	auto &theStream = *((std::ofstream *) _body);
-	theStream << message;
-}
 
 
 
@@ -561,6 +457,19 @@ int main()
     SDL_Renderer *renderer;
     SDL_CreateWindowAndRenderer(255, 255, 0, &window, &renderer);
 
+    VectorOfInt32  testData = { 100,200,300,400,500 };
+
+    // Create surface and draw to it using lib80GFX:
+
+    auto theSurface = SDL_CreateRGBSurfaceWithFormat(0, DemoBitmapWidth, DemoBitmapHeight, 32, SDL_PIXELFORMAT_ARGB4444);
+    if (theSurface == nullptr) return 1;
+
+	if( ! WithSdlSurfaceDo( DemoBitmapWidth, DemoBitmapHeight, theSurface, 
+		[&testData]( lib80GFX::Devices::AbstractDevice &theDevice )
+		{
+            DrawBarChart( theDevice, &testData, DemoBitmapWidth, DemoBitmapHeight );
+		})) return 1;    
+
     context ctx;
     ctx.renderer = renderer;
     ctx.iteration = 0;
@@ -575,3 +484,7 @@ int main()
 
     return EXIT_SUCCESS;
 }
+
+
+
+
