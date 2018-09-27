@@ -537,8 +537,8 @@ void mainloop(void *arg)
     // example: draw a moving rectangle
     
     // red background
-    SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
-    SDL_RenderClear(renderer);
+//    SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
+//    SDL_RenderClear(renderer);
     
     // moving blue rectangle
     SDL_Rect r;
