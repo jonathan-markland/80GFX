@@ -14,6 +14,8 @@ making their own graphics library.
 Integer-arithmetic implementation.
 
 
+UPDATE OCT 2018 - Check out the WebAssembly folder for the WebAssembly demo of this.
+
 
 
 Shapes
@@ -118,49 +120,49 @@ Demonstration Images (as jpegs)
 
 Bar chart with patterned brush.
 
-![Bar chart](/Examples/BarChart.jpg)
+![Bar chart](/lib80GFX/Examples/BarChart.jpg)
 
 Pie chart with patterned brush fills, and thick pen outline (circular nib).
 
-![Pie chart](/Examples/PieChart.jpg)
+![Pie chart](/lib80GFX/Examples/PieChart.jpg)
 
 Polygon scan converted capital letter 'A' (no beziers).
 
-![Capital A](/Examples/CapitalA.jpg)
+![Capital A](/lib80GFX/Examples/CapitalA.jpg)
 
 Polygon scan converted Omega symbol with lines and 
 bezier curves, and thickened outline.
 
-![Omega demo - filled and outline shape with beziers](/Examples/Omega.jpg)
+![Omega demo - filled and outline shape with beziers](/lib80GFX/Examples/Omega.jpg)
 
 Multiple basic shapes contributing to a polygon that is 
 scan-converted in a single pass.
 
-![Polygon with holes](/Examples/PolyWithHoles.jpg)
+![Polygon with holes](/lib80GFX/Examples/PolyWithHoles.jpg)
 
 Multiple basic shapes contributing to a polygon that is 
 scan-converted in a single pass.
 
-![Polygon with holes](/Examples/PolyWithHoles2.jpg)
+![Polygon with holes](/lib80GFX/Examples/PolyWithHoles2.jpg)
 
 Demonstration of brush types: Solid, Patterned, Average Mix, 
 and painting the R,G,B channels independently.  Average Mix isn't
 very retro, but its in!
 
-![Brushes](/Examples/Brushes.jpg)
+![Brushes](/lib80GFX/Examples/Brushes.jpg)
 
 Font demonstration.  Bitmap fonts supported, of user-definable formats.
 
-![Font demo](/Examples/FontDemo.jpg)
+![Font demo](/lib80GFX/Examples/FontDemo.jpg)
 
 "Direct" drawing:  Drawing filled shapes without a polygon scan 
 conversion buffer (or it's associated sort() ! ).
 
-![Direct drawing functions](/Examples/DirectFunctionsDemo.jpg)
+![Direct drawing functions](/lib80GFX/Examples/DirectFunctionsDemo.jpg)
 
 Stretched bitmap drawing used to show a palette.
 
-![Palette bitmap demo](/Examples/PaletteDemo.jpg)
+![Palette bitmap demo](/lib80GFX/Examples/PaletteDemo.jpg)
 
 
 Metafile Example
