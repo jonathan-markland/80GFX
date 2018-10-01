@@ -18,9 +18,6 @@
 //		jynx_emulator {at} yahoo {dot} com
 //
 
-
-// libGraphics_Main.h -- to be written in a libBasic-abstract style.
-
 #pragma once
 
 #include <memory>

@@ -104,7 +104,7 @@ namespace lib80GFX
 {
 	namespace MetaOut
 	{
-		void Add( MetafileWriter &metaWriter, intptr_t x, intptr_t y )
+		void Add( MetafileWriter &metaWriter, int32_t x, int32_t y )
 		{
 			metaWriter.Add( x );
 			metaWriter.Add( y );

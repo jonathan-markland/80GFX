@@ -141,6 +141,7 @@ namespace lib80GFX
 		bool ParseMetaField( const char *&sourcePosition, uint32_t &fieldReference )     { return Internal::ParseMetaIntegerField<uint32_t>( sourcePosition, fieldReference ); }
 		bool ParseMetaField( const char *&sourcePosition, int64_t  &fieldReference )     { return Internal::ParseMetaIntegerField<int64_t>(  sourcePosition, fieldReference ); }
 		bool ParseMetaField( const char *&sourcePosition, uint64_t &fieldReference )     { return Internal::ParseMetaIntegerField<uint64_t>( sourcePosition, fieldReference ); }
+		bool ParseMetaField( const char *&sourcePosition, size_t  &fieldReference )      { return Internal::ParseMetaIntegerField<size_t>(   sourcePosition, fieldReference ); }
 
 		bool ParseMetaField( const char *&sourcePosition, Size<int32_t> &fieldReference )
 		{
@@ -288,14 +289,37 @@ namespace lib80GFX
 
 
 
-		void MetafileWriter::Add( intptr_t value )
+		void MetafileWriter::Add( int32_t value )
 		{
 			_str.AppendChar( ' ' );
 			Append( _str, ToString(value) );
 		}
 
+		void MetafileWriter::Add( int64_t value )
+		{
+			_str.AppendChar( ' ' );
+			Append( _str, ToString(value) );
+		}
 
+		void MetafileWriter::Add( uint32_t value )
+		{
+			_str.AppendChar( ' ' );
+			Append( _str, ToString(value) );
+		}
 
+		void MetafileWriter::Add( uint64_t value )
+		{
+			_str.AppendChar( ' ' );
+			Append( _str, ToString(value) );
+		}
+
+		void MetafileWriter::Add( size_t value )
+		{
+			_str.AppendChar( ' ' );
+			Append( _str, ToString(value) );
+		}
+
+		
 		void MetafileWriter::Done()
 		{
 			_str.AppendChar( '\n' );

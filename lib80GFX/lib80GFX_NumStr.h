@@ -25,6 +25,7 @@
 #pragma once
 
 #include <stdint.h>
+#include <stddef.h> // size_t 
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 //    Conversion of a nibble to a value.
@@ -139,8 +140,10 @@ inline NumberAsStringStore<int32_t>   ToString( int32_t  signedNumber,   uint32_
 inline NumberAsStringStore<uint32_t>  ToString( uint32_t unsignedNumber, uint32_t base )  { return NumberAsStringStore<uint32_t>( unsignedNumber, base, 0, ' ' ); }
 inline NumberAsStringStore<int64_t>   ToString( int64_t  signedNumber,   uint32_t base )  { return NumberAsStringStore<int64_t>(  signedNumber,   base, 0, ' ' ); }
 inline NumberAsStringStore<uint64_t>  ToString( uint64_t unsignedNumber, uint32_t base )  { return NumberAsStringStore<uint64_t>( unsignedNumber, base, 0, ' ' ); }
+inline NumberAsStringStore<size_t>    ToString( size_t unsignedNumber,   uint32_t base )  { return NumberAsStringStore<size_t>( unsignedNumber, base, 0, ' ' ); }
 
 inline NumberAsStringStore<int32_t>     ToString( int32_t  signedNumber )            { return ToString( signedNumber,   10 ); }
 inline NumberAsStringStore<uint32_t>    ToString( uint32_t unsignedNumber )          { return ToString( unsignedNumber, 10 ); }
 inline NumberAsStringStore<int64_t>     ToString( int64_t  signedNumber )            { return ToString( signedNumber,   10 ); }
 inline NumberAsStringStore<uint64_t>    ToString( uint64_t unsignedNumber )          { return ToString( unsignedNumber, 10 ); }
+inline NumberAsStringStore<size_t>      ToString( size_t unsignedNumber )            { return ToString( unsignedNumber, 10 ); }

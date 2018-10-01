@@ -1,3 +1,4 @@
+
 #include <SDL2/SDL.h>
 #include <emscripten.h>
 #include <cstdlib>
@@ -11,6 +12,8 @@
 #include "../lib80GFX/lib80GFX_Resources_FixedFont.h"
 #include "../lib80GFX/lib80GFX_ColoursEnum.h"
 
+#include "AssistanceChartDrawing.h"
+
 
 typedef std::vector<int32_t> VectorOfInt32;
 
@@ -19,6 +22,29 @@ typedef std::vector<int32_t> VectorOfInt32;
 // If any of your polygons are not showing, increase this:
 const uint32_t PolyScanArrayElementCount = 10000; // TODO: Need to eliminate the need to do this by re-design in the library.
 
+
+
+
+
+
+
+
+
+
+
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+//    FONT SERVER
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+// This simple font server will only serve these font objects:
+
+std::shared_ptr<lib80GFX::Fonts::Fixed8byNFont>  g_pSystemFont;
+std::shared_ptr<lib80GFX::Fonts::Fixed8byNFont>  g_pCamLynxFont;
+
+	// Note: The Font object must provide 1-bpp bitmaps for each character,
+	//       upon request, but all that's hidden in the library!  You could
+	//       make your own kind of font *class* to support a new font format,
+	//       as well as providing new font definitions in any supported format.
 
 
 
@@ -40,14 +66,76 @@ public:
 
 
 
+void TestFontServer::Init()
+{
+	// SYSTEM 80
+	g_pSystemFont = std::make_shared<lib80GFX::Fonts::Fixed8byNFont>( 
+		80,     // Font size (for SelectFont() call)
+		g_PcBios8x16Font,   // Font definition.  (As you would expect, just array of bytes in character order).
+		16,     // Height of cell (pixels)
+		0,255,  // Character code low/high range supported (ie: defines array indexing).
+		10 );   // Offset of the base-line (from top) in pixels.
+
+	// LYNX font
+	g_pCamLynxFont = std::make_shared<lib80GFX::Fonts::Fixed8byNFont>( 
+		80, g_CamputersLynxIIFont,  10,  32,126,  7 );
+}
+
+
+
+std::shared_ptr<lib80GFX::Fonts::AbstractFont>  TestFontServer::AddRefFont( const char *fontName, uint32_t pointSizeTenths )
+{
+	// - FontName is the name of the font the caller desires.  Hint:  The SelectFont() function passes in this string.
+	// - PointSizeTenths gives the font size desired.
+	
+	// In this simple font server, we don't even look at the 'PointSizeTenths' parameter!
+
+	// Look up the name string, and return the font object:
+	
+	if( CaseInsensitiveCompare(fontName,"System") == 0 )
+	{
+		return g_pSystemFont;
+	}
+	else if( CaseInsensitiveCompare(fontName,"Lynx") == 0 )
+	{
+		return g_pCamLynxFont;
+	}
+
+	return g_pSystemFont; // a default
+	// We can alternatively return no font:   return nullptr;
+}
+
+
+
+bool TestFontServer::ReleaseFont( std::shared_ptr<lib80GFX::Fonts::AbstractFont> fontToRelease )
+{
+	if( fontToRelease == g_pSystemFont || fontToRelease == g_pCamLynxFont ) // <-- TODO: not proper "addref/release" usage-count faking but is close enough
+	{
+		return true;
+	}
+	return false;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+//    LIBRARY
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 template<typename LAMBDA>
-bool WithSdlSurfaceDo( 
+void WithSdlSurfaceDo( 
 	int32_t demoBitmapWidth, int32_t demoBitmapHeight, 
 	SDL_Surface *sdlSurface, LAMBDA drawingLambda )
 {
-	bool functionResult = false;
-	
 	//
 	// Allocate polygon scan conversion array.
 	// TODO: Upgrade library:  It's a bit annoying to have to do this!
@@ -117,14 +205,7 @@ bool WithSdlSurfaceDo(
 
 	delete [] lrArray;
 	delete [] polygonScanConversionArray;
-	
-	return functionResult;
 }
-
-
-
-
-
 
 
 
@@ -136,241 +217,8 @@ bool WithSdlSurfaceDo(
 
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-//    FONT SERVER
+//    STUFF FOR DEMO
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-// This simple font server will only serve these font objects:
-
-std::shared_ptr<lib80GFX::Fonts::Fixed8byNFont>  g_pSystemFont;
-std::shared_ptr<lib80GFX::Fonts::Fixed8byNFont>  g_pCamLynxFont;
-
-	// Note: The Font object must provide 1-bpp bitmaps for each character,
-	//       upon request, but all that's hidden in the library!  You could
-	//       make your own kind of font *class* to support a new font format,
-	//       as well as providing new font definitions in any supported format.
-
-
-
-void TestFontServer::Init()
-{
-	// SYSTEM 80
-	g_pSystemFont = std::make_shared<lib80GFX::Fonts::Fixed8byNFont>( 
-		80,     // Font size (for SelectFont() call)
-		g_PcBios8x16Font,   // Font definition.  (As you would expect, just array of bytes in character order).
-		16,     // Height of cell (pixels)
-		0,255,  // Character code low/high range supported (ie: defines array indexing).
-		10 );   // Offset of the base-line (from top) in pixels.
-
-	// LYNX font
-	g_pCamLynxFont = std::make_shared<lib80GFX::Fonts::Fixed8byNFont>( 
-		80, g_CamputersLynxIIFont,  10,  32,126,  7 );
-}
-
-
-
-std::shared_ptr<lib80GFX::Fonts::AbstractFont>  TestFontServer::AddRefFont( const char *fontName, uint32_t pointSizeTenths )
-{
-	// - FontName is the name of the font the caller desires.  Hint:  The SelectFont() function passes in this string.
-	// - PointSizeTenths gives the font size desired.
-	
-	// In this simple font server, we don't even look at the 'PointSizeTenths' parameter!
-
-	// Look up the name string, and return the font object:
-	
-	if( CaseInsensitiveCompare(fontName,"System") == 0 )
-	{
-		return g_pSystemFont;
-	}
-	else if( CaseInsensitiveCompare(fontName,"Lynx") == 0 )
-	{
-		return g_pCamLynxFont;
-	}
-
-	return g_pSystemFont; // a default
-	// We can alternatively return no font:   return nullptr;
-}
-
-
-
-bool TestFontServer::ReleaseFont( std::shared_ptr<lib80GFX::Fonts::AbstractFont> fontToRelease )
-{
-	if( fontToRelease == g_pSystemFont || fontToRelease == g_pCamLynxFont ) // <-- TODO: not proper "addref/release" usage-count faking but is close enough
-	{
-		return true;
-	}
-	return false;
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-//    DATASET OPERATIONS    TODO: Is there std lib stuff to do this nowadays?
-// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-template<typename SCALAR>
-SCALAR  Sum( const std::vector<SCALAR> &vec )
-{
-	SCALAR  datasetSumValue = 0;
-	for( auto thisValue : vec )
-	{
-		datasetSumValue += thisValue;
-	}
-	return datasetSumValue;
-}
-
-
-
-template<typename SCALAR>
-SCALAR  Max( const std::vector<SCALAR> &vec )
-{
-	SCALAR  maximumValue = 0;
-	for( auto thisValue : vec )
-	{
-		maximumValue = std::max( thisValue, maximumValue );
-	}
-	return maximumValue;
-}
-
-
-
-
-
-void DrawBackground(
-	lib80GFX::Devices::AbstractDevice &theDevice, 
-	int32_t projectionWidth, int32_t projectionHeight )
-{
-	auto blackBrush = std::make_shared<lib80GFX::Brushes::Solid>( 0xFF000000 );
-	
-	theDevice.SelectBrush( blackBrush );
-	theDevice.StartPoly();
-		theDevice.Rectangle( Rect<int32_t>(0,0,projectionWidth,projectionHeight) );
-	theDevice.EndPoly();
-}
-
-
-
-
-// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-//    CHARTS
-// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-
-
-uint32_t  g_ChartDrawingPalette[16]=
-{
-  0xFF33EEFF,   // yellow
-  0xFF3392FF,   // orange
-  0xFF2323AD,   // red
-  0xFFC02681,   // magenta
-  0xFFD74B2A,   // blue
-  0xFFFFAF9D,   // light blue
-  0xFF7AC581,   // light green
-  0xFF14691D,   // green
-  0xFF194A81,   // brown
-  0xFFF3CDFF,   // pink
-  0xFF000000,   // black
-  0xFF333333,   // grey 33
-  0xFF575757,   // grey 57
-  0xFF888888,   // grey 88
-  0xFFCCCCCC,   // grey
-  0xFFFFFFFF,   // white
-};
-
-
-
-
-
-void DrawBarChart( 
-	lib80GFX::Devices::AbstractDevice &theDevice, 
-	const VectorOfInt32 *dataSet, int32_t projectionWidth, int32_t projectionHeight )
-{
-	DrawBackground( theDevice, projectionWidth, projectionHeight );
-	
-	auto lx = projectionWidth / 10;
-	auto ly = projectionHeight / 10;
-
-	// Create pens:
-	auto axisPen    = std::make_shared<lib80GFX::Pens::Solid>( lib80GFX::Colours::White );
-	auto outlinePen = std::make_shared<lib80GFX::Pens::Solid>( lib80GFX::Colours::Blue );
-
-	// Create brush:
-	auto patternedBrush = std::make_shared<lib80GFX::Brushes::Patterned>( 
-		g_Pattern1616_RoughWeave, lib80GFX::Colours::Black, lib80GFX::Colours::Black );
-
-	// Draw AXES
-	theDevice.SelectPen( axisPen );
-	theDevice.MoveTo( lx,ly );
-	theDevice.LineTo( lx,ly*9 );
-	theDevice.LineTo( lx*9,ly*9 );
-
-	// Draw series
-	auto numberOfBars = int32_t( dataSet->size() );
-	if( numberOfBars > 0 )
-	{
-		auto barSpacing = (lx*8) / numberOfBars;
-		auto barWidth   = (barSpacing * 12) / 16;
-		auto barIndent  = (barSpacing *  2) / 16;
-		auto barBottom  = (ly*9);
-		auto tallestBar = Max(*dataSet);
-		if( tallestBar > 0 )
-		{
-			theDevice.SelectPen( axisPen );
-
-			for( int32_t i = 0; i < numberOfBars; i++ )
-			{
-				auto v = dataSet->at(i);
-				if( v > 0 )
-				{
-					auto barLeft   = lx + (i * barSpacing) + barIndent;
-					auto barHeight = ((ly * 8) * v) / tallestBar;
-					auto barTop    = barBottom - barHeight;
-					patternedBrush->Settings.ForeColour = g_ChartDrawingPalette[i & 15];
-					theDevice.SelectBrush( patternedBrush );
-					theDevice.StartPoly();
-					theDevice.Rectangle( Rect<int32_t>( barLeft, barTop, barLeft + barWidth, barBottom ) );  // The fill (in brush)
-					theDevice.EndPoly();                                                                     
-					theDevice.Rectangle( Rect<int32_t>( barLeft, barTop, barLeft + barWidth, barBottom ) );  // The outline (in pen)
-				}
-			}
-		}
-	}
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 const int DemoBitmapWidth = 640;
 const int DemoBitmapHeight = 480;
@@ -418,23 +266,44 @@ uint32_t g_ColourStripData[16] =
 
 
 
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+//    Emscripten / SDL stuff
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+
 
 struct context
 {
     SDL_Renderer *renderer;
     int iteration;
+	SDL_Texture *theTexture;
 };
+
+
 
 void mainloop(void *arg)
 {
     context *ctx = static_cast<context*>(arg);
     SDL_Renderer *renderer = ctx->renderer;
     
-    // example: draw a moving rectangle
+    // Red background
     
-    // red background
-//    SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
-//    SDL_RenderClear(renderer);
+	SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
+    SDL_RenderClear(renderer);
+
+	// Draw the texture (which has been separately supplied):
+	
+	SDL_Rect  targetRect;
+	targetRect.x = 0;
+	targetRect.y = 0;
+	targetRect.w = DemoBitmapWidth;
+	targetRect.h = DemoBitmapHeight;
+	
+	auto renderResult = SDL_RenderCopy( renderer, ctx->theTexture, NULL /* render whole of source texture */, &targetRect );
+	int blue = 0;
+	if (renderResult == 0) blue = 255;  // Success = cyan moving box, fail = green
+	
+    // example: draw a moving rectangle
     
     // moving blue rectangle
     SDL_Rect r;
@@ -442,7 +311,7 @@ void mainloop(void *arg)
     r.y = 50;
     r.w = 50;
     r.h = 50;
-    SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255 );
+    SDL_SetRenderDrawColor(renderer, 0, 255, blue, 255 );
     SDL_RenderFillRect(renderer, &r );
 
     SDL_RenderPresent(renderer);
@@ -450,36 +319,62 @@ void mainloop(void *arg)
     ctx->iteration++;
 }
 
+
+
 int main()
 {
+	printf("%s", "hello\n");  // Reminder: When hosted in emscripten, /n is essential -- it flushes the output!!
+	
     SDL_Init(SDL_INIT_VIDEO);
     SDL_Window *window;
     SDL_Renderer *renderer;
-    SDL_CreateWindowAndRenderer(255, 255, 0, &window, &renderer);
+    SDL_CreateWindowAndRenderer(DemoBitmapWidth, DemoBitmapHeight, 0, &window, &renderer);
 
     VectorOfInt32  testData = { 100,200,300,400,500 };
 
     // Create surface and draw to it using lib80GFX:
 
-    auto theSurface = SDL_CreateRGBSurfaceWithFormat(0, DemoBitmapWidth, DemoBitmapHeight, 32, SDL_PIXELFORMAT_ARGB4444);
+    auto theSurface = SDL_CreateRGBSurfaceWithFormat(0, DemoBitmapWidth, DemoBitmapHeight, 32, SDL_PIXELFORMAT_ABGR8888);
     if (theSurface == nullptr) return 1;
-
-	if( ! WithSdlSurfaceDo( DemoBitmapWidth, DemoBitmapHeight, theSurface, 
+	
+	WithSdlSurfaceDo( DemoBitmapWidth, DemoBitmapHeight, theSurface, 
 		[&testData]( lib80GFX::Devices::AbstractDevice &theDevice )
 		{
-            DrawBarChart( theDevice, &testData, DemoBitmapWidth, DemoBitmapHeight );
-		})) return 1;    
+             DrawPieChart( theDevice, &testData, DemoBitmapWidth, DemoBitmapHeight );
+		});
 
+	// Create an SDL Texture from the surface, per recommendation:
+	
+	auto theTexture = SDL_CreateTextureFromSurface(renderer, theSurface);
+	if (theTexture == nullptr) return 2;
+
+	// Create binding object for passing to the rendering loop handler:
+	
     context ctx;
     ctx.renderer = renderer;
     ctx.iteration = 0;
+	ctx.theTexture = theTexture;
 
+	// Ask the library to run the main loop:
+	
     const int simulate_infinite_loop = 1; // call the function repeatedly
     const int fps = -1; // call the function as fast as the browser wants to render (typically 60fps)
     emscripten_set_main_loop_arg(mainloop, &ctx, fps, simulate_infinite_loop);
     
+	// Release stuff:
+	
+	SDL_DestroyTexture(theTexture);
+	theTexture = nullptr;
+	
+	SDL_FreeSurface(theSurface);
+	theSurface = nullptr;
+	
     SDL_DestroyRenderer(renderer);
+	renderer = nullptr;
+	
     SDL_DestroyWindow(window);
+	window = nullptr;
+	
     SDL_Quit();
 
     return EXIT_SUCCESS;

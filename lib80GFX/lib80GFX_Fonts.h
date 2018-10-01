@@ -25,6 +25,7 @@
 
 #include <stdint.h>
 #include <memory>
+#include <vector>
 
 
 namespace lib80GFX

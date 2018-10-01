@@ -48,6 +48,7 @@ namespace lib80GFX
 		bool ParseMetaField( const char *&sourcePosition, uint32_t &fieldReference );
 		bool ParseMetaField( const char *&sourcePosition, int64_t  &fieldReference );
 		bool ParseMetaField( const char *&sourcePosition, uint64_t &fieldReference );
+		bool ParseMetaField( const char *&sourcePosition, size_t   &fieldReference );
 		bool ParseMetaField( const char *&sourcePosition, Size<int32_t> &fieldReference );
 		bool ParseMetaField( const char *&sourcePosition, Point<int32_t> &fieldReference );
 		bool ParseMetaField( const char *&sourcePosition, Rect<int32_t> &fieldReference );
@@ -105,7 +106,11 @@ namespace lib80GFX
 
 			// Append a numeric value to a tag begun with Start().
 			// Hint: Call Done() when all additions complete.
-			void Add( intptr_t value );
+			void Add( int32_t value );
+			void Add( int64_t value );
+			void Add( uint32_t value );
+			void Add( uint64_t value );
+			void Add( size_t value );
 
 			// Flushes the completed Tag and values string to the output.
 			void Done();
