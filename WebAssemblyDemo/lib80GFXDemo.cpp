@@ -131,6 +131,30 @@ bool TestFontServer::ReleaseFont( std::shared_ptr<lib80GFX::Fonts::AbstractFont>
 //    LIBRARY
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
+
+
+template<typename LAMBDA>
+void WithSdlWindowAndRendererDo(int projectionWidth, int projectionHeight, LAMBDA lambda)
+{
+    SDL_Init(SDL_INIT_VIDEO);
+    SDL_Window *window;
+    SDL_Renderer *renderer;
+    SDL_CreateWindowAndRenderer(projectionWidth, projectionHeight, 0, &window, &renderer);
+
+	lambda(renderer);
+    
+    SDL_DestroyRenderer(renderer);
+	renderer = nullptr;
+
+    SDL_DestroyWindow(window);
+	window = nullptr;
+
+    SDL_Quit();
+}
+
+
+
+
 template<typename LAMBDA>
 void WithSdlSurfaceDo( 
 	int32_t demoBitmapWidth, int32_t demoBitmapHeight, 
@@ -272,10 +296,6 @@ uint32_t g_ColourStripData[16] =
 
 
 
-VectorOfInt32  g_testData = { 100,200,300,400,500 };
-
-
-
 struct context
 {
     SDL_Renderer *renderer;
@@ -294,16 +314,23 @@ void mainloop(void *arg)
 	auto projectionWidth = DemoBitmapWidth;
 	auto projectionHeight = DemoBitmapHeight;
 	
-    auto theSurface = SDL_CreateRGBSurfaceWithFormat(0, projectionWidth, projectionHeight, 32, SDL_PIXELFORMAT_ABGR8888);
+    auto theSurface = SDL_CreateRGBSurfaceWithFormat(
+		0, projectionWidth, projectionHeight, 32, SDL_PIXELFORMAT_ABGR8888);
+		
     if (theSurface == nullptr) return;
+	
+	// Draw this frame:
 	
 	WithSdlSurfaceDo( projectionWidth, projectionHeight, theSurface, 
 		[&]( lib80GFX::Devices::AbstractDevice &theDevice )
 		{
+			int d = (ctx->iteration & 31) * 2;
+			VectorOfInt32  testData = { 100 - d,200 + d,300 - d,400 + d, 500 - d };
+			
             switch((ctx->iteration >> 7) & 7)
 			{
-				 case 0: DrawPieChart( theDevice, &g_testData, projectionWidth, projectionHeight );  break;
-				 case 1: DrawBarChart( theDevice, &g_testData, projectionWidth, projectionHeight );  break;
+				 case 0: DrawPieChart( theDevice, &testData, projectionWidth, projectionHeight );  break;
+				 case 1: DrawBarChart( theDevice, &testData, projectionWidth, projectionHeight );  break;
 				 case 2: DrawFilledPolygonWithHoles( theDevice, projectionWidth, projectionHeight ); break;
 				 case 3: DrawFilledPolygonWithHoles2( theDevice, projectionWidth, projectionHeight ); break;
 				 case 4: DrawBrushesDemo( theDevice, projectionWidth, projectionHeight ); break;
@@ -366,26 +393,6 @@ void mainloop(void *arg)
 }
 
 
-
-
-template<typename LAMBDA>
-void WithSdlWindowAndRendererDo(int projectionWidth, int projectionHeight, LAMBDA lambda)
-{
-    SDL_Init(SDL_INIT_VIDEO);
-    SDL_Window *window;
-    SDL_Renderer *renderer;
-    SDL_CreateWindowAndRenderer(projectionWidth, projectionHeight, 0, &window, &renderer);
-
-	lambda(renderer);
-    
-    SDL_DestroyRenderer(renderer);
-	renderer = nullptr;
-
-    SDL_DestroyWindow(window);
-	window = nullptr;
-
-    SDL_Quit();
-}
 
 
 
