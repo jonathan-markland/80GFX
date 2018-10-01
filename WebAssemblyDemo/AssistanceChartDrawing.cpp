@@ -555,7 +555,12 @@ void DrawWithTheDirectGraphicsFunctions(
 // Here's an example of drawing a 32-bpp bitmap onto a target device.
 //
 
-void DrawPalette( uint32_t *colourStrip, uint32_t numColours, lib80GFX::Devices::AbstractDevice &theDevice, int32_t widthOfDisplay, int32_t heightOfDisplay )
+void DrawPalette(
+	uint32_t *colourStrip, 
+	uint32_t numColours, 
+	lib80GFX::Devices::AbstractDevice &theDevice, 
+	int32_t widthOfDisplay, 
+	int32_t heightOfDisplay )
 {
 	int32_t  lx = widthOfDisplay / 10;
 	int32_t  ly = heightOfDisplay / 10;

@@ -272,11 +272,14 @@ uint32_t g_ColourStripData[16] =
 
 
 
+VectorOfInt32  g_testData = { 100,200,300,400,500 };
+
+
+
 struct context
 {
     SDL_Renderer *renderer;
     int iteration;
-	SDL_Texture *theTexture;
 };
 
 
@@ -286,96 +289,130 @@ void mainloop(void *arg)
     context *ctx = static_cast<context*>(arg);
     SDL_Renderer *renderer = ctx->renderer;
     
-    // Red background
-    
-	SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
-    SDL_RenderClear(renderer);
+    // Create surface and draw to it using lib80GFX:
 
-	// Draw the texture (which has been separately supplied):
+	auto projectionWidth = DemoBitmapWidth;
+	auto projectionHeight = DemoBitmapHeight;
 	
-	SDL_Rect  targetRect;
-	targetRect.x = 0;
-	targetRect.y = 0;
-	targetRect.w = DemoBitmapWidth;
-	targetRect.h = DemoBitmapHeight;
+    auto theSurface = SDL_CreateRGBSurfaceWithFormat(0, projectionWidth, projectionHeight, 32, SDL_PIXELFORMAT_ABGR8888);
+    if (theSurface == nullptr) return;
 	
-	auto renderResult = SDL_RenderCopy( renderer, ctx->theTexture, NULL /* render whole of source texture */, &targetRect );
-	int blue = 0;
-	if (renderResult == 0) blue = 255;  // Success = cyan moving box, fail = green
-	
-    // example: draw a moving rectangle
-    
-    // moving blue rectangle
-    SDL_Rect r;
-    r.x = ctx->iteration % 255;
-    r.y = 50;
-    r.w = 50;
-    r.h = 50;
-    SDL_SetRenderDrawColor(renderer, 0, 255, blue, 255 );
-    SDL_RenderFillRect(renderer, &r );
+	WithSdlSurfaceDo( projectionWidth, projectionHeight, theSurface, 
+		[&]( lib80GFX::Devices::AbstractDevice &theDevice )
+		{
+            switch((ctx->iteration >> 7) & 7)
+			{
+				 case 0: DrawPieChart( theDevice, &g_testData, projectionWidth, projectionHeight );  break;
+				 case 1: DrawBarChart( theDevice, &g_testData, projectionWidth, projectionHeight );  break;
+				 case 2: DrawFilledPolygonWithHoles( theDevice, projectionWidth, projectionHeight ); break;
+				 case 3: DrawFilledPolygonWithHoles2( theDevice, projectionWidth, projectionHeight ); break;
+				 case 4: DrawBrushesDemo( theDevice, projectionWidth, projectionHeight ); break;
+				 case 5: DrawOverLinesTest( theDevice, projectionWidth, projectionHeight ); break;
+				 case 6: DrawCapitalLetterA( theDevice, projectionWidth, projectionHeight ); break;
+				 case 7: DrawOmega( theDevice, projectionWidth, projectionHeight ); break;
+			}
+		});
 
-    SDL_RenderPresent(renderer);
+	// Create an SDL Texture from the surface, per recommendation:
+	
+	auto theTexture = SDL_CreateTextureFromSurface(renderer, theSurface);
+	if (theTexture != nullptr)
+	{
+		// Red background
+		
+		// SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
+		// SDL_RenderClear(renderer);
 
+		// Draw the texture (which has been separately supplied):
+		
+		SDL_Rect  targetRect;
+		targetRect.x = 0;
+		targetRect.y = 0;
+		targetRect.w = DemoBitmapWidth;
+		targetRect.h = DemoBitmapHeight;
+		
+		auto renderResult = SDL_RenderCopy( 
+			renderer, theTexture, NULL /* render whole of source texture */, &targetRect );
+			
+		// int blue = 0;
+		// if (renderResult == 0) blue = 255;  // Success = cyan moving box, fail = green
+		
+		// example: draw a moving rectangle
+		
+		// moving blue rectangle
+		// SDL_Rect r;
+		// r.x = ctx->iteration % 255;
+		// r.y = 50;
+		// r.w = 50;
+		// r.h = 50;
+		// SDL_SetRenderDrawColor(renderer, 0, 255, blue, 255 );
+		// SDL_RenderFillRect(renderer, &r );
+
+		SDL_RenderPresent(renderer);
+
+		// Release stuff:
+		
+		SDL_DestroyTexture(theTexture);
+		theTexture = nullptr;
+	}
+	
+	// Release stuff:
+	
+	SDL_FreeSurface(theSurface);
+	theSurface = nullptr;
+
+	
     ctx->iteration++;
 }
+
+
+
+
+template<typename LAMBDA>
+void WithSdlWindowAndRendererDo(int projectionWidth, int projectionHeight, LAMBDA lambda)
+{
+    SDL_Init(SDL_INIT_VIDEO);
+    SDL_Window *window;
+    SDL_Renderer *renderer;
+    SDL_CreateWindowAndRenderer(projectionWidth, projectionHeight, 0, &window, &renderer);
+
+	lambda(renderer);
+    
+    SDL_DestroyRenderer(renderer);
+	renderer = nullptr;
+
+    SDL_DestroyWindow(window);
+	window = nullptr;
+
+    SDL_Quit();
+}
+
 
 
 
 int main()
 {
 	printf("%s", "hello\n");  // Reminder: When hosted in emscripten, /n is essential -- it flushes the output!!
-	
-    SDL_Init(SDL_INIT_VIDEO);
-    SDL_Window *window;
-    SDL_Renderer *renderer;
-    SDL_CreateWindowAndRenderer(DemoBitmapWidth, DemoBitmapHeight, 0, &window, &renderer);
 
-    VectorOfInt32  testData = { 100,200,300,400,500 };
-
-    // Create surface and draw to it using lib80GFX:
-
-    auto theSurface = SDL_CreateRGBSurfaceWithFormat(0, DemoBitmapWidth, DemoBitmapHeight, 32, SDL_PIXELFORMAT_ABGR8888);
-    if (theSurface == nullptr) return 1;
-	
-	WithSdlSurfaceDo( DemoBitmapWidth, DemoBitmapHeight, theSurface, 
-		[&testData]( lib80GFX::Devices::AbstractDevice &theDevice )
+	WithSdlWindowAndRendererDo(
+		DemoBitmapWidth, 
+		DemoBitmapHeight,
+		[&](SDL_Renderer *sdlRenderer)
 		{
-             DrawPieChart( theDevice, &testData, DemoBitmapWidth, DemoBitmapHeight );
+			// Create binding object for passing to the rendering loop handler:
+			
+			context ctx;
+			ctx.renderer  = sdlRenderer;
+			ctx.iteration = 0;
+			
+			// Ask the library to run the main loop:
+
+			const int simulate_infinite_loop = 1; // call the function repeatedly
+			const int fps = -1; // call the function as fast as the browser wants to render (typically 60fps)
+			emscripten_set_main_loop_arg(mainloop, &ctx, fps, simulate_infinite_loop);
 		});
-
-	// Create an SDL Texture from the surface, per recommendation:
-	
-	auto theTexture = SDL_CreateTextureFromSurface(renderer, theSurface);
-	if (theTexture == nullptr) return 2;
-
-	// Create binding object for passing to the rendering loop handler:
-	
-    context ctx;
-    ctx.renderer = renderer;
-    ctx.iteration = 0;
-	ctx.theTexture = theTexture;
-
-	// Ask the library to run the main loop:
-	
-    const int simulate_infinite_loop = 1; // call the function repeatedly
-    const int fps = -1; // call the function as fast as the browser wants to render (typically 60fps)
-    emscripten_set_main_loop_arg(mainloop, &ctx, fps, simulate_infinite_loop);
-    
-	// Release stuff:
-	
-	SDL_DestroyTexture(theTexture);
-	theTexture = nullptr;
-	
-	SDL_FreeSurface(theSurface);
-	theSurface = nullptr;
-	
-    SDL_DestroyRenderer(renderer);
-	renderer = nullptr;
-	
-    SDL_DestroyWindow(window);
-	window = nullptr;
-	
-    SDL_Quit();
+		
+	SDL_Quit();
 
     return EXIT_SUCCESS;
 }
