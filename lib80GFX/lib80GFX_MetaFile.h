@@ -110,7 +110,10 @@ namespace lib80GFX
 			void Add( int64_t value );
 			void Add( uint32_t value );
 			void Add( uint64_t value );
+
+			#if defined(__EMSCRIPTEN__)
 			void Add( size_t value );
+			#endif
 
 			// Flushes the completed Tag and values string to the output.
 			void Done();

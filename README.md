@@ -120,49 +120,49 @@ Demonstration Images (as jpegs)
 
 Bar chart with patterned brush.
 
-![Bar chart](/lib80GFX/Examples/BarChart.jpg)
+![Bar chart](/WebImages/BarChart.jpg)
 
 Pie chart with patterned brush fills, and thick pen outline (circular nib).
 
-![Pie chart](/lib80GFX/Examples/PieChart.jpg)
+![Pie chart](/WebImages/PieChart.jpg)
 
 Polygon scan converted capital letter 'A' (no beziers).
 
-![Capital A](/lib80GFX/Examples/CapitalA.jpg)
+![Capital A](/WebImages/CapitalA.jpg)
 
 Polygon scan converted Omega symbol with lines and 
 bezier curves, and thickened outline.
 
-![Omega demo - filled and outline shape with beziers](/lib80GFX/Examples/Omega.jpg)
+![Omega demo - filled and outline shape with beziers](/WebImages/Omega.jpg)
 
 Multiple basic shapes contributing to a polygon that is 
 scan-converted in a single pass.
 
-![Polygon with holes](/lib80GFX/Examples/PolyWithHoles.jpg)
+![Polygon with holes](/WebImages/PolyWithHoles.jpg)
 
 Multiple basic shapes contributing to a polygon that is 
 scan-converted in a single pass.
 
-![Polygon with holes](/lib80GFX/Examples/PolyWithHoles2.jpg)
+![Polygon with holes](/WebImages/PolyWithHoles2.jpg)
 
 Demonstration of brush types: Solid, Patterned, Average Mix, 
 and painting the R,G,B channels independently.  Average Mix isn't
 very retro, but its in!
 
-![Brushes](/lib80GFX/Examples/Brushes.jpg)
+![Brushes](/WebImages/Brushes.jpg)
 
 Font demonstration.  Bitmap fonts supported, of user-definable formats.
 
-![Font demo](/lib80GFX/Examples/FontDemo.jpg)
+![Font demo](/WebImages/FontDemo.jpg)
 
 "Direct" drawing:  Drawing filled shapes without a polygon scan 
 conversion buffer (or it's associated sort() ! ).
 
-![Direct drawing functions](/lib80GFX/Examples/DirectFunctionsDemo.jpg)
+![Direct drawing functions](/WebImages/DirectFunctionsDemo.jpg)
 
 Stretched bitmap drawing used to show a palette.
 
-![Palette bitmap demo](/lib80GFX/Examples/PaletteDemo.jpg)
+![Palette bitmap demo](/WebImages/PaletteDemo.jpg)
 
 
 Metafile Example
