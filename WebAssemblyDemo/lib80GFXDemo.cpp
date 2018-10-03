@@ -7,12 +7,12 @@
 #include <iostream>
 #include <vector>
 
-#include "../lib80GFX/lib80GFX_Main.h"
-#include "../lib80GFX/lib80GFX_Fonts.h"
-#include "../lib80GFX/lib80GFX_Resources_FixedFont.h"
-#include "../lib80GFX/lib80GFX_ColoursEnum.h"
+#include "lib80GFX_Main.h"
+#include "lib80GFX_Fonts.h"
+#include "lib80GFX_Resources_FixedFont.h"
+#include "lib80GFX_ColoursEnum.h"
 
-#include "AssistanceChartDrawing.h"
+#include "../DemoSharedLibrary/AssistanceChartDrawing.h"
 
 
 typedef std::vector<int32_t> VectorOfInt32;

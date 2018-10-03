@@ -12,5 +12,5 @@ g++ \
  ../lib80GFX/lib80GFX_SineTable.cpp \
  ../lib80GFX/lib80GFX_SmallStringBuilder.cpp \
  AssistanceForExamples.cpp \
- AssistanceChartDrawing.cpp \
+ ../DemoSharedLibrary/AssistanceChartDrawing.cpp \
  -I ../lib80GFX -std=c++11

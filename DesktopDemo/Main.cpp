@@ -31,7 +31,7 @@
 #include "lib80GFX_ColoursEnum.h"
 #include "lib80GFX_Resources_FixedFont.h"
 #include "AssistanceForExamples.h"
-#include "AssistanceChartDrawing.h"
+#include "../DemoSharedLibrary/AssistanceChartDrawing.h"
 
 
 
