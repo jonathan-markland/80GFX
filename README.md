@@ -1,5 +1,5 @@
-80GFX
-=====
+80GFX / WebAssembly
+===================
 
 Retro 1980's computer graphics rendering library with classic mid-1980s features.
 Written by Jonathan Markland, using mainly template-based C++, with separated
@@ -14,7 +14,7 @@ making their own graphics library.
 Integer-arithmetic implementation.
 
 
-UPDATE OCT 2018 - Check out the WebAssembly folder for the WebAssembly demo of this.
+*UPDATE OCT 2018 - Check out the WebAssembly folder for the WebAssembly demo of this.*
 
 
 
