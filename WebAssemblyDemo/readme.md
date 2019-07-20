@@ -7,11 +7,24 @@ In this folder
 This folder contains a compiled-to-WASM version of my 80GFX library, and within a small demo program.
 
 
-How to just run this dammit
+
+How to just run this dammit  - Updated 20 July 2019
 ---------------------------
-You run the program by checking out this repo, then double-click the index.html.  The demo
-program is C++ compiled to WebAssembly, and runs sandboxed in your browser.  In case you are
-old, this does NOT mean "ActiveX controls" are used  ;)
+You "just run" the program by checking out this repo.
+
+Recent browser security improvements mean you cannot just double-click the "index.html" 
+and see the program running in your browser, so you will need to install a small local 
+web server to serve this, for example:
+
+- sudo npm install http-server -g
+
+Then "cd" to the WebAssemblyDemo folder and start the HTTP server:
+
+- cd WHEREVER/80GFX/WebAssemblyDemo
+- http-server ./
+
+The default location is "http://127.0.0.1:8080/" which you can view in your browser.
+
 
 
 To build
