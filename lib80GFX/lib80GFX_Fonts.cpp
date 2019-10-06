@@ -44,7 +44,7 @@ namespace lib80GFX
 				{
 					if( tableOffset == 0 ) return true; // allow not-present
 					if( tableOffset < sizeof(Internal::GemFont) ) return false; // can't start within header
-					if( (tableOffset + tableSize) > fileSize ) return false; // out of range of the file data
+					if( (((uint64_t) tableOffset) + tableSize) > fileSize ) return false; // out of range of the file data
 					return true;
 				}
 
@@ -753,7 +753,7 @@ namespace lib80GFX
 {
 	namespace Fonts
 	{
-		Fixed8byNFont::Fixed8byNFont( int32_t pointSizeTenths, uint8_t *fontData, uint32_t scanLines, uint32_t lowestChar, uint32_t highestChar, int32_t baseLineOffset )
+		Fixed8byNFont::Fixed8byNFont( int32_t pointSizeTenths, const uint8_t *fontData, uint32_t scanLines, uint32_t lowestChar, uint32_t highestChar, int32_t baseLineOffset )
 		{
 			_fontData    = fontData;
 			_scanLines   = scanLines;
@@ -765,7 +765,7 @@ namespace lib80GFX
 		bool Fixed8byNFont::OnFirstInit( Internal::DrawInfo *out_drawInfo )
 		{
 			int32_t numChars = (_highestChar - _lowestChar) + 1;
-            auto monoBitmap = std::make_shared<Bitmaps::Mono>( _fontData, 8, _scanLines * numChars, 1 );
+            auto monoBitmap = std::make_shared<Bitmaps::Mono>( const_cast<uint8_t *>(_fontData), 8, _scanLines * numChars, 1 );
 			out_drawInfo->DeltaFromBaseLineY   = _baseLineOffset;
 			out_drawInfo->PostIncrementX       = 8;
 			out_drawInfo->WidthPixels          = 8;

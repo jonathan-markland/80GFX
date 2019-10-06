@@ -286,11 +286,11 @@ namespace lib80GFX
 			// The font data is intended to be stored in statically allocated memory.
 			// There is NO associated persistence format with these fonts.
 
-			Fixed8byNFont( int32_t pointSizeTenths, uint8_t *pFont, uint32_t scanLines, uint32_t lowestChar, uint32_t highestChar, int32_t baseLineOffset );
+			Fixed8byNFont( int32_t pointSizeTenths, const uint8_t *pFont, uint32_t scanLines, uint32_t lowestChar, uint32_t highestChar, int32_t baseLineOffset );
 			virtual bool OnFirstInit( Internal::DrawInfo *out_drawInfo ) override;
 			virtual bool OnGetChar( uint32_t charCode, Internal::DrawInfo *out_drawInfo ) override;
 		private:
-			uint8_t   *_fontData;          // Usually in a statically allocated resource.
+			const uint8_t   *_fontData;          // Usually in a statically allocated resource.
 			uint32_t   _scanLines;
 			uint32_t   _lowestChar;
 			uint32_t   _highestChar;
