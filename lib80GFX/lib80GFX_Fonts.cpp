@@ -1273,7 +1273,7 @@ namespace lib80GFX
 						// Scale each character into position.
 						// But we maintain the cursor position in 1:1 coordinate scheme!
 						int32_t targetX = x + Scale( unscaledOfsX + info.DeltaFromLeftSide, sc.MultiplierX, sc.DivisorX );
-                        int32_t targetY = y - Scale( info.DeltaFromBaseLineY+1, sc.MultiplierY, sc.DivisorY ) - 1;
+                        int32_t targetY = y - Scale( info.DeltaFromBaseLineY, sc.MultiplierY, sc.DivisorY );
 						int32_t sw  = Scale( info.WidthPixels,  sc.MultiplierX, sc.DivisorX );
 						int32_t sh  = Scale( info.HeightPixels, sc.MultiplierY, sc.DivisorY );
 						auto areaOnTarget = Rect<int32_t>( targetX, targetY, targetX+sw, targetY+sh );
